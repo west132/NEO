@@ -16,6 +16,8 @@ Attach these five to a chat with a model that can run code, then send: `Load the
 
 To continue a campaign: the same five files and your newest save. Send: `Continue from this save.`
 
+To make a new world: attach the four play files (no background) and send: `Make a new world: <what you want>.` The GM follows its making-a-world steps, checks the result with the tool, and shows you what it invented before you play.
+
 Out of character: start a message with `ps`.
 
 ## Not part of play
@@ -23,6 +25,6 @@ Out of character: start a message with `ps`.
 | Folder | What it is |
 |---|---|
 | `design/` | Design record, reading note, rule map. History and reasons, for people. Never attach these to a game: they are not an authority in play. |
-| `tests/` | Checks for the tool. From this folder: `python -m unittest discover tests` |
+| `tests/` | Checks for the tool. From this folder: `python -m unittest discover -s tests -t tests` |
 
 All play files share one version. Don't mix versions.

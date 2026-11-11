@@ -443,7 +443,34 @@ channel      a real way information travels: a witness, a messenger, the papers,
              street talk, the PC's own people
 ```
 
-## 10. Starting, loading, repairing, chapters
+## 10. Making a world, starting, loading, repairing, chapters
+
+### 10.0 Making a world
+
+The person asks for a new world, or to rework one. Done before play; never mid-game.
+
+```text
+1 ASK     what they want, in their terms: setting, era, tone, who the PC could be,
+          what it is about, what must or must not be in it; unclear on something
+          that changes the whole world → ask once
+2 RECORD  provenance (authored | generated | mixed) and `requested`, word for
+          word (WORLD §1); requested facts are fixed like authored ones
+3 DESIGN  WORLD Part 0, in its order: hidden reality first (§0.1), mystery
+          principles by the tool's rolls (§0.2), lenses (§0.3), story shape
+          (§0.4), quest spines (§0.5); write the design_logic record
+4 FILL    WORLD Parts A–F, in order; Part C by depth: each actor gets the depth
+          the story gives them and every field that depth needs (WORLD §11); every
+          important actor and every pressure gets a plan or pace with a due, a
+          time of day included ("Day 2 night", never "Day 2")
+5 CHECK   the tool's check form (RULES §16) → fix every finding and run it again
+          until ok; then read the design against Part 0's TEST yourself: the tool
+          can't judge design
+6 SHOW    hand the background to the person with a short list of what was
+          invented beyond `requested` (secrets, pulls, beliefs, added people and
+          places), so they can strike or change any; nothing they strike survives
+7 FILE    BACKGROUND_<NAME>_NEO_v0.md in worlds/; play starts only from a
+          checked, shown background (§10.1)
+```
 
 ### 10.1 New game
 
@@ -586,8 +613,9 @@ EXTEND    the next chapter is a new BACKGROUND whose Round 0 is this chapter's
             content; setting, anchors, content bounds, modules carried unless the
             player changes them; later chapters take chapter 1's file name plus
             _CH<N+1>; chapter 1 stays untouched
-  6 CHECK   the tool checks the new BACKGROUND against the flattened world; every
-            id is carried, recorded, or a retirement allowed
+  6 CHECK   the tool checks the new BACKGROUND against the flattened world (every
+            id carried, recorded, or a retirement allowed), then the check form
+            on it (§10.0 step 5)
   7 START   a new save chain: rounds restart at R0
 AUTHORITY carried records are established and never revised; new content is
           provisional as usual
