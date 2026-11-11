@@ -11,7 +11,7 @@ Field names are the same in both, so nothing is translated between them. Fill in
 PARTS  0 design logic · A frame · B situation · C people · D places · E player ·
   F opening · G records and changes · H the save
 BUILD  generating a background, or reworking one for complex quests and stories:
-  run Part 0 before filling Parts B–C
+  the procedure is GM §10.0; Part 0 runs before Parts B–C
 READ   the GM reads facts only from here (BACKGROUND + newest SAVE + the GM-Δ blocks
   since); never from memory of earlier turns
 ```
@@ -44,7 +44,10 @@ TEST  the design yields several plausible explanations, independently motivated
 D1 WORLD FACTS  what happened, in time order, incl. genuine causal links and
   which events are NOT linked → §9 cause/prior_events, §15 material_history
 D2 ACTOR STATE  each NPC/faction: objectives, knowledge, beliefs, false beliefs,
-  secrets, resources, current plan → §11
+  secrets, resources, current plan → §11, written by depth: the want the PC can
+  push on, the fear, the line they won't cross, the secret with its own ordinary
+  reason; for those the story turns on, the pull that fights the want and the
+  belief that isn't true; and a voice for anyone who speaks
 D3 EVIDENCE PROVENANCE  each clue: the thread it came from, what it actually
   establishes, which readings it does NOT establish → §9 evidence
   check per clue: evidence | objectively true | plausible reading

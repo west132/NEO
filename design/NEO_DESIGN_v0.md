@@ -513,6 +513,12 @@ LAYOUT  Nov 11: flat runtime path. neo/ holds only the play set (NEO_GM, NEO_RUL
       NEO_WORLD, neo_math, README); worlds/ the backgrounds; design/ these notes
       (never loaded in play); tests/ the tool's checks (49 pass). Paths named
       earlier in this record (gm/, rules/, world/) are the old layout.
+GAP   Nov 11: no procedure for making a world (the audit checked only the play
+      loop); fixed: GM §10.0 making a world (ask → record requested → Part 0 →
+      fill by depth → tool check → show the person what was invented → file);
+      WORLD D2 now names the depth fields; tool `check` form for a background
+      before play (51 tests pass); Sheet Anchor passes with 8 dues that name a
+      day but no time of day (the tool assumes 08:00)
 NEXT  the person's test run of the NEO set (README.md lists the files)
 DONE  NEO_GM v0 drafted (neo/gm/); its DECIDE 1–3 settled Nov 11: moves as cost
       forms before the roll · hand-back by choice type · the GM tells what the

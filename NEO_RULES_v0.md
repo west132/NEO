@@ -996,6 +996,11 @@ span       §15.2: from {day, clock}, minutes, pc_zone, arrived → events in ti
            first that could reach the PC; triggers to check; flags (an important
            actor or a pressure with no due, a malformed quest code); after a stop,
            send it again with the returned resume fields
+check      GM §10.0: a background before play → findings: frame, NPC fields and
+           depth, dues (incl. a day with no time of day), important actors and
+           pressures without a due, quests at Round 0, cases with < 3 routes,
+           broken references; ok when nothing but untimed dues; it can't judge
+           design
 selfcheck  GM §8: answers {npc_positions, quests, money, hp}, round → each answer
            against the save, the tool's own checks, the verdict; positions are
            answered with the location's recorded name

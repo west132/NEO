@@ -3342,6 +3342,133 @@ def do_selfcheck(form):
     return out
 
 
+# ── a background on its own, before play ──
+
+def do_check_background(form):
+    """Everything the tool can check in a BACKGROUND before Round 0. It can't judge
+    design: whether a secret is good, a pull is real, a route is fair."""
+    _need(form, "background")
+    bg = _bg_tree(form["background"])
+    tree = json.loads(json.dumps(bg, default=str))
+    anc = _anchor(bg, None)
+    zones = _zones(bg, [])
+    probs = {}
+    add = lambda k, v: probs.setdefault(k, []).append(v)
+
+    for k in ("background_id", "provenance", "setting", "setting_anchors", "content_bounds",
+              "player", "world_state", "premise", "question"):
+        if tree.get(k) in (None, "", {}, []):
+            add("frame", f"{k} :: missing")
+    if str(tree.get("provenance", "")).lower() in ("generated", "mixed") and not tree.get("requested"):
+        add("frame", "requested :: a generated or mixed background lists what the person asked for")
+
+    actors = set((tree.get("npcs") or {}).keys()) | set((tree.get("factions") or {}).keys())
+    for aid, rec in (tree.get("npcs") or {}).items():
+        if not isinstance(rec, dict):
+            continue
+        miss = [f for f in REQUIRED["npcs"] if rec.get(f) in (None, "")]
+        if miss:
+            add("npcs", f"npcs.{aid} :: lacks {', '.join(miss)}")
+        if rec.get("depth") in (None, ""):
+            add("npcs", f"npcs.{aid} :: no depth (0 passer-by · 1 regular · 2 supporting · 3 story-turning)")
+        for tid in (rec.get("relationships") or {}):
+            if str(tid).lower() not in PC_IDS and tid not in actors:
+                add("references", f"npcs.{aid}.relationships.{tid} :: no such actor")
+        st = rec.get("state") if isinstance(rec.get("state"), dict) else {}
+        pos = _val(st.get("position"))
+        if pos and not _where(str(pos), zones):
+            add("references", f"npcs.{aid}.state.position :: \"{pos}\" names no recorded location")
+        due = _STAMP.sub("", str(_val(st.get("due")) or "")).strip()
+        if due and not _no_due(st):
+            if not _due_minutes(due, anc) and not _EVENT.search(due):
+                add("dues", f"npcs.{aid}.state.due :: neither a time nor a trigger — \"{due[:60]}\"")
+            elif re.search(r"\bday\s*\d+\b", due, re.I) and not re.search(
+                    r"\d{1,2}:\d{2}|morning|noon|midday|afternoon|evening|dusk|dawn|night|midnight",
+                    due, re.I):
+                add("dues_without_time", f"npcs.{aid}.state.due :: a day with no time of day; "
+                                         "the tool will assume 08:00")
+    for row in _depth_problems(tree):
+        add("depth_fields", row)
+    for aid, rec, st in _important(tree):
+        if _no_due(st):
+            add("important_without_due", f"npcs.{aid} :: important and has no plan with a due")
+
+    cases = set((tree.get("locked_case_truths") or {}).keys())
+    for qid, q in (tree.get("quests") or {}).items():
+        if not isinstance(q, dict):
+            continue
+        status = str(_val(q.get("status")) or "").lower()
+        if q.get("code"):
+            add("quests", f"quests.{qid} :: has a code at Round 0; codes are given when the PC takes it on")
+        if status not in ("available", "blocked"):
+            add("quests", f"quests.{qid} :: status \"{status}\" at Round 0 (available | blocked)")
+        if status == "blocked" and not q.get("trigger"):
+            add("quests", f"quests.{qid} :: blocked with no trigger")
+        for f in ("objective", "hook", "level"):
+            if q.get(f) in (None, ""):
+                add("quests", f"quests.{qid} :: lacks {f}")
+        refs = [r for r in (q.get("support_refs") or []) if r in cases]
+        for r in q.get("support_refs") or []:
+            if r not in cases:
+                add("references", f"quests.{qid}.support_refs :: no case \"{r}\"")
+        if refs and len(q.get("routes") or []) < 3:
+            add("quests", f"quests.{qid} :: tied to a case but lists {len(q.get('routes') or [])} "
+                          "routes; a case tied to a quest needs ≥3 independent ones")
+
+    for pid, pr in (tree.get("active_world_pressures") or {}).items():
+        if not isinstance(pr, dict):
+            continue
+        ck, tr = pr.get("clock"), pr.get("track")
+        dues = []
+        if isinstance(ck, dict):
+            dues.append(ck.get("due"))
+        if isinstance(tr, dict):
+            for z, t in tr.items():
+                if z not in zones:
+                    add("references", f"active_world_pressures.{pid}.track.{z} :: no such location")
+                if isinstance(t, dict):
+                    dues.append(t.get("due"))
+        if isinstance(ck, dict) and isinstance(tr, dict):
+            add("pressures", f"active_world_pressures.{pid} :: has both a clock and a track")
+        if not [d for d in dues if d not in (None, "")]:
+            add("pressures", f"active_world_pressures.{pid} :: no due")
+        for a in pr.get("actors") or []:
+            if a not in actors:
+                add("references", f"active_world_pressures.{pid}.actors :: no actor \"{a}\"")
+
+    for lid, loc in (tree.get("locations") or {}).items():
+        if not isinstance(loc, dict):
+            continue
+        z = loc.get("zone")
+        if z and z not in zones:
+            add("references", f"locations.{lid}.zone :: no location \"{z}\"")
+        if not z and not loc.get("closed") and not isinstance(loc.get("surface"), dict):
+            add("locations", f"locations.{lid} :: neither a zone nor its own surface")
+
+    for sid, sl in (tree.get("storylines") or {}).items():
+        for ref in (sl or {}).get("refs") or []:
+            owner, _, rid = str(ref).partition(".")
+            if owner and rid and rid not in (tree.get(owner) or {}):
+                add("references", f"storylines.{sid}.refs :: no {ref}")
+
+    mods = tree.get("enabled_modules") or {}
+    if mods.get("flexible_item_entitlement", True) is not False:
+        rank = str(((tree.get("player") or {}).get("item_points") or {}).get("rank") or "")
+        if rank and rank.lower() not in RANK_MAX and "[" not in rank:
+            add("player", f"player.item_points.rank :: \"{rank}\" ({' | '.join(RANK_MAX)})")
+
+    n = sum(len(v) for v in probs.values())
+    hard = {k: v for k, v in probs.items() if k != "dues_without_time"}
+    lines = [f"Background check — {tree.get('background_id') or form['background']}: "
+             f"{n} finding{'s' if n != 1 else ''}"]
+    for k, v in probs.items():
+        lines.append(f"  {k.replace('_', ' ')}: {len(v)}")
+    return {"tool": TOOL_VERSION, "ok": not hard, "findings": probs, "copy": lines,
+            "cannot_check": "design: whether the hidden reality holds together, a secret has "
+                            "a real reason, a pull truly fights the want, routes are really "
+                            "independent; and what was invented, which the GM lists for the person"}
+
+
 # ── awards and other forms that read the world ──
 
 def do_award(form):
@@ -3387,6 +3514,8 @@ FORMS = {
     "combat": "a fight in a batch: side [..], opponents [..], conditions, stop {hp_at_or_below}",
     "span": "run time: from {day, clock}, minutes, pc_zone, arrived + world files; after a stop, "
             "send it again with the returned resume fields",
+    "check": "a background before play: background → findings (frame, npcs, depth fields, dues, "
+             "quests, pressures, locations, references); ok when nothing but untimed dues",
     "selfcheck": "R50 check: answers {npc_positions, quests, money, hp}, round + world files",
     "award": "XP: actor, challenge, scope, source + world files",
     "boundary": "growth boundary: cls, tier, evidence, class_source (yes when a valid source was involved)",
@@ -3447,6 +3576,7 @@ def run(form):
         return {"tool": TOOL_VERSION, "forms": FORMS}
     table = {"action": do_action, "help": do_help_roll, "ask": do_ask_form,
              "combat": do_combat, "span": do_span, "selfcheck": do_selfcheck,
+             "check": do_check_background,
              "award": do_award}
     if cmd in table:
         return table[cmd](form)
