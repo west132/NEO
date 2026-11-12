@@ -42,7 +42,7 @@ SCP是一个大型网络共创虚构项目。在这个世界里，一个叫 **SC
 
 **Your people / 你的人**
 - **MTF Omega-99 "Class of '99" / 机动特遣队Omega-99"九九届"** — a small odd-jobs squad for low-priority weird stuff worldwide. / 一支专接全球低优先级怪事的小队。
-- **The 1999 joke / 1999梗** — the squad's veterans, born in the 1990s, claim they secretly saved the world as kids in 1999 and swore never to tell, so everyone younger owes them coffee. West was born too late and never hears the end of it. / 队里的九零后老鸟坚称自己小时候在1999年偷偷拯救过世界并发誓保密，所以所有更年轻的人都欠他们一杯咖啡。韦斯特出生太晚，被调侃个没完。
+- **The 1999 joke / 1999梗** — anyone born before 2000 claims they secretly saved the world in 1999 and swore never to tell, and makes fun of everyone who wasn't there. / 2000年前出生的人都坚称自己在1999年偷偷拯救过世界并发誓保密，并以此调侃没赶上的人。
 
 **Staff perks / 员工福利** — some harmless Safe-class items can be booked for staff morale with **Form MU-2**, which takes a few days. / 一些无害的Safe级物品可以用 **MU-2表** 申请来提振士气，审批要几天。
 - **SCP-999** — a friendly orange jelly blob that tickles and cheers people up. / 友善的橙色果冻团，会挠痒逗人开心。
@@ -268,7 +268,6 @@ player:
       - Finished the Foundation field-agent academy last week — law, cover identities, amnestic protocol,
         firearms, first aid, containment basics.
       - Posted to Site-19 as a probationary field agent and attached as liaison to MTF Omega-99.
-      - Born in the late 1990s — too young to be "Class of '99", which the unit will not let go.
   appearance: '[UNASSIGNED]'
   archetype: field agent (probationary)
   job: Foundation field agent, Level 2, Personnel Class C, liaison to MTF Omega-99
@@ -305,7 +304,6 @@ player:
       abilities: []
   traits:
     - Probationary — every action goes in a file someone reads on Day 90.
-    - Too young for '99 — the unit's favourite target for the 1999 joke.
   expertise:
     established:
       - amnestic protocol and cover stories
@@ -659,7 +657,7 @@ locked_case_truths:
       "Gus" Pembroke wrote the report, gave the kids a mild amnestic, and the case was filed as Incident
       1999-EP-04. One of the kids was 9-year-old Rosa Delgado.
     prior_events:
-      - The "Class of '99" joke started years later as a cafeteria joke, unrelated; nobody links it to EP-04.
+      - The "Class of '99" joke was made up by the group that really did it; it spread as a funny story and nobody takes it seriously.
       - Gus requested a transfer to Site-19 maintenance near retirement and quietly kept an eye on Rosa when she
         joined the Foundation; he has never told her.
     state: {file: sealed Level 3 folder "1999-EP-04" in RAISA archive; Rosa does not remember; Gus remembers}
@@ -834,7 +832,7 @@ npcs:
         attitude: friendly from the first hour
         credit: []
         grievance: []
-        believes_identity: new roommate; "finally someone who isn't Class of '99"
+        believes_identity: new roommate
         bond: {history: none yet, means: a new friend, habits: cards, late-night noodles, zip-tie fixes,
           wants: a friend who won't judge, unsaid: the debt}
     knowledge:
@@ -1379,7 +1377,7 @@ world_state:
       probation_file: probation file = 试用期档案
       day_90_review: Day 90 review = 第90天考评
       form_mu2: Form MU-2 = MU-2士气使用申请表
-      meme_1999: the 1999 meme = 1999梗（九零后拯救世界并发誓保密）
+      meme_1999: the 1999 meme = 1999梗（2000年前出生的人拯救世界并发誓保密）
       class_of_99: Class of '99 = 九九届
       incident_report: incident report = 事故报告
       addendum: addendum = 附录
