@@ -48,9 +48,10 @@ class Fixes(unittest.TestCase):
 
     def test_check_flags_several_moves_in_one_due(self):
         path = os.path.join(TMP, "bg.md")
-        text = open(BG, encoding="utf-8").read().replace(
-            "due: B-1 Day 1 morning goes with Meera if she lets him",
-            "due: Day 1 morning goes with Meera; Day 3 morning tells her")
+        with open(BG, encoding="utf-8") as f:
+            text = f.read().replace(
+                "due: Day 1 goes with Meera if she lets him",
+                "due: Day 1 morning goes with Meera; Day 3 morning tells her")
         open(path, "w", encoding="utf-8").write(text)
         o = run({"cmd": "check", "background": path})
         self.assertTrue(any("no codes" in r for r in o["findings"].get("dues", [])))
@@ -74,7 +75,7 @@ class Fixes(unittest.TestCase):
     def test_a_move_code_must_name_a_quest_step(self):
         path = os.path.join(TMP, "bg2.md")
         with open(BG, encoding="utf-8") as f:
-            text = f.read().replace("due: B-1 Day 1 morning goes with Meera", "due: Q-9 Day 1 morning goes with Meera")
+            text = f.read().replace("due: Day 1 goes with Meera", "due: Q-9 Day 1 goes with Meera")
         with open(path, "w", encoding="utf-8") as f:
             f.write(text)
         o = run({"cmd": "check", "background": path})

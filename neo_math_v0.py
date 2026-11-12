@@ -2556,7 +2556,7 @@ _MOVE_SPLIT = re.compile(r";\s*(?=[A-Z]{1,2}(?:-[A-Z]{1,2})*(?:-\d+)?[spfa]?\s)"
 
 def _due_moves(text):
     """A due's moves as [(code, status, text)]. Each move starts with the code of the
-    quest step it serves (A-1, A-C); a status letter after the code (A-1s) marks a move
+    quest or part it serves (A-1, A-C); a status letter after the code (A-1s) marks a move
     that has resolved. A due with no code is one move: (None, None, text)."""
     body = _STAMP.sub("", str(_val(text) if text is not None else "")).strip()
     if not _MOVE.match(body):
@@ -3057,7 +3057,7 @@ def do_check_background(form):
             moves = _due_moves(due)
             if len(set(re.findall(r"\bday\s*\d+\b", due, re.I))) > 1 and not moves[0][0]:
                 add("dues", f"{did} :: several moves with no codes; start each move with the "
-                            "code of the quest step it serves (A-1 …; A-3 …)")
+                            "code of the quest or part it serves (A-1 …; A-3 …)")
             for code, _, _ in moves:
                 if code and code not in qcodes:
                     add("references", f"{did} :: code {code} names no quest or part")
