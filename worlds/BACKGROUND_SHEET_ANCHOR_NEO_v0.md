@@ -440,7 +440,9 @@ npcs:
     state:
       position: Patna University
       plan: get her plate back; blames Sterne; goes to Bombay when she hears of the auction
-      due: Day 1 hears of the auction from a colleague; Day 2 reaches Bombay by train — too late to bid, in time for the chaos
+      due:
+        1: Day 1 morning hears of the auction from a colleague
+        2: Day 2 afternoon reaches Bombay by train — too late to bid, in time for the chaos
     drives:
       want: the plate back, and published under her name
       pull: to be the one who reads it — she will not hand the reading to anyone else, even to get it back sooner
@@ -463,7 +465,7 @@ npcs:
     character: 26, sweet, weak, a gambler trying to stop; would die rather than tell Meera
     voice: soft, over-apologises, trails off mid-sentence; calls her "ma'am"; talks too much and too fast when frightened
     in_disorder: neither
-    state: {position: Patna University, plan: hide what he did; help Meera find the plate so it all comes right, due: Day 1 goes with Meera if she lets him}
+    state: {position: Patna University, plan: hide what he did; help Meera find the plate so it all comes right, due: Day 1 morning goes with Meera if she lets him}
     drives:
       want: to undo it — the plate back in Meera's safe
       pull: Meera must never find out
@@ -510,7 +512,9 @@ npcs:
     state:
       position: The Taj hotel
       plan: win the plate at auction or take it; follow it to the jewel; sell the jewel in Karachi
-      due: Day 2 night the auction; Day 4 Hartog reads his half; then the clock (sterne_expedition)
+      due:
+        1: Day 2 night the auction
+        2: Day 4 morning Hartog reads his half; then the clock (sterne_expedition)
       if_blocked: buys whoever has what he needs; failing that, sends Kasteel
     drives:
       want: the jewel
@@ -548,7 +552,7 @@ npcs:
     character: 60s, German, vain, drinks, a fine Greek scholar who reads no Brahmi at all
     voice: pompous lecture tone, German word order, quotes Greek and waits to be admired; slower and louder after lunch
     in_disorder: neither
-    state: {position: The Taj hotel, plan: read whatever Sterne brings; be right, due: Day 4 reads the Greek half — sees Sandrokottos and the throne line}
+    state: {position: The Taj hotel, plan: read whatever Sterne brings; be right, due: Day 4 morning reads the Greek half — sees Sandrokottos and the throne line}
     drives:
       want: to be right, and known to be
       fear: being shown up in front of Sterne
@@ -568,7 +572,10 @@ npcs:
     state:
       position: The Taj hotel
       plan: see the plate; photograph it if she can't buy it; find the jewel for the find, not the money
-      due: Day 2 night bids at the auction; photographs both faces of the plate before it breaks; Day 4 reads the photographs; Day 6 at Devgarh
+      due:
+        1: Day 2 night bids at the auction and photographs both faces of the plate before it breaks
+        2: Day 4 afternoon reads the photographs
+        3: Day 6 evening at Devgarh
     drives:
       want: the discovery — to stand where no one has stood
       pull: to do it alone, on her own terms
@@ -592,7 +599,10 @@ npcs:
     state:
       position: Chor Bazaar
       plan: with Sully, steal the plate at the auction; sell it to Sterne for double, or follow it themselves
-      due: Day 2 night the auction (he ends with the Brahmi half); Day 5 Sully offers it to Sterne; Day 6 they double-cross him and go for the well
+      due:
+        1: Day 2 night the auction (he ends with the Brahmi half)
+        2: Day 5 afternoon Sully offers it to Sterne
+        3: Day 6 night they double-cross him and go for the well
     drives:
       want: the payday
       pull: to see what is behind the door — he will throw the money away to be right about history
@@ -614,7 +624,7 @@ npcs:
     character: as in the Uncharted games — older, cigar-chomping, charming, in debt to dangerous people, loyal to Nate
     voice: gravelly and unhurried; calls Nate "kid"; flirts by reflex; talks his way round a problem long before he reaches for the gun
     in_disorder: thrives
-    state: {position: Chor Bazaar, plan: get paid; keep the kid alive, due: Day 5 offers the Brahmi half to Sterne}
+    state: {position: Chor Bazaar, plan: get paid; keep the kid alive, due: Day 5 afternoon offers the Brahmi half to Sterne}
     drives:
       want: to get paid and clear what he owes
       fear: the kid getting killed
@@ -636,7 +646,9 @@ npcs:
     state:
       position: Chor Bazaar
       plan: get the plate (then the jewel) for his client, a Hong Kong collector, Mr Lau; politely
-      due: Day 2 night bids at the auction and ends up in the brawl; Day 7 at Devgarh, booked as a hotel guest under a silly name
+      due:
+        1: Day 2 night bids at the auction and ends up in the brawl
+        2: Day 7 evening at Devgarh, booked as a hotel guest under a silly name
     drives:
       want: his commission — the plate, then the jewel, delivered to Mr Lau
       pull: to do it with style and hurt no one badly — he gives up an advantage rather than injure someone
@@ -659,7 +671,7 @@ npcs:
     state:
       position: Devgarh palace-hotel
       plan: fill the hotel; save the palace; keep the throne secret
-      due: Day 6 the palace is suddenly fully booked — Lara, Sterne's people, Hawk and a film crew
+      due: Day 6 evening the palace is suddenly fully booked — Lara, Sterne's people, Hawk and a film crew
     drives:
       want: the palace saved
       pull: his father's name kept clean — the truth about the throne might save the hotel, and would shame the family
@@ -717,7 +729,7 @@ npcs:
     character: 70, booming, generous, thirty years ridiculed for his theory; would give anything to be proved right
     voice: booming and generous; quotes Sanskrit, then translates it for you; "my dear fellow"; every answer becomes a lecture
     in_disorder: neither
-    state: {position: Patna, plan: get the plate read in Brahmi; publish; be vindicated, due: Day 3 hears of the Brahmi line and gives a newspaper interview; Day 5 offers his life savings for the Brahmi half}
+    state: {position: Patna, plan: get the plate read in Brahmi; publish; be vindicated, due: {1: Day 3 morning hears of the Brahmi line and gives a newspaper interview, 2: Day 5 morning offers his life savings for the Brahmi half}}
     drives:
       want: to be proved right before he dies
       fear: dying a joke
@@ -734,7 +746,7 @@ npcs:
     character: 60, Goan, ex-air force, sings while he flies, owes the bank, flies anywhere for cash
     voice: unbothered; air-force slang and Goan English, "men" on the end of a sentence; sings old songs over the engines
     in_disorder: neither
-    state: {position: Juhu aerodrome, plan: hire the Dakota to whoever pays; keep it flying, due: Day 5 Sterne tries to hire him; he'll take a better offer}
+    state: {position: Juhu aerodrome, plan: hire the Dakota to whoever pays; keep it flying, due: Day 5 morning Sterne tries to hire him; he'll take a better offer}
     drives:
       want: the Dakota kept flying
       fear: the bank taking the plane
@@ -751,7 +763,7 @@ npcs:
     character: 45, loud, fearless, has broken every bone once; shooting a film at Devgarh palace from Day 6
     voice: loud Bombay Hindi-English; swears cheerfully; orders everyone about, stars included; laughs at injuries, her own first
     in_disorder: neither
-    state: {position: The film studio, plan: finish the film; get her crew to Devgarh, due: Day 2 night the auction brawl wrecks her set next door; Day 6 at Devgarh}
+    state: {position: The film studio, plan: finish the film; get her crew to Devgarh, due: {1: Day 2 night the auction brawl wrecks her set next door, 2: Day 6 morning at Devgarh}}
     drives:
       want: the film finished
       fear: a death on her set
@@ -768,7 +780,7 @@ npcs:
     character: 50, lazy, greedy, not stupid; arrests whoever didn't pay him last
     voice: slow and bored, chewing paan; asks questions he already knows the answer to; names a price without ever saying a number
     in_disorder: thrives
-    state: {position: Bakshi's shop, plan: take money from everyone in the plate business, due: Day 3 comes to Chor Bazaar to collect after the brawl}
+    state: {position: Bakshi's shop, plan: take money from everyone in the plate business, due: Day 3 morning comes to Chor Bazaar to collect after the brawl}
     drives:
       want: money from everyone in the plate business
       fear: a superior noticing him

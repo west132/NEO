@@ -369,6 +369,7 @@ quests:
     parts: {}                      # optional: {part_id: {objective: , level: }}
     routes: []                     # a case tied to it: 3 or more ways in (RULES §15.6)
     support_refs: []
+    terms:                         # paid work: rights_obligations.<id>; the contract names quest: <code>
 development_threads:
   thread_id: {direction: , origin: , state: , status: }
 
@@ -446,6 +447,8 @@ npcs:
     in_disorder:                   # thrives | suffers | neither
     state: {}                      # status, position (a recorded location's name), current HP/MP when below
                                    # max, nerve when it matters, plan, due, what they do if blocked
+                                   # due: one step with a daypart ("Day 2 night …"), or numbered steps
+                                   # {1: Day 2 night …, 2: Day 5 afternoon …} like a quest's parts
                                    # work source: routines: {work_source: {pace: , kinds: []}}
     drives:
       want:                        # depth 1+: the one plain thing they want

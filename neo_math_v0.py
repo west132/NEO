@@ -720,7 +720,7 @@ def do_merge(a):
     if bg is not None:   # delta capsule: retirements of BACKGROUND paths must persist
         retired = [(r["id"], r["reason"] or "retired") for r in base_retired]
     readable_skipped = 0
-    notes = {"whole_record_update": [], "plus_on_existing": [], "tilde_on_missing": [],
+    notes = {"whole_record_update": [], "applied_by_field": [],
              "unknown_owner": [], "retire_nothing": [], "several_in_one": []}
     for b in kept:
         stamp = f"R{b['round']}"
@@ -746,8 +746,60 @@ def do_merge(a):
                 notes["unknown_owner"].append(owner)
             deeper = [k for k in records if k.startswith(rid + ".")]
             bgv = _bg_get(bg, rid) if bg is not None else _MISS
+            if op in ("~", "+", "-"):
+                # a change inside a record that was written whole: split the whole
+                # record into its fields first, down to this path, then apply
+                parts_ = rid.split(".")
+                for depth in range(2, len(parts_)):
+                    anc = ".".join(parts_[:depth])
+                    if anc not in records:
+                        continue
+                    whole_v = _record_value(records[anc])
+                    if not isinstance(whole_v, dict):
+                        break
+                    st_ = (_STAMP.match(records[anc]) or [None, None])[1]
+                    for ok, ov in whole_v.items():
+                        records.setdefault(f"{anc}.{ok}", f"R{st_}: {_flow(ov)}" if st_ else _flow(ov))
+                    del records[anc]
+                deeper = [k for k in records if k.startswith(rid + ".")]
+            fields = None
+            if op in ("~", "+"):
+                try:
+                    import yaml
+                    v = yaml.safe_load(text) if text.strip().startswith("{") else None
+                    fields = v if isinstance(v, dict) and v else None
+                except Exception:
+                    fields = None
+            existing = rid in records or bool(deeper) or isinstance(bgv, dict)
+            if op in ("~", "+") and fields is None and re.search(r"\.due$", rid):
+                # a new due replaces the whole plan: every earlier step is retired
+                for k in [k for k in records if k.startswith(rid + ".")]:
+                    del records[k]
+                if isinstance(bgv, dict):
+                    for k in bgv:
+                        sid = f"{rid}.{k}"
+                        if sid not in [r[0] for r in retired]:
+                            retired.append((sid, f"replaced by a new due {stamp}"))
+                records[rid] = f"{stamp}: {text}"; changed.append(rid)
+                continue
+            if fields is not None and existing:
+                # a whole record changed at once: apply each field as its own record
+                for fk, fv in fields.items():
+                    fid = f"{rid}.{fk}"
+                    for k in [k for k in records if k.startswith(fid + ".")]:
+                        del records[k]
+                    records[fid] = f"{stamp}: {_flow(fv)}"
+                    changed.append(fid)
+                if rid in records and not deeper and not isinstance(bgv, dict):
+                    old = _record_value(records[rid])
+                    if isinstance(old, dict):   # spread the old whole record into fields too
+                        for ok, ov in old.items():
+                            records.setdefault(f"{rid}.{ok}", f"{stamp}: {_flow(ov)}")
+                    del records[rid]
+                notes["applied_by_field"].append(f"{where} {rid}")
+                continue
             if bgv is not _MISS and rid not in records and op == "~" and isinstance(bgv, dict):
-                # whole BACKGROUND record: keep its Round-0 fields, add a dated note beside them
+                # whole BACKGROUND record, not a mapping: keep its fields, add a dated note
                 nk = rid + ".notes"
                 records[nk] = f"{records[nk]} | {stamp}: {text}" if nk in records else f"{stamp}: {text}"
                 appended.append(rid); notes["whole_record_update"].append(f"{where} {rid}")
@@ -756,7 +808,6 @@ def do_merge(a):
             ancestor = next((".".join(parts[:i]) for i in range(len(parts) - 1, 0, -1)
                              if ".".join(parts[:i]) in records), None)
             if op == "+" and rid in records:
-                notes["plus_on_existing"].append(f"{where} {rid}")
                 op = "~"
             if op == "+":
                 records[rid] = f"{stamp}: {text}"; added.append(rid)
@@ -770,8 +821,6 @@ def do_merge(a):
                     records[rid] = f"{stamp}: {text}"; changed.append(rid)
                 else:
                     records[rid] = f"{stamp}: {text}"; added.append(rid)
-                    if not ancestor and not deeper and bgv is _MISS:
-                        notes["tilde_on_missing"].append(f"{where} {rid}")
             else:
                 gone = [k for k in list(records) if k == rid or k.startswith(rid + ".")]
                 if gone or bgv is not _MISS:
@@ -789,10 +838,9 @@ def do_merge(a):
            "added": len(set(added)), "changed": len(set(changed)),
            "appended_notes": len(appended), "retired": [r[0] for r in retired]}
     hints = {
-        "whole_record_update": "kept the record and appended a dated note; next time name "
-                               "the field, e.g. npcs.bjorn.state.position",
-        "plus_on_existing": "applied as ~",
-        "tilde_on_missing": "added as new (use +)",
+        "whole_record_update": "a whole record changed by plain text: kept, with a dated note; "
+                               "name the field, or give the new fields as a {mapping}",
+        "applied_by_field": "a whole record changed at once: applied field by field",
         "unknown_owner": "not a record owner: file these under their real owner",
         "retire_nothing": "nothing to retire",
         "several_in_one": "one entry holds several records' facts (all filed under the first "
@@ -1127,6 +1175,18 @@ def _dues(path, caps, retired=(), bg=None, save_round=None):
             m = re.search(r"\bdue:\s*([^,}]+)", t)
             if m:
                 cur[f"{i}.state.due"] = m.group(1).strip()
+    for i, t in list(cur.items()):   # numbered steps: each step is its own due
+        if i.endswith(".due"):
+            steps = _due_steps(t)
+            if steps and steps[0][0]:
+                del cur[i]
+                for suf, body in steps:
+                    if f"{i}{suf}" not in cur:
+                        cur[f"{i}{suf}"] = body
+    gone_ids = [r["id"] for r in retired]
+    for i in [i for i in cur if re.search(r"\.due\.[\w\-]+$", i)]:
+        if any(i == g or i.startswith(g + ".") for g in gone_ids):
+            del cur[i]
     now = _now(path)
     nowk = now[1] if now else None
     same = lambda pts: [p for p in pts if nowk and p[0][0] == nowk[0][0]]
@@ -1134,10 +1194,18 @@ def _dues(path, caps, retired=(), bg=None, save_round=None):
     unread, incidental, aim_open = [], [], []
     for rid, txt in cur.items():
         body = re.sub(r"^R\d+:\s*", "", txt)
-        if rid.endswith(".due"):
+        if re.search(r"\.due(\.[\w\-]+)?$", rid):
+            base_ = re.sub(r"\.(state\.)?due(\.[\w\-]+)?$", "", rid)
+            st_ = cur.get(f"{base_}.state.status") or cur.get(f"{base_}.status") or ""
+            if not st_:
+                m_ = re.search(r"\bstatus:\s*([^,}]+)", cur.get(base_, ""))
+                st_ = m_.group(1) if m_ else ""
+            if _CLOSED.search(re.sub(r"^R\d+:\s*", "", st_)):
+                continue   # closed or paid: its due is spent
             pts = _points(body, anc)
             if not pts:
-                if not _EVENT.search(body) and not re.search(r"\b(none|routine)\b", body, re.I):
+                if not _EVENT.search(body) and not re.search(r"\b(none|routine|incidental)\b",
+                                                              body, re.I):
                     unregistered.append(f"{rid} :: {body[:90]}")
             elif nowk and not same(pts):
                 unread.append(f"{rid} :: {body[:90]}")
@@ -1165,6 +1233,9 @@ def _dues(path, caps, retired=(), bg=None, save_round=None):
         for k in sorted(actors):
             base = f"{owner}.{k}"
             due = cur.get(f"{base}.state.due")
+            if due is None:
+                steps = [t for i, t in cur.items() if i.startswith(f"{base}.state.due.")]
+                due = "; ".join(steps) if steps else None
             if due is None:
                 if owner == "npcs" or f"{base}.state.plan" in cur or re.search(r"\bplan\b",
                                                                                 cur.get(base, "")):
@@ -1207,7 +1278,11 @@ def _dues(path, caps, retired=(), bg=None, save_round=None):
                           r"brokered|service|meeting|delivery)", whole, re.I)
         if dated and nowk and pts and max(pts) < nowk:
             unclosed.append(f"{b} :: all dates past, status '{status.strip()[:40]}'")
-        if _WORK.search(whole[:160]) and name not in quest_text:
+        codes = set(re.findall(r"\bcode['\"]?:\s*['\"]?([A-Z]{1,2}(?:-[A-Z]{1,2})*(?:-\d+)?)", quest_text))
+        qids = {i.split(".")[1] for i in cur if i.startswith("quests.")}
+        linked = (name in quest_text or any(re.search(r"\b" + re.escape(q) + r"\b", txt) for q in qids)
+                  or any(re.search(r"\bquest['\"]?:\s*['\"]?" + re.escape(c) + r"\b", txt) for c in codes))
+        if _WORK.search(whole[:160]) and not linked:
             no_quest.append(b)
     out = {"now": (f"{now[0]} {now[1][1] // 60:02d}:{now[1][1] % 60:02d}" if now else
                    "unread: the save records no day_index or ISO date"),
@@ -1368,23 +1443,49 @@ _PLACE_WORDS = {"office", "house", "street", "rooms", "station", "north", "south
 
 
 def _where(text, zones):
-    """The location a position's free text names: a whole id or name beats a single
-    word of one (5+ letters); the longest match wins; none → None."""
-    norm = lambda s: re.sub(r"\s+", " ", re.sub(r"[_\-,]", " ", str(s).lower())).strip()
-    low = norm(text or "")
-    words = set(re.findall(r"[a-z][a-z']{4,}", low))
+    """The location a position's text names: a recorded location's whole id or name
+    (the longest wins); none → None. A position that names no recorded place is a
+    place to develop and record (GM §7.5), never a guess from one shared word."""
+    norm = lambda s: re.sub(r"\s+", " ", re.sub(r"[_\-,.'’]", " ", str(s).lower())).strip()
+    low = f" {norm(text or '')} "
     best, score = None, 0
     for k, z in zones.items():
-        for whole in (norm(k), norm(re.sub(r"\s*\(.*?\)", "", str(z["name"])))):
-            if len(whole) > 3 and whole in low and 100 + len(whole) > score:
-                best, score = k, 100 + len(whole)
-        for w in set(re.findall(r"[a-z][a-z']{4,}", norm(k) + " " + norm(z["name"]))) - _PLACE_WORDS:
-            if w in words and len(w) > score:
-                best, score = k, len(w)
+        for whole in (norm(k), norm(re.sub(r"\s*\(.*?\)", "", str(z["name"]))),
+                      norm(re.sub(r"^the\s+", "", str(z["name"]), flags=re.I))):
+            if len(whole) > 3 and f" {whole} " in low and len(whole) > score:
+                best, score = k, len(whole)
     return best
 
 
 _STAMP = re.compile(r"^R(\d+):\s*")
+
+
+def _due_steps(v):
+    """A due as its steps: [(suffix, text)]. One due is one step (suffix "");
+    a plan of several steps is a mapping {1: ..., 2: ...} and each step is its own
+    due at <path>.due.<n>; a fired step is retired with a − entry."""
+    v = _val(v)
+    if isinstance(v, str):
+        body = _STAMP.sub("", v).strip()
+        if body.startswith("{"):
+            try:
+                import yaml
+                parsed = yaml.safe_load(body)
+                if isinstance(parsed, dict):
+                    v = parsed
+            except Exception:
+                pass
+    if isinstance(v, dict):
+        return [(f".{k}", _STAMP.sub("", str(_val(t))).strip()) for k, t in v.items()
+                if t not in (None, "")]
+    return [("", _STAMP.sub("", str(v if v is not None else "")).strip())]
+
+
+def _key(node, part):
+    """A mapping key as written in a path: numbered steps load from YAML as ints."""
+    if isinstance(node, dict) and part not in node and part.isdigit() and int(part) in node:
+        return int(part)
+    return part
 
 
 def _set_path(tree, rid, value):
@@ -1426,11 +1527,13 @@ def _del_path(tree, rid):
     parts = rid.split(".")
     node = tree
     for part in parts[:-1]:
+        part = _key(node, part)
         if not isinstance(node, dict) or part not in node:
             return False
         node = node[part]
-    if isinstance(node, dict) and parts[-1] in node:
-        del node[parts[-1]]
+    last = _key(node, parts[-1])
+    if isinstance(node, dict) and last in node:
+        del node[last]
         return True
     return False
 
@@ -2517,9 +2620,9 @@ def _due_minutes(text, anchor):
 
 
 def _no_due(st):
-    v = _val(st.get("due")) if isinstance(st, dict) else None
-    body = _STAMP.sub("", str(v if v is not None else "")).strip()
-    return not body or re.fullmatch(r"(none|incidental)\b.*", body, re.I) is not None
+    v = st.get("due") if isinstance(st, dict) else None
+    return all(not body or re.fullmatch(r"(none|incidental)\b.*", body, re.I) is not None
+               for _, body in _due_steps(v))
 
 
 QUEST_CODE = re.compile(r"^([A-Z]{1,2}(?:-[A-Z]{1,2})*)(?:-(\d+))?([spfa])?$")
@@ -2631,6 +2734,30 @@ def _important(tree):
     return out
 
 
+def _layers(loc, zones):
+    """A location's surface and undercurrent (a building reads its zone's); no
+    undercurrent recorded = none (0)."""
+    z = zones.get(loc) or {}
+    if z.get("zone") and z["zone"] in zones and z["zone"] != loc:
+        z = zones[z["zone"]]
+    if not z:
+        return None, None
+    return z.get("surface"), z.get("undercurrent") or 0
+
+
+def _zone_point(side, surface, under):
+    """RULES §9.1 ZONE: the likelihood point for an actor's uncertain act, by its
+    in_disorder: open act → the surface, hidden act → the undercurrent."""
+    def pt(v, open_):
+        if v is None:
+            return None
+        k = 2 if v <= -3 else 1 if v <= -2 else 0
+        if open_:
+            k = -2 if v >= 3 else -1 if v >= 2 else k
+        return {"thrives": k, "suffers": -k, "neither": 0}.get(side)
+    return {"open": pt(surface, True), "hidden": pt(under, False)}
+
+
 def do_span(form):
     _need(form, "background", "from", "minutes")
     tree, last = world_tree(form["background"], form.get("save"), form.get("deltas"))
@@ -2657,7 +2784,7 @@ def do_span(form):
     events, triggers, flags = [], [], []
     seen = set(form.get("shown_at_start") or [])
     resumed = "shown_at_start" in form
-    def add_dues(rid, text, zone_of=None):
+    def add_dues(rid, text, zone_of=None, side=None):
         body = _STAMP.sub("", str(text or "")).strip()
         if not body or re.fullmatch(r"(none|incidental|routine)\b.*", body, re.I):
             return False
@@ -2673,9 +2800,17 @@ def do_span(form):
                 loc = zone_of
                 here = bool(loc and home and (loc == home or zones.get(loc, {}).get("zone") == home
                                               or loc == pcz))
-                events.append({"t": t, "kind": "due", "id": rid, "what": seg[:240],
-                               "zone": loc, "candidate": here or bool(aimed.search(seg)),
-                               "time_assumed": assumed})
+                ev = {"t": t, "kind": "due", "id": rid, "what": seg[:240],
+                      "zone": loc, "candidate": here or bool(aimed.search(seg)),
+                      "time_assumed": assumed}
+                if side is not None:   # RULES §9.1 ZONE: the point for this actor's act
+                    ev["in_disorder"] = side or "unset — set it once from role and drives"
+                    if loc:
+                        sv, uv = _layers(loc, zones)
+                        ev["surface"], ev["undercurrent"] = sv, uv
+                        if side in ("thrives", "suffers", "neither"):
+                            ev["zone_point"] = _zone_point(side, sv, uv)
+                events.append(ev)
         return True
 
     for owner in ("npcs", "factions"):
@@ -2683,9 +2818,15 @@ def do_span(form):
             if not isinstance(rec, dict):
                 continue
             st = rec.get("state") if isinstance(rec.get("state"), dict) else {}
-            loc = _where(str(_val(st.get("position")) or ""), zones)
-            if st.get("due") is not None:
-                add_dues(f"{owner}.{aid}.state.due", _val(st.get("due")), loc)
+            pos = str(_val(st.get("position")) or "")
+            loc = _where(pos, zones)
+            if st.get("due") is not None and not _no_due(st):
+                if pos and loc is None:
+                    flags.append(f"{owner}.{aid}.state.position :: \"{pos[:60]}\" names no recorded "
+                                 "location — develop the place once (GM §7.5) and record it")
+                side = str(_val(rec.get("in_disorder")) or "").strip().lower()
+                for suf, body in _due_steps(st.get("due")):
+                    add_dues(f"{owner}.{aid}.state.due{suf}", body, loc, side)
     for pid, p in (tree.get("active_world_pressures") or {}).items():
         if not isinstance(p, dict):
             continue
@@ -2757,7 +2898,8 @@ def do_span(form):
                 shown.append(row); stop = e; break
             shown.append(row)
             continue
-        row.update({k: e[k] for k in ("id", "what", "zone") if e.get(k)})
+        row.update({k: e[k] for k in ("id", "what", "zone", "in_disorder", "surface",
+                                      "undercurrent", "zone_point") if e.get(k) is not None})
         if e.get("time_assumed"):
             row["time_assumed"] = "the due names a day only; hour taken from its wording, else 08:00"
         shown.append(row)
@@ -2920,14 +3062,19 @@ def do_check_background(form):
         pos = _val(st.get("position"))
         if pos and not _where(str(pos), zones):
             add("references", f"npcs.{aid}.state.position :: \"{pos}\" names no recorded location")
-        due = _STAMP.sub("", str(_val(st.get("due")) or "")).strip()
-        if due and not _no_due(st):
+        for suf, due in ([] if _no_due(st) else _due_steps(st.get("due"))):
+            did = f"npcs.{aid}.state.due{suf}"
+            if not due:
+                continue
+            if len(set(re.findall(r"\bday\s*\d+\b", due, re.I))) > 1:
+                add("dues", f"{did} :: several dated steps in one due; write them as numbered "
+                            "steps {1: …, 2: …}")
             if not _due_minutes(due, anc) and not _EVENT.search(due):
-                add("dues", f"npcs.{aid}.state.due :: neither a time nor a trigger — \"{due[:60]}\"")
+                add("dues", f"{did} :: neither a time nor a trigger — \"{due[:60]}\"")
             elif re.search(r"\bday\s*\d+\b", due, re.I) and not re.search(
                     r"\d{1,2}:\d{2}|morning|noon|midday|afternoon|evening|dusk|dawn|night|midnight",
                     due, re.I):
-                add("dues_without_time", f"npcs.{aid}.state.due :: a day with no time of day; "
+                add("dues_without_time", f"{did} :: a day with no time of day; "
                                          "the tool will assume 08:00")
     for row in _depth_problems(tree):
         add("depth_fields", row)

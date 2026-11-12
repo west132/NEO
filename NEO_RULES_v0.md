@@ -288,8 +288,9 @@ APPLY     the answer stands for this exchange; the relationship moves only by
 ```text
 ZONE       an NPC's uncertain plan or act reads the zone where it happens: open →
            surface, hidden → undercurrent; their `in_disorder` says whether
-           disorder helps them (thrives), hurts them (suffers) or neither; the
-           tool turns it into one likelihood point or one favourable condition
+           disorder helps them (thrives), hurts them (suffers) or neither; `span`
+           gives the point with each actor's due (zone_point: open, hidden); it
+           counts as one likelihood point or one favourable condition
 INFLUENCE  persuading, deceiving, intimidating, bargaining are player actions; an
            action form when how well it's done is uncertain: success +2 likelihood
            (decisive +3) · failure −2 and its cost; proof or a corrected belief →
@@ -323,7 +324,8 @@ ONCE     the answer stands; asking again needs a changed fact
 QUEST    an objective the PC has taken on: offered by an actor, required by a deal,
          or set by the PC
 RECORD   code · objective · source · level · status · parts (optional); paid work
-         points to its terms in rights_obligations
+         points to its terms: `terms: rights_obligations.<id>`, and the contract
+         names its quest back: `quest: <code>`
 LEVEL    the fixed challenge of the job, from its cause, task and opposition within
          the location's band; a job that truly changes becomes a new part or quest
 WHICH    an action's challenge: its direct opponent or task, else the engaged
@@ -752,8 +754,10 @@ combat     §8: side, opponents, conditions, stop → a batch of exchanges, paus
            the first turning point with every fighter's HP; send it again with HP as
            it stands to continue
 span       §15.2: from {day, clock}, minutes, pc_zone, arrived → events in time
-           order, stopping at the first that could reach the PC; triggers to check;
-           flags; after a stop, send it again with the returned resume fields
+           order, stopping at the first that could reach the PC (each actor's due
+           with its zone and zone_point, §9.1); triggers to check; flags (a
+           position naming no recorded place among them); after a stop, send it
+           again with the returned resume fields
 check      a background before play → findings (frame, NPC fields and depth, dues,
            important actors and pressures without a due, quests at Round 0, cases
            with fewer than 3 routes, broken references); ok when only untimed dues

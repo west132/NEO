@@ -34,15 +34,20 @@ IMPORTANT   read from the newest save: an actor with a relationship to the PC
             (credit, grievance, bond), a role in a quest, pressure or case, or a
             deal with the PC; an important actor always has a plan and a due
 DUE         a clock time with a daypart, or a trigger written as an event ("when …")
-            the tool can list
+            the tool can list; a plan with several steps is written as numbered
+            steps, like a quest's parts (A-1, A-2): due: {1: …, 2: …}; each step is
+            its own due at …state.due.<n>, and a step that has fired is retired
+            (`− npcs.<id>.state.due.1 :: fired R<n>`)
 CHARACTER   who they are, played as behaviour · VOICE how they sound, played as
             speech · a character from a source is played as the source made them
 WANT        kept plain: what the PC can push on; the complexity lives in pull,
             beliefs, secret and line; `secret.why` is their own ordinary reason for
             hiding it, and the reason for any lie that protects it
 IN_DISORDER thrives (works against order) · suffers (relies on it) · neither
-POSITION    an actor's position names a recorded location, so the tool finds the
-            zone
+POSITION    an actor's or the PC's position names a recorded location, so the tool
+            finds the zone; someone going somewhere unrecorded that play will use
+            (a lodging, a hideout) → develop the place once for the world's own
+            reason (GM §7.5) and record it: + locations.<id> :: {name, zone, …}
 CHANNELS    player.knowledge.channels: how the PC hears of the world (GM §3.1 WORD)
 STYLE       player.fighting_style: the player's own combat habits, in their words;
             only the player changes them
