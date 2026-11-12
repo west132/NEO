@@ -49,12 +49,36 @@ class Fixes(unittest.TestCase):
     def test_check_flags_several_moves_in_one_due(self):
         path = os.path.join(TMP, "bg.md")
         text = open(BG, encoding="utf-8").read().replace(
-            "due: Day 1 morning goes with Meera if she lets him",
+            "due: B-1 Day 1 morning goes with Meera if she lets him",
             "due: Day 1 morning goes with Meera; Day 3 morning tells her")
         open(path, "w", encoding="utf-8").write(text)
         o = run({"cmd": "check", "background": path})
-        self.assertTrue(any("one next move" in r for r in o["findings"].get("dues", [])))
+        self.assertTrue(any("no codes" in r for r in o["findings"].get("dues", [])))
 
+
+    def test_a_resolved_move_stops_firing(self):
+        d = deltas("GM-Δ 1\n  ~ npcs.nathan_drake.state.due :: A-3s Day 2 night the auction; "
+                   "A-10 Day 5 afternoon Sully offers it to Sterne; A-11 Day 6 night the well\n")
+        form = {"cmd": "span", "background": BG, "from": {"day": 2, "clock": 1200},
+                "minutes": 5 * 1440, "pc_zone": "patna_university", "deltas": d}
+        steps = []
+        for _ in range(60):
+            o = run(form)
+            steps += [e["step"] for e in o["events"]
+                      if e["kind"] == "due" and e["id"] == "npcs.nathan_drake.state.due"]
+            if not o["stopped"]:
+                break
+            form = {**form, **o["resume"]}
+        self.assertEqual(steps, ["A-10", "A-11"])      # Day 5 and Day 6; the auction move is done
+
+    def test_a_move_code_must_name_a_quest_step(self):
+        path = os.path.join(TMP, "bg2.md")
+        with open(BG, encoding="utf-8") as f:
+            text = f.read().replace("due: B-1 Day 1 morning goes with Meera", "due: Q-9 Day 1 morning goes with Meera")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text)
+        o = run({"cmd": "check", "background": path})
+        self.assertTrue(any("Q-9" in r for r in o["findings"].get("references", [])))
 
 
 if __name__ == "__main__":

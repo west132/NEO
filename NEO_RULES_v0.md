@@ -483,7 +483,9 @@ ACTOR     an NPC or faction; kept as a record when it recurs or matters (its dep
 ACTS      from who they are, their state, drives, relationships, rights,
           knowledge, capability and the world around them; they react to changes
           they perceive
-PLAN      a next move and a due: a clock time, or a trigger the tool can list;
+PLAN      its moves and their dues: a clock time, or a trigger the tool can list;
+          each move carries the code of the quest step it serves (A-1 …), and its
+          status letter once resolved (A-1s);
           when the due passes the move resolves wherever the PC is, reaching the
           PC through real channels
 ALWAYS    every important actor has a plan with a due at all times; the tool flags

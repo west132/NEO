@@ -552,7 +552,10 @@ TEST  Nov 12: 20-round Sheet Anchor test (West.L, treasure hunter). Opening,
       runner, customs held. Fixed from it, all within existing design: packed
       dues rewritten as one next move each, the rest in the plan (RULES §15.1);
       quest codes designed with the quest as in the Step 2 example, given to the
-      player on take-on (the check no longer rejects them) · span gives the §9.1 zone point with each actor's due · a position
+      player on take-on (the check no longer rejects them); a quest's parts are its
+      steps in order (A-1 … A-13), each code unique; every actor move in a due
+      starts with the step code it serves and takes its status letter once
+      resolved (A-3s) · span gives the §9.1 zone point with each actor's due · a position
       names a recorded place by whole name, else the GM develops and records it
       (no guessing from one word) · quest and contract point at each other by
       terms and code (RULES §10) · merge applies a whole-record change field by

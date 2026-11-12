@@ -449,8 +449,8 @@ npcs:
     in_disorder:                   # thrives | suffers | neither
     state: {}                      # status, position (a recorded location's name), current HP/MP when below
                                    # max, nerve when it matters, plan, due, what they do if blocked
-                                   # due: the one next move, with a daypart ("Day 2 night …") or a trigger;
-                                   # later moves stay in plan (RULES §15.1)
+                                   # due: each move with the code of the quest step it serves and a daypart
+                                   # or trigger: "A-1 Day 2 night …; A-3 Day 6 night …" (A-1s once resolved)
                                    # work source: routines: {work_source: {pace: , kinds: []}}
     drives:
       want:                        # depth 1+: the one plain thing they want

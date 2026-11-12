@@ -1172,6 +1172,9 @@ def _dues(path, caps, retired=(), bg=None, save_round=None):
     for rid, txt in cur.items():
         body = re.sub(r"^R\d+:\s*", "", txt)
         if rid.endswith(".due"):
+            body = _open_due(body)
+            if not body:
+                continue
             base_ = re.sub(r"\.(state\.)?due$", "", rid)
             st_ = cur.get(f"{base_}.state.status") or cur.get(f"{base_}.status") or ""
             if not st_:
@@ -2547,10 +2550,43 @@ def do_combat(form):
 
 # ── time: run a span, stop at the first thing that could reach the PC ──
 
-def _due_minutes(text, anchor):
-    """Each dated point of a due as (absolute minute, segment text, assumed)."""
+_MOVE = re.compile(r"^([A-Z]{1,2}(?:-[A-Z]{1,2})*(?:-\d+)?)([spfa])?\s+(.+)$", re.S)
+_MOVE_SPLIT = re.compile(r";\s*(?=[A-Z]{1,2}(?:-[A-Z]{1,2})*(?:-\d+)?[spfa]?\s)")
+
+
+def _due_moves(text):
+    """A due's moves as [(code, status, text)]. Each move starts with the code of the
+    quest step it serves (A-1, A-C); a status letter after the code (A-1s) marks a move
+    that has resolved. A due with no code is one move: (None, None, text)."""
+    body = _STAMP.sub("", str(_val(text) if text is not None else "")).strip()
+    if not _MOVE.match(body):
+        return [(None, None, body)] if body else []
     out = []
-    segs = [s.strip() for s in re.split(r";", text) if s.strip()] or [text]
+    for seg in _MOVE_SPLIT.split(body):
+        m = _MOVE.match(seg.strip())
+        if m:
+            out.append((m.group(1), m.group(2), m.group(3).strip()))
+        elif out:
+            out[-1] = (out[-1][0], out[-1][1], out[-1][2] + "; " + seg.strip())
+    return out
+
+
+def _open_due(text):
+    """The text of a due's open moves only (no status letter), joined."""
+    return "; ".join((f"{c} {t}" if c else t) for c, st, t in _due_moves(text) if not st)
+
+
+def _due_minutes(text, anchor):
+    """Each dated point of a due's open moves as (absolute minute, segment text, assumed)."""
+    out = []
+    segs = []
+    for code, st, body in _due_moves(text):
+        if st:
+            continue
+        if code:
+            segs.append(f"{code} {body}")
+        else:
+            segs += [x.strip() for x in re.split(r";", body) if x.strip()]
     for seg in segs:
         for key, mins in _points(seg, anchor):
             if key[0] != "d":
@@ -2565,7 +2601,7 @@ def _due_minutes(text, anchor):
 
 def _no_due(st):
     v = _val(st.get("due")) if isinstance(st, dict) else None
-    body = _STAMP.sub("", str(v if v is not None else "")).strip()
+    body = _open_due(v)
     return not body or re.fullmatch(r"(none|incidental)\b.*", body, re.I) is not None
 
 
@@ -2729,7 +2765,7 @@ def do_span(form):
     seen = set(form.get("shown_at_start") or [])
     resumed = "shown_at_start" in form
     def add_dues(rid, text, zone_of=None, side=None):
-        body = _STAMP.sub("", str(text or "")).strip()
+        body = _open_due(text)
         if not body or re.fullmatch(r"(none|incidental|routine)\b.*", body, re.I):
             return False
         pts = _due_minutes(body, anc)
@@ -2744,7 +2780,9 @@ def do_span(form):
                 loc = zone_of
                 here = bool(loc and home and (loc == home or zones.get(loc, {}).get("zone") == home
                                               or loc == pcz))
+                mv = _MOVE.match(seg)
                 ev = {"t": t, "kind": "due", "id": rid, "what": seg[:240],
+                      "step": mv.group(1) if mv else None,
                       "zone": loc, "candidate": here or bool(aimed.search(seg)),
                       "time_assumed": assumed}
                 if side is not None:   # RULES §9.1 ZONE: the point for this actor's act
@@ -2841,7 +2879,7 @@ def do_span(form):
                 shown.append(row); stop = e; break
             shown.append(row)
             continue
-        row.update({k: e[k] for k in ("id", "what", "zone", "in_disorder", "surface",
+        row.update({k: e[k] for k in ("id", "what", "step", "zone", "in_disorder", "surface",
                                       "undercurrent", "zone_point") if e.get(k) is not None})
         if e.get("time_assumed"):
             row["time_assumed"] = "the due names a day only; hour taken from its wording, else 08:00"
@@ -2990,6 +3028,14 @@ def do_check_background(form):
         add("frame", "requested :: a generated or mixed background lists what the person asked for")
 
     actors = set((tree.get("npcs") or {}).keys()) | set((tree.get("factions") or {}).keys())
+    qcodes = set()
+    for q in (tree.get("quests") or {}).values():
+        if isinstance(q, dict):
+            if q.get("code"):
+                qcodes.add(str(q["code"]))
+            for part in (q.get("parts") or {}).values() if isinstance(q.get("parts"), dict) else []:
+                if isinstance(part, dict) and part.get("code"):
+                    qcodes.add(str(part["code"]))
     for aid, rec in (tree.get("npcs") or {}).items():
         if not isinstance(rec, dict):
             continue
@@ -3008,9 +3054,13 @@ def do_check_background(form):
         due = _STAMP.sub("", str(_val(st.get("due")) or "")).strip()
         did = f"npcs.{aid}.state.due"
         if due and not _no_due(st):
-            if len(set(re.findall(r"\bday\s*\d+\b", due, re.I))) > 1:
-                add("dues", f"{did} :: several moves in one due; an actor has one next move "
-                            "and one due, the rest in its plan (RULES §15.1)")
+            moves = _due_moves(due)
+            if len(set(re.findall(r"\bday\s*\d+\b", due, re.I))) > 1 and not moves[0][0]:
+                add("dues", f"{did} :: several moves with no codes; start each move with the "
+                            "code of the quest step it serves (A-1 …; A-3 …)")
+            for code, _, _ in moves:
+                if code and code not in qcodes:
+                    add("references", f"{did} :: code {code} names no quest or part")
             if not _due_minutes(due, anc) and not _EVENT.search(due):
                 add("dues", f"{did} :: neither a time nor a trigger — \"{due[:60]}\"")
             elif re.search(r"\bday\s*\d+\b", due, re.I) and not re.search(
