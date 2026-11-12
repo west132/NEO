@@ -11,7 +11,7 @@ Field names are the same in both, so nothing is translated between them. Fill in
 PARTS  0 design logic · A frame · B situation · C people · D places · E player ·
   F opening · G records and changes · H the save
 BUILD  generating a background, or reworking one for complex quests and stories:
-  the procedure is GM §10.0; Part 0 runs before Parts B–C
+  the procedure is GM §7.1; Part 0 runs before Parts B–C
 READ   the GM reads facts only from here (BACKGROUND + newest SAVE + the GM-Δ blocks
   since); never from memory of earlier turns
 ```
@@ -354,7 +354,7 @@ canon_course:
 
 ## 3. Setting anchors
 
-Record only the anchors needed to stop incompatible generation. Every new setting element in play must trace back to one of these, to recorded canon, or to in-world development (I3); what none of them settles is developed by GM §10.4.
+Record only the anchors needed to stop incompatible generation. Every new setting element in play must trace back to one of these, to recorded canon, or to in-world development (I3); what none of them settles is developed by GM §7.5.
 
 ```yaml
 setting_anchors:
@@ -544,7 +544,7 @@ Every NPC has a depth. It sets which fields they carry; never how much they matt
 3 STORY-TURNING  + pull, belief; plan and due; knowledge
 UP     an NPC rises when the record shows they matter more: a tie with the PC, a
        role in a quest, pressure or case, a deal; new fields are developed once
-       (GM §10.4), then fixed
+       (GM §7.5), then fixed
 NEVER  moves down; a dead or departed NPC keeps the record (witnesses, grudges and
        knowledge outlast them)
 START  the BACKGROUND sets each NPC's depth; an NPC first met in play starts at 0,
@@ -715,7 +715,7 @@ player:
   fighting_style: []
   knowledge:
     facts: {}
-    channels: []                  # how the PC hears of the world: the GM tells what comes through these (GM §5.1 WORD)
+    channels: []                  # how the PC hears of the world: the GM tells what comes through these (GM §3.1 WORD)
 ```
 
 `hp` and `mp` start at the derived maximum unless the history says otherwise. A lasting condition is a name and one plain effect ("broken leg: harder to run or climb"). `fighting_style` holds combat habits the player has stated for this character, in their words — what a resource is kept for, how a fight opens, how a danger is tested, where allies stand. Leave it empty if they have stated none; only the player adds or changes it. `routines` holds only recorded in-world recurring behaviour. `channels` are how this character actually receives information.
@@ -812,7 +812,7 @@ DERIVED  stance, risk, opportunity, access, feasibility, severity, payoff
 ```text
 EXISTS  a fact exists only once written (a GM-Δ entry or the capsule); until then
   it never influences resolution, decisions, evidence, or narration (I2, I3)
-BLOCK   one per round, at the top of the turn before any prose (GM §5.6), holding
+BLOCK   one per round, at the top of the turn before any prose (GM §3.6), holding
   every change since the last block, visible or hidden, plain text; header names
   the previous block's round (first after a save names the save's round);
   no change → `GM-Δ <round> none`; a missing block = a gap
@@ -860,7 +860,7 @@ TWO PARTS  A readable (written by the GM at save time) · B capsule (built by th
   tool); the same completed round, the same stable ids, never the same field twice
 BUILT    the tool merges the previous save (none for the first) with every GM-Δ
   block since, copied from the turns (RULES §16 save)
-TIMING   GM §8
+TIMING   GM §6
 ```
 
 ## 18. Part A — readable
