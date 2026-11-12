@@ -18,7 +18,7 @@ To continue a campaign: the same five files and your newest save. Send: `Continu
 
 To make a new world: attach the four play files (no background) and send: `Make a new world: <what you want>.` The GM follows its making-a-world steps, checks the result with the tool, and shows you what it invented before you play.
 
-Out of character: start a message with `ps`.
+Out of character: start a message with `ps`, or say it is out of game, to the GM or to the AI.
 
 ## Not part of play
 

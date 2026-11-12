@@ -114,7 +114,7 @@ REACH    partial  progress, foothold, part of the objective
          full     the stated objective
          decisive objective + a further advantage the situation offers
          set by what this action can achieve from here, never by drama
-SHOWN    GM §5.3; a shown danger is never reduced, refused quietly, or its cost
+SHOWN    GM §3.3; a shown danger is never reduced, refused quietly, or its cost
          lowered after
 APPLY    bound stakes as written; success-partial ≠ failure; failure-setback is
          still failure (I11); physical harm paid in HP (§5)
@@ -279,7 +279,7 @@ BATCH     the tool rolls exchange after exchange and applies damage; it pauses a
 AT PAUSE  the GM settles morale (below) and checks the world around the fight
           (noise heard, fire spreading, someone arriving); nothing the plan doesn't
           cover → the tool continues; something it doesn't → the player decides
-          (GM §7)
+          (GM §5)
 UNCOVERED a case the form can't hold → an action form, never an invented mechanic
 ```
 
@@ -314,7 +314,7 @@ ENVIRON  causally active: can block, break, spread, attract attention, open opti
 ORDER    1 PLAN    the actor's plan touches the question → the plan decides, no
                    roll: fits it → yes; works against it → no, or only on the plan's
                    terms; a plan with a condition → the condition decides
-         2 SETTLE  the record or the usual answer (GM §5.5 USUAL) settles it (duty,
+         2 SETTLE  the record or the usual answer (GM §3.5 USUAL) settles it (duty,
                    drive, standing, authority, obvious cost, recorded fact,
                    setting) → that way, for or against the player, no roll; test:
                    would it settle the same way if the outcome flipped for the
@@ -373,7 +373,7 @@ IDENTITY  actors react to who they believe they deal with (I5): a false name,
 ```text
 NOTHING  a person, thing or event exists only from the world's own causes, never
          to help the PC
-EXISTS   designed by the WORLD, or usual here (a taxi in Bombay; GM §5.5 USUAL) →
+EXISTS   designed by the WORLD, or usual here (a taxi in Bombay; GM §3.5 USUAL) →
          exists, no roll
 ROLL     possible but not usual, and the player asks → 2d10 ≥ 15
 REACH    −1 to the target per source, each once, at most −3: the PC's own network ·
@@ -470,7 +470,7 @@ RECOVERY  collect routinely only if: material exposed, collection possible, owne
   permits, taking is routine or reclaims player property, no real danger/
   legal/time/capacity/preservation tradeoff → update natural owner, consume
   material time; never auto-take disputed/owned/protected goods; never
-  teleport bulk; real choice → stop (GM §7); once collected, canonical (no
+  teleport bulk; real choice → stop (GM §5); once collected, canonical (no
   repeated commands)
 PAYOFFS  derive from actual outcome + canonical sources; filter by ownership,
   authority, access, causality; apply once at natural owner; earned but
@@ -574,7 +574,7 @@ QUEST XP  each code pays once at CLOSE, vs its level; a part (A-1) pays for
 
 ## 14. Item points
 
-On unless the BACKGROUND sets `flexible_item_entitlement: false`. Not help from the world (GM §5.5 HELP): the PC spends their own limited resource on their own preparation.
+On unless the BACKGROUND sets `flexible_item_entitlement: false`. Not help from the world (GM §3.5 HELP): the PC spends their own limited resource on their own preparation.
 
 ```text
 PURPOSE  buys back preparation play skipped (a GM fast-forward, a step the player
@@ -970,7 +970,7 @@ CONDITIONS  ending_conditions; 0..n, an open world needs none; chapter.end is on
   choices; outcomes the player may pursue, ignore, miss (I6, I11); hidden ones
   natural and discoverable; the full set revealed at the end
 CHECK  only when a resolved event changed state a condition depends on; never on
-  schedule, round count, or length; met → ending review (GM §10.6); permanently
+  schedule, round count, or length; met → ending review (GM §7.6); permanently
   unreachable → closed for good; none left → ends in that state, no new ending
 ```
 
@@ -996,12 +996,12 @@ span       §15.2: from {day, clock}, minutes, pc_zone, arrived → events in ti
            first that could reach the PC; triggers to check; flags (an important
            actor or a pressure with no due, a malformed quest code); after a stop,
            send it again with the returned resume fields
-check      GM §10.0: a background before play → findings: frame, NPC fields and
+check      GM §7.1: a background before play → findings: frame, NPC fields and
            depth, dues (incl. a day with no time of day), important actors and
            pressures without a due, quests at Round 0, cases with < 3 routes,
            broken references; ok when nothing but untimed dues; it can't judge
            design
-selfcheck  GM §8: answers {npc_positions, quests, money, hp}, round → each answer
+selfcheck  GM §6: answers {npc_positions, quests, money, hp}, round → each answer
            against the save, the tool's own checks, the verdict; positions are
            answered with the location's recorded name
 award      §13: actor, challenge, scope, source → XP, level, the paid marker
@@ -1012,7 +1012,7 @@ encounter  §15.3: one surface or undercurrent roll
 vitals · harm · heal · cast · time · roll   single calculations (§5)
 merge      WORLD §19: previous save + GM-Δ blocks → the next capsule
 validate   a save: readable, capsule survival against the previous save, dues
-flatten    GM §10.6: BACKGROUND + final save → one world, records open or closed
+flatten    GM §7.6: BACKGROUND + final save → one world, records open or closed
 ```
 
 ---
