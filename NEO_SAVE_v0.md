@@ -35,7 +35,7 @@ IMPORTANT   read from the newest save: an actor with a relationship to the PC
             deal with the PC; an important actor always has a plan and a due
 DUE         a clock time with a daypart, or a trigger written as an event ("when …")
             the tool can list; a due with several moves starts each with the code of
-            the quest step it serves: `A-1 Day 2 night …; A-3 Day 6 night …`; a move
+            the quest or part it serves: `A-1 Day 2 night …; A-3 Day 6 night …`; a move
             that has resolved gets its status letter after the code (`A-1s …`) and
             stops firing; when no open move is left, the actor re-plans
 CHARACTER   who they are, played as behaviour · VOICE how they sound, played as
