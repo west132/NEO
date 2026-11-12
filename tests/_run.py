@@ -6,7 +6,7 @@ import json, os, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 TOOL = os.path.join(ROOT, "neo_math_v0.py")
-BG = os.path.join(ROOT, "worlds", "BACKGROUND_SHEET_ANCHOR_NEO_v0.md")
+BG = os.path.join(ROOT, "worlds", "BACKGROUND_SCP_OMEGA99_NEO_v0.md")
 
 
 
@@ -17,34 +17,33 @@ def run(form):
     return json.loads(r.stdout)
 
 
-READABLE = """# SAVE — Sheet Anchor R{round}
+READABLE = """# SAVE — Class of '99 R{round} (test fixture; the player block is a test agent)
 
 ## Part A — readable
 
 ```yaml
-background_ref: {{id: sheet_anchor_india_1991}}
+background_ref: {{id: scp_class_of_99_v5_2}}
 language: en
-profile: full
 round:
   last_completed_round: {round}
   saved_completed_round: {round}
 world_state:
-  location: chor_bazaar
-  time: {{season: monsoon, day_index: 2, date: Day 2 (July 1991), clock_minutes: 1320, daypart: evening, precision: exact}}
-  environment: {{weather: first monsoon rain}}
+  location: site19
+  time: {{season: early spring, day_index: 2, date: '2026-03-03', clock_minutes: 1320, daypart: evening, precision: exact}}
+  environment: {{weather: cold, clear}}
 player:
-  identity: {{name: Lok, age: 27, origin: Hong Kong, history: [film stunt performer in Bombay]}}
-  archetype: film stunt performer
-  job: film stunt performer
-  belongs: [independent]
+  identity: {{name: Test Agent, age: 27, origin: United States, history: [test fixture agent]}}
+  archetype: field agent (test)
+  job: Foundation field agent (test)
+  belongs: [foundation, mtf_omega_99]
   gender: man
   character: player-defined in play
   status: bruised
   skills:
-    acrobatics: {{class: NORMAL, tier: T2, evidence: 1, class_source: the role's work, abilities: []}}
-    brawling: {{class: NORMAL, tier: T2, evidence: 0, class_source: the role's work, abilities: []}}
-  traits: [knows how to fall]
-  expertise: {{established: [stunt rigging], limitations: [no formal schooling]}}
+    acrobatics: {{class: NORMAL, tier: T2, evidence: 1, class_source: test, abilities: []}}
+    brawling: {{class: NORMAL, tier: T2, evidence: 0, class_source: test, abilities: []}}
+  traits: [test fixture]
+  expertise: {{established: [test], limitations: [test]}}
   growth_period: {{opened: 0, credited: [acrobatics]}}
   progression:
     system: numeric_level_xp
@@ -56,18 +55,18 @@ player:
     fatigue: tired
     last_rest: full night, Day 1
   equipment:
-    - {{item_id: stunt_harness, name: stunt harness, type: tool, capability_domain: acrobatics, condition: serviceable, special_properties: [], tier: T1, abilities: []}}
-  money: {{cash: "₹1,350"}}
+    - {{item_id: stunt_harness, name: stunt harness, type: tool, capability_domain: acrobatics, condition: serviceable, special_properties: [], tier: T2, abilities: []}}
+  money: {{cash_and_accessible_funds: "1,350", currency: USD}}
   resources: {{}}
   item_points: {{current: 37, max: 40, rank: commoner}}
   routines: {{}}
   fighting_style: []
-  knowledge: {{facts: {{rumour: a plate, an auction}}, channels: [the street, the papers, their own people]}}
+  knowledge: {{facts: {{test: fixture}}, channels: [handler briefings]}}
 enabled_modules: {{numeric_level_xp: true, flexible_item_entitlement: true}}
-narrative_theme: {{initial: {{tone: pulp}}, current: {{tone: pulp}}}}
+narrative_theme: {{initial: {{tone: light}}, current: {{tone: light}}}}
 index:
-  npcs: {{pinky_malhotra: "Pinky — your boss; you saved her riggers"}}
-  quests: {{B: "who stole from Meera's lab — active"}}
+  npcs: {{dmitri_volkov: "Dima — sparring partner"}}
+  quests: {{B: "the Loewes file — active"}}
 ```
 
 ## Part B — capsule
@@ -77,18 +76,17 @@ index:
 """
 
 DELTAS_1 = """GM-Δ 1 ⟵ 0
-  ~ npcs.meera_raghavan.state.position :: the train to Bombay
+  ~ npcs.rosa_delgado.state.position :: Site-88
 GM-Δ 2 ⟵ 1
-  + quests.side_lab_theft.code :: B (R2, the PC agreed to help Meera)
-  ~ quests.side_lab_theft.status :: active
-  + npcs.pinky_malhotra.relationships.pc.credit.set_saved :: pulled two riggers out of the collapsing set (R2)
+  ~ quests.loewes_file.status :: active
+  + npcs.dmitri_volkov.relationships.pc.credit.sparring :: held his own at sparring (R2)
 GM-Δ 3 none
 """
 
 DELTAS_2 = """GM-Δ 11 ⟵ 10
-  ~ quests.side_lab_theft.status :: succeeded (R11, Ravi confessed)
-  ~ npcs.ravi_kumar.state.plan :: tell Meera himself
-  ~ npcs.ravi_kumar.state.due :: Day 3 morning tells Meera
+  ~ quests.loewes_file.status :: succeeded (R11, the copycat caught)
+  ~ npcs.leo_brandt.state.plan :: tell West
+  ~ npcs.leo_brandt.state.due :: L Day 3 evening tells West
   ~ player.condition.hp :: 12
 GM-Δ 12 none
 """

@@ -2551,7 +2551,7 @@ def do_combat(form):
 # ── time: run a span, stop at the first thing that could reach the PC ──
 
 _MOVE = re.compile(r"^([A-Z]{1,2}(?:-[A-Z]{1,2})*(?:-\d+)?)([spfa])?\s+(.+)$", re.S)
-_MOVE_SPLIT = re.compile(r";\s*(?=[A-Z]{1,2}(?:-[A-Z]{1,2})*(?:-\d+)?[spfa]?\s)")
+_MOVE_SPLIT = re.compile(r";\s*(?=[A-Z]{1,2}(?:-[A-Z]{1,2})*(?:-\d+)?[spfa]?\s|Day\s+[−-]?\d)")
 
 
 def _due_moves(text):
@@ -2566,6 +2566,8 @@ def _due_moves(text):
         m = _MOVE.match(seg.strip())
         if m:
             out.append((m.group(1), m.group(2), m.group(3).strip()))
+        elif re.match(r"Day\s+[−-]?\d", seg.strip()):
+            out.append((None, None, seg.strip()))      # a move that serves no quest
         elif out:
             out[-1] = (out[-1][0], out[-1][1], out[-1][2] + "; " + seg.strip())
     return out

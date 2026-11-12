@@ -12,9 +12,9 @@ class Action(unittest.TestCase):
         return f
 
     def test_capability_read_from_the_world(self):
-        o = run({"cmd": "action", "background": BG, "actor": "asian_hawk", "action": "vault",
-                 "skill": "acrobatics", "opposition": {"level": 5}})
-        self.assertEqual(o["bound"]["capability"], 11)        # level 8 + T3
+        o = run({"cmd": "action", "background": BG, "actor": "rosa_delgado", "action": "search",
+                 "skill": "field_investigation", "opposition": {"level": 5}})
+        self.assertEqual(o["bound"]["capability"], 9)         # level 6 + T3
 
     def test_roll_adds_up(self):
         o = run(self.base())
@@ -48,9 +48,7 @@ class Action(unittest.TestCase):
         self.assertIn("fact", o["error"])
 
     def test_one_item_counts_once(self):
-        o = run({"cmd": "action", "background": BG, "actor": "lara_croft", "action": "shoot",
-                 "skill": "firearms", "gear_tier": "twin pistols", "tool": {"fit": "good"},
-                 "opposition": {"level": 6}})
+        o = run(self.base(skill="acrobatics", gear_tier="stunt_harness", tool={"fit": "good"}))
         self.assertIn("once", o["error"])
 
     def test_opposition_is_exactly_one_kind(self):

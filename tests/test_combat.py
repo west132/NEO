@@ -7,7 +7,7 @@ W = World()
 class Combat(unittest.TestCase):
     def test_pauses_at_a_turning_point(self):
         o = run({"cmd": "combat", "background": BG,
-                 "side": [{"actor": "asian_hawk", "skill": "brawling", "damage": "1d3"}],
+                 "side": [{"actor": "dmitri_volkov", "skill": "close_combat", "damage": "1d3"}],
                  "opponents": [{"name": "merc 1", "level": 3, "damage": "1d6"},
                                {"name": "merc 2", "level": 3, "damage": "1d6"}]})
         self.assertTrue(o["paused"])
@@ -19,7 +19,7 @@ class Combat(unittest.TestCase):
         for _ in range(12):
             o = run({"cmd": "combat", **W.w20,
                      "side": [{"actor": "pc", "skill": "brawling", "damage": "1d3"}],
-                     "opponents": [{"actor": "ruud_kasteel", "skill": "brawling", "damage": "1d8"}],
+                     "opponents": [{"actor": "dmitri_volkov", "skill": "close_combat", "damage": "1d8"}],
                      "stop": {"hp_at_or_below": "half"}})
             if "stop condition" in o["paused"]:
                 seen = True
@@ -30,7 +30,7 @@ class Combat(unittest.TestCase):
     def test_hp_never_below_zero_and_is_written_back(self):
         o = run({"cmd": "combat", **W.w20,
                  "side": [{"actor": "pc", "skill": "brawling", "damage": "1d3"}],
-                 "opponents": [{"actor": "ruud_kasteel", "skill": "brawling", "damage": "1d8"}]})
+                 "opponents": [{"actor": "dmitri_volkov", "skill": "close_combat", "damage": "1d8"}]})
         for f in o["side"] + o["opponents"]:
             self.assertGreaterEqual(f["hp"], 0)
         for line in o["gm_delta"]:
@@ -38,7 +38,7 @@ class Combat(unittest.TestCase):
 
     def test_outnumbered_is_one_condition(self):
         o = run({"cmd": "combat", "background": BG,
-                 "side": [{"actor": "asian_hawk", "skill": "brawling", "damage": "1d3"}],
+                 "side": [{"actor": "dmitri_volkov", "skill": "close_combat", "damage": "1d3"}],
                  "opponents": [{"name": "a", "level": 3}, {"name": "b", "level": 3},
                                {"name": "c", "level": 3}], "max_exchanges": 1})
         first = [l for l in o["copy"] if "Difficulty" in l][0]
@@ -46,7 +46,7 @@ class Combat(unittest.TestCase):
 
     def test_continue_with_hp_as_it_stands(self):
         o = run({"cmd": "combat", "background": BG,
-                 "side": [{"actor": "asian_hawk", "skill": "brawling", "damage": "1d3", "hp": 5}],
+                 "side": [{"actor": "dmitri_volkov", "skill": "close_combat", "damage": "1d3", "hp": 5}],
                  "opponents": [{"name": "merc", "level": 3, "hp": 2}], "max_exchanges": 1})
         self.assertLessEqual(o["side"][0]["hp"], 5)
         self.assertLessEqual(o["opponents"][0]["hp"], 2)
