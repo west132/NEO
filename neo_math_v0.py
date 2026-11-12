@@ -76,7 +76,7 @@ def capmod(actor_capability: int, challenge: int) -> int:
 
 
 def do_check(a):
-    """Difficulty = base + execution penalties (positive = harder), 1..20; see check --help."""
+    """Difficulty = base + execution penalties (positive = harder), 1..20."""
     for name in CONDITION_CATEGORIES:
         v = getattr(a, name)
         if v not in (-1, 0, 1, 2):
@@ -115,33 +115,8 @@ def do_check(a):
     penalty_total = clamp(sum(penalties.values()), -3, 3)   # the rules bounded
     difficulty = clamp(a.base + penalty_total, 1, 20)
 
-    if a.odds:   # the rules odds first: exact chance, no roll
-        need = difficulty - cm - tool            # what 2d10 must reach
-        pct = sum(1 for x in range(1, 11) for y in range(1, 11) if x + y >= need)  # of 100
-        if a.brief:
-            head = f"{a.label} — " if a.label else ""
-            tail = f" · on failure: {a.on_failure}" if a.on_failure else ""
-            return f"{head}about {pct}%{tail}"
-        return {"tool": TOOL_VERSION, "mode": mode, "odds_percent": pct,
-                "needs_on_2d10": need, "capability_modifier": cm, "tool_modifier": tool,
-                "penalty_total": penalty_total, "difficulty": difficulty}
-
     r = roll_spec("2d10")
     total = r["sum"] + cm + tool
-    if a.lite:
-        d1, d2 = r["dice"]
-        head = f"{a.label} — " if a.label else ""
-        return (f"{head}2d10 {d1}+{d2} {cm:+d} {tool:+d} = {total} vs {difficulty} → "
-                f"{'Success' if total >= difficulty else 'Failure'}")
-    if a.brief:
-        d1, d2 = r["dice"]
-        src = f" [{a.tool_source}]" if a.tool_source and tool else ""
-        basis = f" [{a.basis}]" if a.basis else ""
-        stakes = f" | Stakes: {a.stakes}" if a.stakes else ""
-        head = f"{a.label} — " if a.label else ""
-        return (f"{head}2d10: {d1}+{d2} | Capability: {cm:+d} | Tool: {tool:+d}{src} | Total: {total}\n"
-                f"Difficulty: {difficulty}{basis}{stakes} | Outcome: "
-                f"{'Success' if total >= difficulty else 'Failure'}")
     return {"tool": TOOL_VERSION, "mode": mode, "dice": r["dice"],
             "capability_modifier": cm, "tool_modifier": tool,
             "base_difficulty": a.base, "execution_penalties": penalties,
@@ -289,16 +264,6 @@ def do_ask(a):
     r = roll_spec("2d10")
     total = r["sum"] + a.likelihood
     answer = next(name for floor, name in ASK_ANSWERS if total >= floor)
-    if a.lite:
-        d1, d2 = r["dice"]
-        head = f"{a.label} — " if a.label else ""
-        return f"{head}ask 2d10 {d1}+{d2} {a.likelihood:+d} = {total} → {answer}"
-    if a.brief:
-        d1, d2 = r["dice"]
-        head = f"{a.label} — " if a.label else ""
-        cols = f" [for: {a.for_ or 'none'}; against: {a.against or 'none'}]"
-        return (f"{head}2d10: {d1}+{d2} | Likelihood: {a.likelihood:+d}{cols} | "
-                f"Total: {total} → {answer}")
     return {"tool": TOOL_VERSION, "dice": r["dice"], "likelihood": a.likelihood,
             "total": total, "answer": answer}
 
@@ -424,7 +389,6 @@ ENUMS = {
     "development_threads": {"status": {"active", "available", "dormant", "blocked",
                                        "completed", "abandoned"}},
     "*": {"precision": {"exact", "daypart", "degraded"},
-          "profile": {"full", "lite"},
           "tracking": {"exact", "usage_die"},
           "usage_die": {"d12", "d10", "d8", "d6", "d4", "empty"}},
 }
@@ -852,7 +816,7 @@ def do_merge(a):
     if degraded:
         out["degraded"] = degraded
         out["degraded_note"] = ("these entries were not applied: mark each id degraded in "
-                                "continuity_status (I12)")
+                                "continuity_status")
     dropped_bg = 0
     if bg is not None:
         for k in [k for k, t in records.items() if _same_as_bg(bg, k, t)]:
@@ -1420,167 +1384,6 @@ def _where(text, zones):
     return best
 
 
-def _layers(loc, zones):
-    """A location's surface and undercurrent (a building reads its zone's); no
-    undercurrent recorded = none (0)."""
-    z = zones.get(loc) or {}
-    if z.get("zone") and z["zone"] in zones and z["zone"] != loc:
-        z = zones[z["zone"]]
-    if not z:
-        return None, None
-    return z.get("surface"), z.get("undercurrent") or 0
-
-
-def _zone_point(side, surface, under):
-    """the rules: points for an actor's plan by its in_disorder."""
-    def pt(v, open_):
-        if v is None:
-            return None
-        k = 2 if v <= -3 else 1 if v <= -2 else 0
-        if open_:
-            k = -2 if v >= 3 else -1 if v >= 2 else k
-        return {"thrives": k, "suffers": -k, "neither": 0}.get(side)
-    return {"open": pt(surface, True), "hidden": pt(under, False)}
-
-
-def do_dues(a):
-    """the rules: every due at or before now, the next ones, and those that
-    wait on a trigger, with the zone each plays out in. Reports only; the GM fires each
-    as a check and decides everything else."""
-    if a.day < 0 or not 0 <= a.clock <= 1439:
-        raise InputError("need --day >= 0 and --clock 0..1439")
-    bg = _bg_tree(a.background)
-    caps, retired, last = _live(a.save, a.deltas)
-    anc = _anchor(bg, a.save)
-    cur = _world(caps, retired, bg)
-    for i, t in list(cur.items()):
-        if re.fullmatch(r"(npcs|factions)\.[\w\-]+", i) and f"{i}.state.due" not in cur:
-            m = re.search(r"\bdue:\s*([^,}]+)", t)
-            if m:
-                cur[f"{i}.state.due"] = m.group(1).strip()
-        if re.fullmatch(r"rights_obligations\.[\w\-]+", i) and re.search(r"type:\s*owed", t) \
-                and not _CLOSED.search(re.sub(r"type:\s*owed", "", t)):
-            m = re.search(r"\bdue:\s*([^,}]+)", t)
-            if m:
-                cur[f"{i}.due"] = m.group(1).strip()
-    zones = _zones(bg, caps)
-    now = (("d", a.day), a.clock)
-    due_now, upcoming, trigger, unread = [], [], [], []
-    for rid, txt in sorted(cur.items()):
-        if not rid.endswith(".due"):
-            continue
-        body = re.sub(r"^R\d+:\s*", "", txt).strip()
-        if not body or re.fullmatch(r"(none|incidental|routine)\b.*", body, re.I):
-            continue
-        base = rid[:-len(".due")]
-        owner = base.split(".")[0]
-        actor = ".".join(base.split(".")[:2]) if owner in ("npcs", "factions") else None
-        item = {"id": rid, "due": body[:240]}
-        loc = None
-        if actor:
-            whole = cur.get(actor, "")
-            pos = cur.get(f"{actor}.state.position") or (
-                re.search(r"\bposition:\s*([^,}]+)", whole) or [None, ""])[1]
-            loc = _where(pos, zones)
-            side = re.sub(r"^R\d+:\s*", "", cur.get(f"{actor}.in_disorder", "")).strip() or (
-                re.search(r"\bin_disorder:\s*(thrives|suffers|neither)", whole) or [None, None])[1]
-            item["in_disorder"] = side or "unset — set once from role and drives"
-        elif ".track." in rid:
-            loc = rid.split(".track.")[1].split(".")[0]
-        if loc or actor:
-            s, u = _layers(loc, zones) if loc else (None, None)
-            item["zone"] = (f"{zones[loc]['name']} ({loc})" if loc in zones else
-                            loc or "? — position names no recorded location")
-            item["surface"], item["undercurrent"] = s, u
-            if actor and item["in_disorder"] in ("thrives", "suffers", "neither"):
-                item["zone_point"] = _zone_point(item["in_disorder"], s, u)
-                if s is not None and s <= -3 and item["in_disorder"] == "suffers":
-                    item["note"] = "surface −3: an institution's response cannot reach the zone"
-        pts = [p for p in _points(body, anc) if p[0][0] == "d"]
-        if pts:
-            # a date-only due (no time given) is due all through its day
-            past = [p for p in pts if p <= now or (p[0] == now[0] and p[1] == 1439)]
-            fut = sorted(p for p in pts if p not in past)
-            if past:
-                if fut:
-                    item["next"] = (f"day {fut[0][0][1]}" if fut[0][1] == 1439 else
-                                    f"day {fut[0][0][1]} {fut[0][1] // 60:02d}:{fut[0][1] % 60:02d}")
-                due_now.append((min(past), item))
-            else:
-                upcoming.append((fut[0], item))
-        elif _EVENT.search(body):
-            trigger.append(item)
-        else:
-            unread.append(item)
-    # the rules BEAT: a blocked quest's trigger, and the `opens` of
-    # each canon beat whose quest(s) are still blocked, wait on an event like any trigger
-    def _status(qid):
-        st = re.sub(r"^R\d+:\s*", "", cur.get(f"quests.{qid}.status", "")).strip()
-        if not st:
-            m = re.search(r"\bstatus:\s*(\w+)", cur.get(f"quests.{qid}", ""))
-            st = m.group(1) if m else ((bg.get("quests") or {}).get(qid) or {}).get("status", "")
-        return str(st).strip().lower()
-    for qid, qd in sorted((bg.get("quests") or {}).items()):
-        if isinstance(qd, dict) and qd.get("trigger") and _status(qid) == "blocked":
-            trigger.append({"id": f"quests.{qid}.trigger", "due": str(qd["trigger"])[:240]})
-    for beat, bd in (bg.get("canon_course") or {}).items():
-        if not (isinstance(bd, dict) and bd.get("opens") and bd.get("quest")):
-            continue
-        qs = bd["quest"] if isinstance(bd["quest"], list) else [bd["quest"]]
-        if qs and all(_status(str(q)) == "blocked" for q in qs):
-            trigger.append({"id": f"canon_course.{beat}.opens", "due": str(bd["opens"])[:240]})
-    due_now.sort(key=lambda x: x[0])
-    upcoming.sort(key=lambda x: x[0])
-    stamp = lambda p: (f"day {p[0][1]}" if p[1] == 1439 and p is not now
-                       else f"day {p[0][1]} {p[1] // 60:02d}:{p[1] % 60:02d}")
-    extra = _since(a, zones) if a.since_day is not None else None
-    out = {"tool": TOOL_VERSION, "now": stamp(now),
-           "chain_through": last,
-           "due_now": [dict(at=stamp(p), **i) for p, i in due_now],
-           "next": [dict(at=stamp(p), **i) for p, i in upcoming[:a.ahead]],
-           "on_trigger": trigger, "unread": unread,
-           "note": "at its due a plan acts if its cause still "
-                   "holds → resolve from state (uncertain → the zone_point for an "
-                   "open or hidden act); cause gone → STOPPED or REPLAN; it reaches the PC only "
-                   "by real channels (I5). on_trigger: check against what has happened; met → "
-                   "it fires now."}
-    if extra:
-        out.update(extra)
-    if not a.brief:
-        return out
-    def line(i, tag):
-        z = ""
-        if "zone" in i:
-            sv = "?" if i["surface"] is None else f"{i['surface']:+d}" if i["surface"] else "0"
-            uv = "" if not i["undercurrent"] else f" under {i['undercurrent']}"
-            z = f" · {i['zone']} surface {sv}{uv}"
-        if "in_disorder" in i:
-            z += f" · {i['in_disorder']}"
-        if "zone_point" in i:
-            zp = i["zone_point"]
-            f = lambda v: "?" if v is None else f"{v:+d}" if v else "0"
-            z += f" → open {f(zp['open'])} / hidden {f(zp['hidden'])}"
-        if i.get("note"):
-            z += f" ({i['note']})"
-        nx = f" · next {i['next']}" if i.get("next") else ""
-        return f"{tag} {i.get('at', '')} {i['id']} :: {i['due']}{z}{nx}".replace("  ", " ")
-    rows = [f"Dues at {out['now']}" + (f" (chain through R{last})" if last else "")]
-    rows += [line(i, "DUE") for i in out["due_now"]] or ["DUE none"]
-    rows += [line(i, "NEXT") for i in out["next"]]
-    rows += [line(i, "TRIGGER") for i in trigger]
-    rows += [line(i, "UNREAD") for i in unread]
-    if extra:
-        rows += [f"MONTH {m['day']} :: {m['check']}" for m in extra.get("months", [])]
-        rows += [f"ENCOUNTER {e['at']} :: {e['line']}" for e in extra.get("encounters", [])]
-        rows += [f"UNDERCURRENT :: {u}" for u in extra.get("undercurrent", [])]
-    rows.append("At its due a plan acts if its cause still holds; TRIGGER: check against "
-                "what has happened, met → fires now.")
-    return "\n".join(rows)
-
-
-CHAPTER_OWNERS = ("npcs", "factions", "quests", "development_threads",
-                  "active_world_pressures", "locked_case_truths",
-                  "rights_obligations", "locations")
 _STAMP = re.compile(r"^R(\d+):\s*")
 
 
@@ -1671,104 +1474,6 @@ def _readable_tree(path):
     return tree
 
 
-def _status_of(v):
-    t = json.dumps(v, ensure_ascii=False) if isinstance(v, (dict, list)) else str(v)
-    m = re.search(r'"?status"?\s*:\s*"?([^",}\]]+)', t)
-    st = m.group(1) if m else ""
-    if re.search(r"\b(dead|killed|died)\b", t, re.I) and not st:
-        return "check: dead?"
-    if _CLOSED.search(st) or re.search(r"\b(completed|failed|abandoned|retired)\b", st):
-        return "closed"
-    return "open" if st else "?"
-
-
-def do_flatten(a):
-    """the rules step 2: the previous chapter's whole world as one tree.
-    BACKGROUND under the capsule, retired paths removed, readable save on top."""
-    import yaml
-    bg = _bg_tree(a.background)
-    caps, retired = _capsule_records(a.save)
-    tree = json.loads(json.dumps(bg, default=str))
-    placed, conflicts = 0, []
-    for r in sorted(caps, key=lambda r: (r["id"].count("."), _seg_key(r["id"]))):
-        t = _text_of(r)
-        if t is None:
-            conflicts.append(f"{r['id']} :: unreadable")
-            continue
-        if _set_path(tree, r["id"], _record_value(t)):
-            placed += 1
-        else:
-            conflicts.append(f"{r['id']} :: path blocked by a list or scalar")
-    gone = 0
-    for r in retired:
-        gone += _del_path(tree, r["id"])
-    readable = _readable_tree(a.save)
-    for k, v in readable.items():
-        if k in ("world_state",) and isinstance(v, dict):
-            tree.setdefault("world_state", {}).update(v)
-        elif k not in ("round", "index"):
-            tree[k] = v
-    out = {"tool": TOOL_VERSION, "background": bg.get("background_id"),
-           "save": a.save, "records_applied": placed, "retired_removed": gone}
-    if conflicts:
-        out["conflicts"] = conflicts
-        out["conflict_note"] = "carry these by hand from the save's capsule"
-    checklist = {}
-    for owner in CHAPTER_OWNERS:
-        recs = tree.get(owner)
-        if isinstance(recs, dict) and recs:
-            checklist[owner] = {k: _status_of(v) for k, v in recs.items()}
-    idx = readable.get("index") if isinstance(readable.get("index"), dict) else {}
-    known = {o: sorted(k for k in idx[o] if k in ids) for o, ids in checklist.items()
-             if isinstance(idx.get(o), dict) and any(k in ids for k in idx[o])}
-    group = lambda st: st if st in ("open", "closed") else "uncertain"
-    out["summary"] = {o: {g: sum(group(st) == g for st in ids.values())
-                          for g in ("open", "closed", "uncertain")}
-                      for o, ids in checklist.items()}
-    out["known_to_player"] = known
-    if a.summary:
-        out["uncertain"] = {o: {k: st for k, st in ids.items() if group(st) == "uncertain"}
-                            for o, ids in checklist.items()}
-    else:
-        out["checklist"] = checklist
-    out["sort_note"] = ("closed → RECORD as a `chN:` line; open → CARRY; "
-                        "RETIRE only what the rules allows; unsure → CARRY; SHOW the RETIRE "
-                        "list's known_to_player records before WRITE")
-
-    if a.chapter:
-        new = _bg_tree(a.chapter)
-        hist = " ".join(str(x) for x in ((new.get("world_state") or {})
-                                         .get("material_history") or []))
-        unaccounted = []
-        for owner, ids in checklist.items():
-            have = new.get(owner) or {}
-            for k in ids:
-                if isinstance(have, dict) and k in have:
-                    continue
-                name = (tree[owner].get(k) or {}).get("name") \
-                    if isinstance(tree[owner].get(k), dict) else None
-                words = [k] + ([str(name)] if name else [])
-                if any(re.search(re.escape(w), hist, re.I) for w in words):
-                    continue
-                unaccounted.append(f"{owner}.{k} ({ids[k]})")
-        out["chapter_check"] = {
-            "new_background": new.get("background_id"),
-            "neither_carried_nor_recorded": unaccounted,
-            "chapter_field": new.get("chapter") or "missing: add chapter {campaign, n, previous, end}",
-            "note": "each listed id must be a retirement the rules allows; else carry it or add a chN: line"}
-        out["valid"] = not unaccounted and bool(new.get("chapter"))
-
-    flat = yaml.safe_dump(tree, allow_unicode=True, sort_keys=False, width=110)
-    if a.out:
-        with open(a.out, "w", encoding="utf-8") as f:
-            f.write(f"# FLAT WORLD — {bg.get('background_id')} + {a.save}\n"
-                    "# working file for the chapter rebase; never loaded as a save\n" + flat)
-        out["written_to"] = a.out
-    elif not a.chapter and not a.summary:
-        out["flat_yaml"] = flat
-    return out
-
-
 SURFACE_NAMES = {3: "Sanctuary", 2: "Secure", 1: "Calm", 0: "Ordinary", -1: "Uneasy",
                  -2: "Unstable", -3: "Collapsed"}
 NERVE_NAMES = {3: "unshakeable", 2: "hardened", 1: "steady", 0: "ordinary", -1: "shaken",
@@ -1838,7 +1543,7 @@ def do_encounter(a):
     if (a.surface is None) == (a.depth is None):
         raise InputError("pass exactly one of --surface (−3..+3) or --depth (−1..−3)")
     out, line = _roll_surface(a.surface) if a.surface is not None else _roll_depth(a.depth)
-    if a.brief or a.lite:
+    if a.brief:
         return line
     return {"tool": TOOL_VERSION, **out}
 
@@ -1849,63 +1554,6 @@ MONTH_DAYS = 30
 
 def _daypart_of(clock):
     return [n for start, n in DAYPARTS if clock >= start][-1]
-
-
-def _since(a, zones):
-    """the rules for the stretch since --since-day/--since-clock: month
-    rollovers and the PC zone's surface rolls, one per daypart
-    begun in the stretch (--arrived: also the daypart the PC arrived in)."""
-    sc = a.since_clock if a.since_clock is not None else 0
-    if not 0 <= sc <= 1439:
-        raise InputError("--since-clock must be 0..1439")
-    t0, t1 = a.since_day * 1440 + sc, a.day * 1440 + a.clock
-    if t0 > t1:
-        raise InputError("--since is after now")
-    res = {"since": f"day {a.since_day} {sc // 60:02d}:{sc % 60:02d}"}
-    months = []
-    for m in range(a.since_day // MONTH_DAYS + 1, a.day // MONTH_DAYS + 1):
-        drift = sorted(f"{z['name']} ({k}) {z['surface']:+d}→{z['surface_baseline']:+d}"
-                       for k, z in zones.items()
-                       if isinstance(z.get("surface"), int) and isinstance(z.get("surface_baseline"), int)
-                       and z["surface"] != z["surface_baseline"])
-        bleed = sorted(f"{z['name']} ({k})" for k, z in zones.items()
-                       if isinstance(z.get("undercurrent"), int) and z["undercurrent"] <= -2
-                       and not z.get("cover"))
-        months.append({"day": m * MONTH_DAYS,
-                       "check": ("monthly marks — drift 1 toward baseline where no "
-                                 f"pressure touched the zone: {', '.join(drift) or 'none off baseline'}"
-                                 f" · no-cover bleed, surface −1: {', '.join(bleed) or 'none'}")})
-    res["months"] = months
-    if a.pc_zone:
-        if a.pc_zone not in zones:
-            raise InputError(f"--pc-zone {a.pc_zone} is not a recorded location")
-        z = a.pc_zone
-        if zones[z].get("zone") and zones[z]["zone"] in zones:
-            z = zones[z]["zone"]
-        s_val, u_val = zones[z].get("surface"), zones[z].get("undercurrent") or 0
-        parts = []
-        if a.arrived:
-            parts.append((a.since_day, _daypart_of(sc)))
-        for day in range(a.since_day, a.day + 1):
-            for start, name in DAYPARTS:
-                if t0 < day * 1440 + start <= t1:
-                    parts.append((day, name))
-        enc = []
-        for day, name in parts:
-            at = f"day {day} {name}"
-            if not isinstance(s_val, int):
-                enc.append({"at": at, "zone": z, "line": f"{zones[z]['name']}: no surface "
-                            "recorded — derive and commit it, then roll"})
-                continue
-            o, ln = _roll_surface(s_val)
-            enc.append({"at": at, "zone": z, **o, "line": f"{zones[z]['name']} — {ln}"})
-        res["encounters"] = enc
-        if u_val:
-            res["undercurrent"] = [f"{zones[z]['name']} depth {u_val}, hours: "
-                                   f"{zones[z].get('hours') or '?'}, sites: "
-                                   f"{', '.join(zones[z].get('sites') or []) or '?'} — on contact "
-                                   f"roll `encounter --depth {u_val}`"]
-    return res
 
 
 STEP_MARKS = {1: 3, 2: 5, 3: 6}   # boundary by its outer value
@@ -2102,34 +1750,6 @@ def _cli(argv):
     p = sp.add_parser("roll", help="roll NdM")
     p.add_argument("spec")
 
-    p = sp.add_parser("check", help="2d10 + capability + tool vs a 1-20 difficulty",
-                      formatter_class=argparse.RawDescriptionHelpFormatter, epilog="""\
-Numeric Challenge (--cmp + --challenge): base is always 10. Otherwise --capmod
-and --base (the task's own 1-20 difficulty). Condition flags +1/+2/-1, each
-category once. --brief: the roll lines, copied verbatim. --odds: the chance
-only, no roll.""")
-    p.add_argument("--cmp", type=int, help="actor capability, with a numeric challenge")
-    p.add_argument("--challenge", type=int, help="the task or opponent's challenge")
-    p.add_argument("--capmod", type=int, help="absolute capability grade: -4,-2,0,+2,+4")
-    p.add_argument("--base", type=int,
-                   help="omit with a numeric challenge (always 10); otherwise required: "
-                        "the task's own 1-20 difficulty")
-    p.add_argument("--fit", type=int, default=0, help="tool fit -2..+2")
-    p.add_argument("--condition", type=int, default=0, help="tool condition 0,-1,-2")
-    for n in CONDITION_CATEGORIES:
-        p.add_argument(f"--{n}", type=int, default=0,
-                       help="+1 adverse, +2 severely adverse, -1 favourable")
-    p.add_argument("--brief", action="store_true", help="print the rules roll lines")
-    p.add_argument("--lite", action="store_true", help="print the one-line lite roll line")
-    p.add_argument("--basis", help="with --brief: short Difficulty basis")
-    p.add_argument("--stakes", help="with --brief: <cost>/<reach>")
-    p.add_argument("--tool-source", help="with --brief: what the nonzero ToolMod comes from")
-    p.add_argument("--label", help="with --brief: whose roll, for a roll not the player's; "
-                                   "with --odds: the action")
-    p.add_argument("--odds", action="store_true",
-                   help="print the chance of success only; roll nothing")
-    p.add_argument("--on-failure", help="with --odds --brief: the cost on failure")
-
     p = sp.add_parser("xp", help="derive an award, or apply a known amount")
     p.add_argument("--level", type=int, required=True)
     p.add_argument("--xp", type=int, required=True)
@@ -2137,14 +1757,6 @@ only, no roll.""")
     p.add_argument("--p", type=int, help="participant overall level")
     p.add_argument("--scope", choices=sorted(SCOPE))
     p.add_argument("--amount", type=int, help="apply an already-decided amount")
-
-    p = sp.add_parser("accrue", help="evidence from one qualifying roll (no tier change)")
-    p.add_argument("--cls", required=True)
-    p.add_argument("--tier", required=True)
-    p.add_argument("--challenge", type=int)
-    p.add_argument("--personal-skill-level", type=int)
-    p.add_argument("--difficulty", type=int, required=True, help="1..20")
-    p.add_argument("--success", action="store_true")
 
     p = sp.add_parser("boundary", help="resolve tiers and class at a growth boundary")
     p.add_argument("--cls", required=True)
@@ -2182,14 +1794,6 @@ A full capsule converts to a delta on its next merge.""")
     p.add_argument("--out", help="write the capsule YAML here")
     p.add_argument("--save-round", type=int, help="default: the last GM-Δ round")
 
-    p = sp.add_parser("ask", help="open question: 2d10 + likelihood -> four answers")
-    p.add_argument("--likelihood", type=int, required=True, help="-3..+3, each point a recorded fact; at most two facts per column, separated by ';'")
-    p.add_argument("--for", dest="for_", help="with --brief: the facts for")
-    p.add_argument("--against", help="with --brief: the facts against")
-    p.add_argument("--label", help="with --brief: who or what answers")
-    p.add_argument("--brief", action="store_true", help="print the rules answer line")
-    p.add_argument("--lite", action="store_true", help="print the one-line lite answer line")
-
     p = sp.add_parser("points", help="item points: spend, or refill on a good rest",
                       formatter_class=argparse.RawDescriptionHelpFormatter, epilog="""\
 Max from --rank (outcast 20 · commoner 40 · working_adult 60 ·
@@ -2215,48 +1819,6 @@ dropped; not proof every change was recorded.""")
     p.add_argument("--file", required=True, help="the save to check")
     p.add_argument("--against", help="the previous save; every capsule id must be carried or retired")
     p.add_argument("--background", help="the BACKGROUND a delta capsule is relative to")
-
-    p = sp.add_parser("flatten", help="chapter rebase: a chapter's whole world as one tree",
-                      formatter_class=argparse.RawDescriptionHelpFormatter, epilog="""\
-the rules step 2: the final save's capsule over its BACKGROUND (later stamps
-win, retired paths removed), readable save on top, as one YAML tree; checklist
-of every record by owner (open / closed / ?); summary counts; known_to_player =
-records in the readable index (the only ones SHOW may list). --summary: uncertain
-records instead of the checklist. --chapter <new BACKGROUND>: lists records
-neither carried nor named in material_history (`chN:`); valid: true when none
-remain and the chapter field is present.""")
-    p.add_argument("--background", required=True, help="the chapter's BACKGROUND")
-    p.add_argument("--save", required=True, help="the chapter's final save")
-    p.add_argument("--out", help="write the flat world YAML here")
-    p.add_argument("--chapter", help="the next chapter's BACKGROUND, to check carry/record")
-    p.add_argument("--summary", action="store_true",
-                   help="counts and uncertain records instead of the full checklist")
-
-    p = sp.add_parser("dues", help="what is due now, next, and on a trigger",
-                      formatter_class=argparse.RawDescriptionHelpFormatter, epilog="""\
-the rules. Reads the BACKGROUND, the newest save (omit before the first
-save) and, optionally, a file of the GM-Δ blocks since it, and lists every plan, pressure,
-pending consequence and owed entry due at or before --day/--clock, the next few,
-and those waiting on a trigger. Each actor's due shows its zone (from its position;
-? when the position names no recorded location), the zone's surface and
-undercurrent, its in_disorder and the rules point for an open or a hidden act.
---since-day/--since-clock: the stretch since the last call — month rollovers
-(every 30 days of day_index: the rules monthly marks) and, with --pc-zone, one surface
-roll per daypart begun in it (night 00–06, morning 06–12, afternoon 12–18, evening
-18–24; --arrived adds the daypart the PC arrived in). Rolls are GM-side: narrate only
-what the PC meets. Each due is a check, never a delivery.""")
-    p.add_argument("--background", required=True, help="the campaign's BACKGROUND")
-    p.add_argument("--save", help="the newest save; omit before the first save")
-    p.add_argument("--deltas", help="optional: file of every GM-Δ block since that save")
-    p.add_argument("--day", type=int, required=True, help="world_state.time.day_index now")
-    p.add_argument("--clock", type=int, required=True, help="clock_minutes now, 0..1439")
-    p.add_argument("--ahead", type=int, default=5, help="how many upcoming dues to list")
-    p.add_argument("--since-day", type=int, help="day_index at the last dues call")
-    p.add_argument("--since-clock", type=int, help="clock_minutes at the last dues call")
-    p.add_argument("--pc-zone", help="location id the PC spent the stretch in")
-    p.add_argument("--arrived", action="store_true",
-                   help="the PC entered --pc-zone at --since: roll that daypart too")
-    p.add_argument("--brief", action="store_true", help="one line per due")
 
     p = sp.add_parser("time", help="clock and day rollover")
     p.add_argument("--day", type=int, required=True)
@@ -2295,7 +1857,6 @@ pool entry.""")
     p.add_argument("--surface", type=int, help="zone surface, -3..+3")
     p.add_argument("--depth", type=int, help="zone undercurrent, -1..-3")
     p.add_argument("--brief", action="store_true", help="one line to copy into the turn")
-    p.add_argument("--lite", action="store_true", help="same one line")
 
     p = sp.add_parser("stability", help="apply marks to a surface, undercurrent or nerve",
                       formatter_class=argparse.RawDescriptionHelpFormatter, epilog="""\
@@ -2323,16 +1884,10 @@ A pressure track's advance is one mark, signed by its direction.""")
     if True:
         if a.cmd == "roll":
             out = {"tool": TOOL_VERSION, **roll_spec(a.spec)}
-        elif a.cmd == "check":
-            out = do_check(a)
         elif a.cmd == "xp":
             out = do_xp(a)
-        elif a.cmd == "accrue":
-            out = do_accrue(a)
         elif a.cmd == "boundary":
             out = do_boundary(a)
-        elif a.cmd == "ask":
-            out = do_ask(a)
         elif a.cmd == "points":
             out = do_points(a)
         elif a.cmd == "merge":
@@ -2341,10 +1896,6 @@ A pressure track's advance is one mark, signed by its direction.""")
             out = do_validate(a)
         elif a.cmd == "time":
             out = do_time(a)
-        elif a.cmd == "dues":
-            out = do_dues(a)
-        elif a.cmd == "flatten":
-            out = do_flatten(a)
         elif a.cmd == "vitals":
             out = do_vitals(a)
         elif a.cmd == "harm":
@@ -2618,8 +2169,7 @@ def _cost_tier(danger):
 
 def _check_ns(**kw):
     base = dict(cmp=None, challenge=None, capmod=None, base=None, fit=0, condition=0,
-                brief=False, lite=False, basis=None, stakes=None, tool_source=None,
-                label=None, odds=False, on_failure=None)
+                brief=False)
     base.update({c: 0 for c in CONDITION_CATEGORIES})
     base.update(kw)
     return argparse.Namespace(**base)
@@ -2737,19 +2287,14 @@ def do_action(form):
                              + " · ".join(COST_FORMS))
     r = do_check(_check_ns(**kw))
     d1, d2 = r["dice"]
-    lite = bool(form.get("lite"))
     who = "" if me["path"] == "player" else f"{form['actor']} — "
     outcome = "Success" if r["success"] else "Failure"
     stakes = f"{cost}/{reach}"
-    if lite:
-        lines = [f"{who}2d10 {d1}+{d2} {r['capability_modifier']:+d} {r['tool_modifier']:+d} = "
-                 f"{r['total']} vs {r['difficulty']} → {outcome}"]
-    else:
-        src = f" [{(form.get('tool') or {}).get('name', 'tool')}]" if r["tool_modifier"] else ""
-        b = f" [{'; '.join(basis)}]" if basis else ""
-        lines = [f"{who}2d10: {d1}+{d2} | Capability: {r['capability_modifier']:+d} | "
-                 f"Tool: {r['tool_modifier']:+d}{src} | Total: {r['total']}",
-                 f"Difficulty: {r['difficulty']}{b} | Stakes: {stakes} | Outcome: {outcome}"]
+    src = f" [{(form.get('tool') or {}).get('name', 'tool')}]" if r["tool_modifier"] else ""
+    b = f" [{'; '.join(basis)}]" if basis else ""
+    lines = [f"{who}2d10: {d1}+{d2} | Capability: {r['capability_modifier']:+d} | "
+             f"Tool: {r['tool_modifier']:+d}{src} | Total: {r['total']}",
+             f"Difficulty: {r['difficulty']}{b} | Stakes: {stakes} | Outcome: {outcome}"]
     out = {"tool": TOOL_VERSION, "success": r["success"], "total": r["total"],
            "difficulty": r["difficulty"],
            "bound": {"actor": form["actor"], "skill": form.get("skill"),
@@ -2815,13 +2360,10 @@ def do_ask_form(form):
     a, at = col("against", -1)
     like = clamp(f + a, -3, 3)
     r = do_ask(argparse.Namespace(likelihood=like, for_=None, against=None, label=None,
-                                  brief=False, lite=False))
+                                  brief=False))
     d1, d2 = r["dice"]
-    if form.get("lite"):
-        line = f"{form['who']} — ask 2d10 {d1}+{d2} {like:+d} = {r['total']} → {r['answer']}"
-    else:
-        line = (f"{form['who']} — 2d10: {d1}+{d2} | Likelihood: {like:+d} "
-                f"[for: {ft}; against: {at}] | Total: {r['total']} → {r['answer']}")
+    line = (f"{form['who']} — 2d10: {d1}+{d2} | Likelihood: {like:+d} "
+            f"[for: {ft}; against: {at}] | Total: {r['total']} → {r['answer']}")
     return {"tool": TOOL_VERSION, "answer": r["answer"], "total": r["total"], "copy": [line]}
 
 
@@ -3494,7 +3036,7 @@ def do_award(form):
 
 
 PASSTHROUGH = {"roll": ["spec"], "xp": [], "boundary": [], "points": [], "merge": [],
-               "validate": [], "flatten": [], "vitals": [], "harm": [], "heal": [],
+               "validate": [], "vitals": [], "harm": [], "heal": [],
                "encounter": [], "stability": [], "cast": [], "time": []}
 
 FIELDS = {"vitals": "v, size, mp_tier", "harm": "hp, max, dice | amount, soak, hits",
@@ -3503,12 +3045,11 @@ FIELDS = {"vitals": "v, size, mp_tier", "harm": "hp, max, dice | amount, soak, h
           "points": "rank, current, spend | refill, label",
           "stability": "layer, current, baseline, tension, marks, lasting, stepped, day",
           "encounter": "surface | depth", "merge": "base, background, deltas, out, save_round",
-          "validate": "file, against, background",
-          "flatten": "background, save, out, chapter, summary"}
+          "validate": "file, against, background"}
 
 FORMS = {
     "action": "an uncertain action: actor, action, skill, opposition, tool, gear_tier, "
-              "conditions, lasting, danger, cost_form, reach, damage, lite + world files",
+              "conditions, lasting, danger, cost_form, reach, damage + world files",
     "help": "does help exist? ask, sources (≤3), hostile",
     "ask": "an NPC's open answer: who, question, for [{fact, points}], against [{fact, points}]",
     "combat": "a fight in a batch: side [..], opponents [..], conditions, stop {hp_at_or_below}",
@@ -3530,14 +3071,13 @@ FORMS = {
     "roll": "plain dice: spec (NdM)",
     "merge": "build a capsule: base, background, deltas, out, save_round",
     "validate": "check a save: file, against, background",
-    "flatten": "chapter rebase: background, save, out, chapter, summary",
     "world files": "background (required), save (newest, once one exists), deltas (a file of "
                    "every GM-Δ block since that save)",
 }
 
 
-YES_NO = ("class_source", "refill", "summary", "arrived", "quarter", "full", "lasting",
-          "lite", "brief", "success")
+YES_NO = ("class_source", "refill", "arrived", "quarter", "full", "lasting",
+          "brief", "success")
 
 
 def _passthrough(cmd, form):

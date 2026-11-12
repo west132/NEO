@@ -254,7 +254,8 @@ ORDER    1 PLAN    the actor's plan covers the question → the plan answers: wh
          2 SETTLE  the record or the usual answer (GM §3.5 USUAL) settles it: duty,
                    drive, standing, authority, obvious cost, setting; check it by
                    flipping the stakes: would it settle the same way if it went
-                   against the player? yes → that answer
+                   against the player? yes → that answer; never roll to avoid
+                   being the one who said yes
          3 ROLL    honestly open → one yes/no question, the ask roll
 TORN     the question touches both want and pull → the plan if it covers it, else
          whichever the record shows is more pressing now; honestly torn → roll,
@@ -275,10 +276,11 @@ ASK ROLL  tool `ask`: 2d10 + likelihood (−3..+3); up to two recorded facts for
   ≥16    YES, AND  more than asked, within their means and authority
   12–15  YES       as asked
   7–11   NO, BUT   partly: less, later, or on their terms (a price, a condition,
-                   a favour back)
+                   a favour back); never a smaller free gift
   ≤6     NO, AND   refused, plus the small trouble this actor can cause from where
                    they stand (a remark, suspicion, a raised price, a description
-                   passed on)
+                   passed on); never a new obstacle aimed at what the PC
+                   carries, hides or plans
 APPLY     the answer stands for this exchange; the relationship moves only by
           §15.1 CHANGE
 ```
@@ -299,7 +301,8 @@ IDENTITY   people react to who they believe they're dealing with: a false name,
 ### 9.2 Help
 
 ```text
-SOURCE   people, things and events come from the world's own causes
+SOURCE   people, things and events come from the world's own causes; nothing
+         exists just to help the PC
 EXISTS   in the background, or usual here (a taxi in Bombay; GM §3.5 USUAL) →
          it exists, no roll
 ROLL     possible but unusual, and the player asks → help form, 2d10 ≥ 15
@@ -308,6 +311,7 @@ REACH    −1 to the target per source, at most −3: the PC's own network · a 
          reach here; a place hostile to the PC's people +1
          odds: 16+ 15% · 15+ 21% · 14+ 28% · 13+ 36% · 12+ 45%
 OUTSIDE  impossible in this setting → no
+UNASKED  help is never offered unasked
 ONCE     the answer stands; asking again needs a changed fact
 ```
 
@@ -377,7 +381,8 @@ USED BY   horror rolls, morale (§8), witnesses, an actor's re-plan
 
 ```text
 RESULTS     come from what happened and the state of things; good choices improve
-            the odds, bad ones may survive on luck; harm and failure add up
+            the odds, bad ones may survive on luck; harm and failure add up;
+            never escalate without a recorded cause
 GATHERING   the PC picks up what is exposed, theirs or plainly free to take, with
             no danger or trade-off → it's theirs, and takes the time it takes; a
             real choice → stop (GM §5)
@@ -456,9 +461,9 @@ STEPS     1 the player says what they want to be true · 2 check: enough points,
           PC was with the time and means · 4 spend the points · 5 a prep involving
           someone else resolves as if done then (their answer or a roll) and can
           fail · 6 narrate the reason as what happened
-SCOPE     an item or a prep, as ordinary as the reason; unique named things,
-          what someone else holds, and the PC's own confiscated gear come through
-          play
+SCOPE     an item or a prep, as ordinary as the reason; a spend never reveals
+          hidden truth, moves an actor, contradicts the record, or takes a unique
+          named thing, what someone else holds, or the PC's own confiscated gear
 AFTER     a real item: seen, remembered, can be lost, broken, stolen or sold
 ```
 
@@ -481,7 +486,8 @@ PLAN      a next move and a due: a clock time, or a trigger the tool can list;
 ALWAYS    every important actor has a plan with a due at all times; the tool flags
           any without one
 OFFSCREEN between moves, an actor changes when time advances something they are
-          doing or an event changes their situation
+          doing or an event changes their situation; time alone never changes
+          personality, loyalty, goals, relationships or skill
 REPLAN    a plan resolved, blocked, failed or out of date, or new means or news →
           re-plan at once from want, pull, fear, line, means and knowledge; an
           actor with an unmet want and the means keeps pursuing it; honestly open
@@ -497,7 +503,7 @@ TEMPER    a new actor not in the background rolls once: 2d10 ≥17 (≥15 on an
           opposing side) → difficult in a way their position allows (a clerk
           slow-walks, a guard asks for more, a foreman is curt); it shows to
           everyone, the way it would in their job; their attitude to the PC still
-          comes from the meeting
+          comes from the meeting; never aimed at the PC's secrets
 STANCE    on meeting or being asked: the relationship, want, fear, line, what is
           asked, its cost to them, what they know of the asker, duty, authority
 ```
@@ -524,7 +530,8 @@ CHANGE     attitude and bond move on real relationship events: a life saved, a
 FAMILIAR   people the PC already knows meet them from their tie, attitude and
            bond; shared history comes from the bond or from play
 NEEDED     a scene needs a person → an existing relationship, affiliation or
-           institution first, else someone the setting would put there
+           institution first, else someone the setting would put there; never a
+           connection made up for the PC
 COMPANIONS someone joins for a reason in the world; on joining, record their
            capability, HP, gear and when they'd ask for help, push back or leave;
            they act from that record, fight with their own gear, earn their own XP
@@ -570,7 +577,7 @@ TIME      sleep and aftermath all take time
 
 ### 15.3 Encounters
 
-Rolled for each daypart the PC spends in a zone, and on contact with a zone's undercurrent.
+Rolled for each daypart the PC spends in a zone, and on contact with a zone's undercurrent. Never for round count, quiet, or a wish for content.
 
 ```text
 SURFACE      one roll per zone per daypart the PC is there, whatever they're doing;
@@ -583,8 +590,9 @@ UNDERCURRENT on contact (the PC enters one of its sites, is out in its hours, ac
              (contact, no harm) · incident (something happens to someone) ·
              hostile (it acts against those present); the last three call for a
              horror check where the setting has horrors (§11)
-CAUSE        drawn from the zone's own lists, by the roll; the cause acts from its
-             own nature: fight, flight, parley
+CAUSE        drawn from the zone's own lists, by the roll, never by looking at the
+             PC's cargo, secrets or plans; it acts from its own nature: fight,
+             flight, parley
 ```
 
 ### 15.4 Places and stability
@@ -634,10 +642,11 @@ DUE       every pressure has one; the tool flags any without
 PACE      every <interval> while <condition>; world-scale moves in weeks or months
 CHECK     at its due (then due += interval) and when an event touches it: it
           advances once if it actually operated, once more for a plainly
-          accelerating event; the PC can advance, reverse, stall or end it
+          accelerating event; the PC can advance, reverse, stall or end it; never
+          moved by round count, pacing or quiet
 ON STEP   written when it's made: what the world does when a track reaches a step
-ON FILL   or a clock fills; it happens whoever is there; the PC learns of it
-          through a real channel
+ON FILL   or a clock fills; it happens whoever is there, never aimed at the PC;
+          the PC learns of it through a real channel
 STOPPED   its condition fails → it holds; its actors re-plan
 STAGES    a track's steps are its stages; a clock may have early (still stoppable)
           and late (coming; brace); each stage has a sign someone could notice
@@ -653,7 +662,8 @@ CASE      a hidden cause that must hold across more than one contact; it lives a
           several
 CREATE    the cause is written first; evidence follows from it; misleading
           information has its own cause
-FIXED     the cause stays as written, whatever the player's theory
+FIXED     the cause stays as written; a player's theory never rewrites it, and a
+          missing cause is never built backward from a clue
 EVIDENCE  a competent person with the right skill examining the right spot finds
           what is there, no roll; rolls decide time, cost, being noticed, finds
           beyond the obvious, and what it means (§2 LIMITED)
@@ -661,11 +671,12 @@ SOLVABLE  a case tied to a quest has 3 or more independent routes the PC can rea
           (a different person, place or record each); fewer → add routes from its
           actors' own plans (someone searching, a witness who comes forward, a
           nervous accomplice), written into the case before play reaches it;
-          checked when the case is made
+          checked when the case is made; never added during play
 CLOSED    a route the PC's own failure closes stays closed
 STUCK     no reachable route on an active quest, or the player asks → list the
           leads the PC knows as numbered options (what, where, rough cost and
-          risk); the player may still do anything else
+          risk), never a hidden route or a new fact; the player may still do
+          anything else
 ```
 
 ### 15.7 Witnesses and response
@@ -689,11 +700,12 @@ BELIEF    whoever hears it judges the source and decides whether to believe it
 
 ```text
 SOURCE    people act from drives, circumstances, beliefs and what they think they
-          can get away with
+          can get away with; never to look admirable, never to look grim
 RANGE     a place holds what its conditions produce: decent, petty, generous,
           cowardly, zealous, warm to their own and hard on outsiders, tired
 SETTING   play the setting's own values and prejudices as its people hold them,
-          at the level the situation supports
+          at the level the situation supports; never softened into modern
+          sensibility, never given one it didn't have
 TRAIT     a character trait sets what an actor tries, how, and how they sound;
           whether it works comes from §3 or §8 (actor against actor: one roll,
           the other as challenge)
@@ -718,8 +730,9 @@ NEXT        what follows comes from pending consequences, pressures, actors'
             state and drives, and the setting
 CONDITIONS  ending_conditions (an open world needs none): written before the
             choices they govern; the player may pursue, ignore or miss them;
-            checked when an event changes what they depend on; met → the ending
-            review (GM §7.6); unreachable → closed
+            checked when an event changes what they depend on, never by schedule,
+            round count or length; met → the ending review (GM §7.6);
+            unreachable → closed
 ```
 
 ---

@@ -540,6 +540,14 @@ REDO  Nov 12: play set rewritten so every rule says what to do (no "never" lists
       powers, canon mode and no-levels moved to modules/NEO_MODULES_v0.md; law tags
       I1–I12 dropped; full/short narration profile dropped; tool's flatten command
       is now unused (chapters)
+GUARDS Nov 12: a "never" stays where it blocks the AI's pull toward pleasing,
+      drama or convenience (§1 AGREED), placed beside the rule it guards: no
+      invented hook or loss, no hidden fact told, no help unasked or made to fit,
+      no NPC answer softened or turned on the PC, no encounter or pressure aimed
+      at the PC or moved by pacing, no case rebuilt from a theory, no stop for
+      drama; nevers that only scolded or restated a positive rule stay out
+TOOL  Nov 12: removed flatten (chapters), dues (span replaced it), the lite and
+      odds output modes, the profile enum, and command-line commands no form uses
 ```
 
 ---

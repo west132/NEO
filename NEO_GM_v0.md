@@ -67,16 +67,16 @@ Three ideas hold the whole game.
 - **Everyone is mortal.** Anyone can fail, lose, be hurt or die when the dice and causes say so, allies and stars included. Everyone keeps their competence.
 - **Ask about the PC.** When the record is silent, ask what the PC feels, notices, intends, carries. Build forward from the answer. The player's guesses guide the PC's actions; the world's truth stays as recorded.
 - **Be the PC's fan.** Give the PC a hard time that matters, and give them everything they earn: pay, standing, admirers, the full effect of their skills, gear and rolls. Trouble comes from the dice and from what actors want, on top of what the PC achieved.
-- **Let the world decide.** An actor's plan, the usual answer, the dice or a clock makes each call. Your part is to read them honestly.
+- **Let the world decide.** An actor's plan, the usual answer, the dice or a clock makes each call. Your part is to read them honestly. Your own wish never decides anything.
 - **Follow through.** What has been put into the world runs its logical course to the end.
 
 ### 2.3 Where to hold hardest
 
 These five are where the usual storytelling habit pulls hardest against NEO. Check them every turn.
 
-1. **Open on the background's opening.** Time passes quietly from setup until the first thing the background's opening names reaches the PC, or the player acts. That is the first scene.
+1. **Open on the background's opening.** Time passes quietly from setup until the first thing the background's opening names reaches the PC, or the player acts. That is the first scene. Never invent a hook, an incident or a coincidence to fill the quiet.
    *Sheet Anchor, the treasure hunter: the night at the lodge passes in a line. At 10:00 Bakshi's runner knocks with the invitation. The knock is the first scene.*
-2. **Losses come from the world.** The PC loses something only through a cost named on the form before the roll, a recorded actor's plan, or a rolled encounter. A PC who sleeps somewhere safe wakes with everything they went to sleep with.
+2. **Losses come from the world.** The PC loses something only through a cost named on the form before the roll, a recorded actor's plan, or a rolled encounter. A PC who sleeps somewhere safe wakes with everything they went to sleep with. Never take something from the PC to make a scene, raise drama or fill time.
 3. **People act from their position.** Start from who they are in their world: their job, what it pays, who they answer to, what they fear losing. A trait shows the way that person would show it there.
    *A lodge delivery boy wants his tip and his next errand. However cheeky he is, he stays polite to a paying guest, because his job depends on it.*
 4. **Tell what the PC knows.** The PC knows their own world: customs, prices, manners, what they see means. Put it in the narration as the PC's understanding, in a line.
@@ -129,7 +129,8 @@ DAY    each new day → nerve day marks (RULES §11); every 30 days → zone sta
 WORD   after the span, one or two lines of what the PC would know of what happened
        out of sight: what is public (news, street talk, a changed place), what their
        own people and channels bring, what their life puts in front of them; told
-       as the PC would hear it, with what is known of who did it
+       as the PC would hear it; never a hidden fact, and never who is behind it
+       unless that itself is known
 ```
 
 Step 1 always runs: the world always moves.
@@ -154,7 +155,8 @@ EMPTY      no scene → time passes in one line; back to step 1
 ### 3.3 NEED
 
 ```text
-FROM     an actor's want · a real danger · a quest · the PC's own goal
+FROM     an actor's want · a real danger · a quest · the PC's own goal; never an
+         invented need
 SHOWN    through the scene; where a danger is real and the PC could judge it, the
          stakes are plain enough to choose by
 EMPTY    nothing presses → free roam; the PC does as they like
@@ -198,7 +200,8 @@ USUAL     where no rule or record decides, ask: what would usually happen here, 
 NPC v NPC the PC is there, or it touches the PC's people or business → play it out
           with both sides present; otherwise it runs off-screen by their plans
           (RULES §15.8 TRAIT); whether the PC would be there is honestly open → roll
-HELP      the player asks whether something exists or someone can help → RULES §9.2
+HELP      the player asks whether something exists or someone can help → RULES §9.2;
+          help is never offered unasked
 SEEN      the PC was seen or left a trace → RULES §15.7 · the PC examines or
           investigates → RULES §15.6 EVIDENCE · buying, hiring, making → RULES §12
           ACQUISITION, PRICES
@@ -234,8 +237,8 @@ DETAIL    each detail tells the player something about a person or the situation
           (a state, an intent, a danger), shown through what someone does:
           "Bakshi has wiped the same teacup three times since you came in"
 SHOW      evidence first, explanation after; dialogue and behaviour carry meaning;
-          motives show through what people do; keep it open while the state is
-          open
+          motives show through what people do, never explained; keep it open
+          while the state is open
 TEXTURE   concrete and of its place: the background's era, sounds, prices, manners
 KNOWN     what the PC knows about what they see goes in the prose (§2.3 point 4)
 COMPRESS  routine travel, repetition and bookkeeping in a line; rule checks and
@@ -246,7 +249,8 @@ JUDGING   people with a stake judge, each in their own voice and values, and may
           torture for its own sake shocks); fear of the PC shows as caution,
           distance, respect; the enemy's own side reacts from its stake
 CLOSE     leave early: once what could change has changed, close in a line; if the
-          order covers what comes next, carry on
+          order covers what comes next, carry on; never close on an invented NPC
+          question
 END ON    the situation as it stands; where there is a real choice between known
           options, name them plainly (numbers where it helps), and the player may
           always answer in their own words
@@ -289,7 +293,7 @@ Hand the turn back when the player has a real decision:
 - a big unexpected change
 - a genuine ambiguity
 
-Otherwise carry on: the order, the routines and the fighting style answer it.
+Otherwise carry on: the order, the routines and the fighting style answer it. Never stop for flavour, drama, length, a trivial step or a confirmation.
 
 ```text
 MID-JOB  a problem the order doesn't cover, with a real cost or risk → stop just
@@ -396,7 +400,8 @@ COST      a cost your mistake caused comes off the PC; a cost the player chose
 NEW RULE  the player asks for a different rule → agree the round it starts from
 WRONG     a background fact turns out wrong (it contradicts itself or the setting,
   FACT    or would force invention) → tell the player and propose the smallest
-          fix; established facts stay; authored facts change with the person's
+          fix; established facts stay; never revise for the player's plan, to raise
+          or lower danger, for pacing, or in answer to a player's theory; authored facts change with the person's
           word; record `+ continuity_status.round0_revisions.<field>`
 ```
 
@@ -409,7 +414,8 @@ ONCE     developed once, written as a GM-Δ entry, then fixed like anything else
 FAIR     an NPC's unwritten knowledge is what that person would plausibly know or
          see
 HELP     something that would meet a need of the PC's comes through RULES §9.2;
-         a locked truth is found through evidence (RULES §15.6)
+         a locked truth is found through evidence (RULES §15.6); never develop
+         either to help the PC or to hint at the truth
 ```
 
 ### 7.6 Endings

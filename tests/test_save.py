@@ -58,11 +58,6 @@ class Save(unittest.TestCase):
                  "minutes": 10, "pc_zone": "chor_bazaar"})
         self.assertTrue(any("npcs.bakshi" in f for f in s["flags"]))
 
-    def test_flatten_runs(self):
-        o = run({"cmd": "flatten", "background": BG, "save": W.save20, "out": W.p("flat.yaml"),
-                 "summary": True})
-        self.assertEqual(o["summary"]["quests"]["closed"], 1)  # B succeeded
-
     def test_background_meets_its_depth_fields(self):
         o = run({"cmd": "selfcheck", **W.w20, "answers": {"hp": 12}})
         self.assertNotIn("depth_fields", o["tool_checks"])

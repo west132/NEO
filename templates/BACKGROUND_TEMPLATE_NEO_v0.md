@@ -105,7 +105,9 @@ M3 THE WORLD ANSWERS ACTIONS   when the PC acts on a wrong theory, the world
   responds to what they actually did: they may succeed, fail, hurt the wrong
   person or help someone unexpected; a wrong reading is a real outcome; the
   author sets reality and consequences, and the player draws their own
-  conclusions
+  conclusions; never an NPC who appears just to explain the answer, never a
+  quest to correct a mistaken theory, never events rearranged to prove the PC
+  right
 
 M4 TRUE CLUES, FALSE LINKS   each thread leaves real evidence; evidence from
   different threads overlaps in time, place, people or motive and suggests a
@@ -116,7 +118,8 @@ M4 TRUE CLUES, FALSE LINKS   each thread leaves real evidence; evidence from
 M5 PEOPLE, NOT CLUE BOXES   people have lives beyond the case; most hide things
   for ordinary reasons (privacy, shame, love, duty, money, fear); some are
   wrongdoers, others victims, witnesses, bystanders or opportunists, and roles
-  overlap; they act from their own motives and knowledge
+  overlap; they act from their own motives and knowledge, never to hand out
+  clues or keep a mystery going
 
 M6 COMPLEXITY FROM CROSSING   each thread makes sense alone; the complexity comes
   from how they collide: several wrongdoers with different aims, overlapping
@@ -176,7 +179,8 @@ SITUATION  write what each actor does if the PC stays out (D4): situations, with
 STORYLINE  one reality that makes sense alone (M6): its truth (§9), actors (§11),
            pressure (§8) and routes, indexed in §7
 ROUTES     a case tied to a quest has 3 or more (RULES §15.6); other storylines have
-           the routes their own facts give
+           the routes their own facts give; never invent routes or connections to
+           reach a count
 SCALES     one main storyline over weeks or months · local storylines over days ·
            ordinary lives, which need no pressure (most storylines are ordinary
            lives)
