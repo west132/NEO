@@ -118,9 +118,8 @@ TIME   send the time the last action took (or the wait, the journey) to the tool
 STOP   the tool stops at the first event that could reach the PC; judge that one:
        it reaches them → time stops there and the scene opens; it passes them by →
        send the span on with its resume fields
-FIRES  each due in the span happens if its cause still holds; a fired step of a
-       numbered plan is retired in the block, and an actor whose plan is spent
-       gets a new plan and due at once (RULES §15.1 actors,
+FIRES  each due in the span happens if its cause still holds; when an actor's
+       move resolves, it re-plans at once: its next move and due (RULES §15.1 actors,
        §15.5 pressures, §12 owed and pending); an encounter rolled → RULES §15.3;
        the tool flags an important actor or pressure with no due → give it a plan
        and a due now

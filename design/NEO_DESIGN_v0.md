@@ -549,10 +549,10 @@ GUARDS Nov 12: a "never" stays where it blocks the AI's pull toward pleasing,
 TOOL  Nov 12: removed flatten (chapters), dues (span replaced it), the lite and
       odds output modes, the profile enum, and command-line commands no form uses
 TEST  Nov 12: 20-round Sheet Anchor test (West.L, treasure hunter). Opening,
-      runner, customs held. Fixed from it, all within existing design: an
-      actor's plan of several steps is written as numbered steps like quest parts
-      (due {1:, 2:}), each its own due, retired when fired, replaced whole by a new
-      due · span gives the §9.1 zone point with each actor's due · a position
+      runner, customs held. Fixed from it, all within existing design: packed
+      dues rewritten as one next move each, the rest in the plan (RULES §15.1);
+      quest codes designed with the quest as in the Step 2 example, given to the
+      player on take-on (the check no longer rejects them) · span gives the §9.1 zone point with each actor's due · a position
       names a recorded place by whole name, else the GM develops and records it
       (no guessing from one word) · quest and contract point at each other by
       terms and code (RULES §10) · merge applies a whole-record change field by

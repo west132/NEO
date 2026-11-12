@@ -347,7 +347,8 @@ CODES
   PARTS     stages of one objective: A-1, A-2, A-3
   FOLLOW-ON grown out of another: A-B (B grew out of A), A-B-D; two origins → the
             main one in the code, the other in its source
-  WHEN      given when the quest becomes the PC's
+  WHEN      designed with the quest (the background or the GM-Δ that makes it);
+            the player is given it when the quest becomes the PC's
   FIXED     a code stays the same for the whole campaign; letters are used once
   STATUS    the record holds the word: active · succeeded · partly · failed ·
             abandoned; the code shows a letter: (none) · s · p · f · a

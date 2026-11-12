@@ -34,10 +34,8 @@ IMPORTANT   read from the newest save: an actor with a relationship to the PC
             (credit, grievance, bond), a role in a quest, pressure or case, or a
             deal with the PC; an important actor always has a plan and a due
 DUE         a clock time with a daypart, or a trigger written as an event ("when …")
-            the tool can list; a plan with several steps is written as numbered
-            steps, like a quest's parts (A-1, A-2): due: {1: …, 2: …}; each step is
-            its own due at …state.due.<n>, and a step that has fired is retired
-            (`− npcs.<id>.state.due.1 :: fired R<n>`)
+            the tool can list; one next move and one due (RULES §15.1): later moves
+            stay in the plan, and the actor re-plans when the move resolves
 CHARACTER   who they are, played as behaviour · VOICE how they sound, played as
             speech · a character from a source is played as the source made them
 WANT        kept plain: what the PC can push on; the complexity lives in pull,

@@ -771,17 +771,6 @@ def do_merge(a):
                 except Exception:
                     fields = None
             existing = rid in records or bool(deeper) or isinstance(bgv, dict)
-            if op in ("~", "+") and fields is None and re.search(r"\.due$", rid):
-                # a new due replaces the whole plan: every earlier step is retired
-                for k in [k for k in records if k.startswith(rid + ".")]:
-                    del records[k]
-                if isinstance(bgv, dict):
-                    for k in bgv:
-                        sid = f"{rid}.{k}"
-                        if sid not in [r[0] for r in retired]:
-                            retired.append((sid, f"replaced by a new due {stamp}"))
-                records[rid] = f"{stamp}: {text}"; changed.append(rid)
-                continue
             if fields is not None and existing:
                 # a whole record changed at once: apply each field as its own record
                 for fk, fv in fields.items():
@@ -1175,18 +1164,6 @@ def _dues(path, caps, retired=(), bg=None, save_round=None):
             m = re.search(r"\bdue:\s*([^,}]+)", t)
             if m:
                 cur[f"{i}.state.due"] = m.group(1).strip()
-    for i, t in list(cur.items()):   # numbered steps: each step is its own due
-        if i.endswith(".due"):
-            steps = _due_steps(t)
-            if steps and steps[0][0]:
-                del cur[i]
-                for suf, body in steps:
-                    if f"{i}{suf}" not in cur:
-                        cur[f"{i}{suf}"] = body
-    gone_ids = [r["id"] for r in retired]
-    for i in [i for i in cur if re.search(r"\.due\.[\w\-]+$", i)]:
-        if any(i == g or i.startswith(g + ".") for g in gone_ids):
-            del cur[i]
     now = _now(path)
     nowk = now[1] if now else None
     same = lambda pts: [p for p in pts if nowk and p[0][0] == nowk[0][0]]
@@ -1194,8 +1171,8 @@ def _dues(path, caps, retired=(), bg=None, save_round=None):
     unread, incidental, aim_open = [], [], []
     for rid, txt in cur.items():
         body = re.sub(r"^R\d+:\s*", "", txt)
-        if re.search(r"\.due(\.[\w\-]+)?$", rid):
-            base_ = re.sub(r"\.(state\.)?due(\.[\w\-]+)?$", "", rid)
+        if rid.endswith(".due"):
+            base_ = re.sub(r"\.(state\.)?due$", "", rid)
             st_ = cur.get(f"{base_}.state.status") or cur.get(f"{base_}.status") or ""
             if not st_:
                 m_ = re.search(r"\bstatus:\s*([^,}]+)", cur.get(base_, ""))
@@ -1233,9 +1210,6 @@ def _dues(path, caps, retired=(), bg=None, save_round=None):
         for k in sorted(actors):
             base = f"{owner}.{k}"
             due = cur.get(f"{base}.state.due")
-            if due is None:
-                steps = [t for i, t in cur.items() if i.startswith(f"{base}.state.due.")]
-                due = "; ".join(steps) if steps else None
             if due is None:
                 if owner == "npcs" or f"{base}.state.plan" in cur or re.search(r"\bplan\b",
                                                                                 cur.get(base, "")):
@@ -1460,34 +1434,6 @@ def _where(text, zones):
 _STAMP = re.compile(r"^R(\d+):\s*")
 
 
-def _due_steps(v):
-    """A due as its steps: [(suffix, text)]. One due is one step (suffix "");
-    a plan of several steps is a mapping {1: ..., 2: ...} and each step is its own
-    due at <path>.due.<n>; a fired step is retired with a − entry."""
-    v = _val(v)
-    if isinstance(v, str):
-        body = _STAMP.sub("", v).strip()
-        if body.startswith("{"):
-            try:
-                import yaml
-                parsed = yaml.safe_load(body)
-                if isinstance(parsed, dict):
-                    v = parsed
-            except Exception:
-                pass
-    if isinstance(v, dict):
-        return [(f".{k}", _STAMP.sub("", str(_val(t))).strip()) for k, t in v.items()
-                if t not in (None, "")]
-    return [("", _STAMP.sub("", str(v if v is not None else "")).strip())]
-
-
-def _key(node, part):
-    """A mapping key as written in a path: numbered steps load from YAML as ints."""
-    if isinstance(node, dict) and part not in node and part.isdigit() and int(part) in node:
-        return int(part)
-    return part
-
-
 def _set_path(tree, rid, value):
     """Put value at a dotted path, creating maps; a scalar in the way moves under _value."""
     parts = rid.split(".")
@@ -1527,13 +1473,11 @@ def _del_path(tree, rid):
     parts = rid.split(".")
     node = tree
     for part in parts[:-1]:
-        part = _key(node, part)
         if not isinstance(node, dict) or part not in node:
             return False
         node = node[part]
-    last = _key(node, parts[-1])
-    if isinstance(node, dict) and last in node:
-        del node[last]
+    if isinstance(node, dict) and parts[-1] in node:
+        del node[parts[-1]]
         return True
     return False
 
@@ -2620,9 +2564,9 @@ def _due_minutes(text, anchor):
 
 
 def _no_due(st):
-    v = st.get("due") if isinstance(st, dict) else None
-    return all(not body or re.fullmatch(r"(none|incidental)\b.*", body, re.I) is not None
-               for _, body in _due_steps(v))
+    v = _val(st.get("due")) if isinstance(st, dict) else None
+    body = _STAMP.sub("", str(v if v is not None else "")).strip()
+    return not body or re.fullmatch(r"(none|incidental)\b.*", body, re.I) is not None
 
 
 QUEST_CODE = re.compile(r"^([A-Z]{1,2}(?:-[A-Z]{1,2})*)(?:-(\d+))?([spfa])?$")
@@ -2825,8 +2769,7 @@ def do_span(form):
                     flags.append(f"{owner}.{aid}.state.position :: \"{pos[:60]}\" names no recorded "
                                  "location — develop the place once (GM §7.5) and record it")
                 side = str(_val(rec.get("in_disorder")) or "").strip().lower()
-                for suf, body in _due_steps(st.get("due")):
-                    add_dues(f"{owner}.{aid}.state.due{suf}", body, loc, side)
+                add_dues(f"{owner}.{aid}.state.due", _val(st.get("due")), loc, side)
     for pid, p in (tree.get("active_world_pressures") or {}).items():
         if not isinstance(p, dict):
             continue
@@ -3062,13 +3005,12 @@ def do_check_background(form):
         pos = _val(st.get("position"))
         if pos and not _where(str(pos), zones):
             add("references", f"npcs.{aid}.state.position :: \"{pos}\" names no recorded location")
-        for suf, due in ([] if _no_due(st) else _due_steps(st.get("due"))):
-            did = f"npcs.{aid}.state.due{suf}"
-            if not due:
-                continue
+        due = _STAMP.sub("", str(_val(st.get("due")) or "")).strip()
+        did = f"npcs.{aid}.state.due"
+        if due and not _no_due(st):
             if len(set(re.findall(r"\bday\s*\d+\b", due, re.I))) > 1:
-                add("dues", f"{did} :: several dated steps in one due; write them as numbered "
-                            "steps {1: …, 2: …}")
+                add("dues", f"{did} :: several moves in one due; an actor has one next move "
+                            "and one due, the rest in its plan (RULES §15.1)")
             if not _due_minutes(due, anc) and not _EVENT.search(due):
                 add("dues", f"{did} :: neither a time nor a trigger — \"{due[:60]}\"")
             elif re.search(r"\bday\s*\d+\b", due, re.I) and not re.search(
@@ -3087,8 +3029,8 @@ def do_check_background(form):
         if not isinstance(q, dict):
             continue
         status = str(_val(q.get("status")) or "").lower()
-        if q.get("code"):
-            add("quests", f"quests.{qid} :: has a code at Round 0; codes are given when the PC takes it on")
+        if not q.get("code"):
+            add("quests", f"quests.{qid} :: no code; a quest's code is designed with it (RULES §10)")
         if status not in ("available", "blocked"):
             add("quests", f"quests.{qid} :: status \"{status}\" at Round 0 (available | blocked)")
         if status == "blocked" and not q.get("trigger"):

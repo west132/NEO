@@ -254,6 +254,7 @@ storylines:
 
 quests:
   tq_syamantaka:
+    code: A
     objective: Find the Syamantaka before the others — or decide who should have it.
     source: the plate and its auction (Bakshi)
     hook: A copper plate, a thieves' market auction, and a word out of the Krishna stories.
@@ -273,11 +274,12 @@ quests:
       plate, Sterne's half, Hawk's employer's papers, the Devgarh throne, the temple family, Professor Iyengar's
       library, follow whoever looks most certain]
     parts:
-      the_plate: {objective: get the plate or both halves or a reading of them}
-      the_throne: {objective: find what the throne of thirty-two statues says}
-      the_cave: {objective: reach the cave of the bear-king}
+      the_plate: {code: A-1, objective: get the plate or both halves or a reading of them}
+      the_throne: {code: A-2, objective: find what the throne of thirty-two statues says}
+      the_cave: {code: A-3, objective: reach the cave of the bear-king}
     support_refs: [plate, syamantaka]
   side_lab_theft:
+    code: B
     objective: Find out who really stole the plate from Meera's lab.
     source: meera_raghavan
     hook: The lab door was forced, the plate is gone, and Meera is sure it was the London syndicate.
@@ -294,6 +296,7 @@ quests:
       Bakshi's books, Ravi himself]
     support_refs: [lab_theft]
   side_palace_night:
+    code: A-C
     objective: Get at the throne of thirty-two statues in Devgarh palace-hotel — on the night half the hunt arrives.
     source: vikram_singh
     hook: The Yuvraj of Devgarh has fully booked his palace for the first time in ten years, and doesn't know why.
@@ -439,10 +442,8 @@ npcs:
     in_disorder: suffers
     state:
       position: Patna University
-      plan: get her plate back; blames Sterne; goes to Bombay when she hears of the auction
-      due:
-        1: Day 1 morning hears of the auction from a colleague
-        2: Day 2 afternoon reaches Bombay by train — too late to bid, in time for the chaos
+      plan: get her plate back; blames Sterne; goes to Bombay when she hears of the auction, reaching it Day 2 afternoon by train — too late to bid, in time for the chaos
+      due: Day 1 morning hears of the auction from a colleague
     drives:
       want: the plate back, and published under her name
       pull: to be the one who reads it — she will not hand the reading to anyone else, even to get it back sooner
@@ -511,10 +512,8 @@ npcs:
     in_disorder: thrives
     state:
       position: The Taj hotel
-      plan: win the plate at auction or take it; follow it to the jewel; sell the jewel in Karachi
-      due:
-        1: Day 2 night the auction
-        2: Day 4 morning Hartog reads his half; then the clock (sterne_expedition)
+      plan: win the plate at auction or take it; have Hartog read it (Day 4 morning); follow it to the jewel with his expedition (sterne_expedition); sell the jewel in Karachi
+      due: Day 2 night the auction
       if_blocked: buys whoever has what he needs; failing that, sends Kasteel
     drives:
       want: the jewel
@@ -571,11 +570,8 @@ npcs:
     in_disorder: neither
     state:
       position: The Taj hotel
-      plan: see the plate; photograph it if she can't buy it; find the jewel for the find, not the money
-      due:
-        1: Day 2 night bids at the auction and photographs both faces of the plate before it breaks
-        2: Day 4 afternoon reads the photographs
-        3: Day 6 evening at Devgarh
+      plan: see the plate; photograph it if she can't buy it; read the photographs (Day 4 afternoon); go to Devgarh (Day 6 evening); find the jewel for the find, not the money
+      due: Day 2 night bids at the auction and photographs both faces of the plate before it breaks
     drives:
       want: the discovery — to stand where no one has stood
       pull: to do it alone, on her own terms
@@ -598,11 +594,8 @@ npcs:
     in_disorder: thrives
     state:
       position: Chor Bazaar
-      plan: with Sully, steal the plate at the auction; sell it to Sterne for double, or follow it themselves
-      due:
-        1: Day 2 night the auction (he ends with the Brahmi half)
-        2: Day 5 afternoon Sully offers it to Sterne
-        3: Day 6 night they double-cross him and go for the well
+      plan: with Sully, steal the plate at the auction; Sully offers it to Sterne (Day 5 afternoon); then double-cross him and go for the well (Day 6 night)
+      due: Day 2 night the auction (he ends with the Brahmi half)
     drives:
       want: the payday
       pull: to see what is behind the door — he will throw the money away to be right about history
@@ -645,10 +638,8 @@ npcs:
     in_disorder: neither
     state:
       position: Chor Bazaar
-      plan: get the plate (then the jewel) for his client, a Hong Kong collector, Mr Lau; politely
-      due:
-        1: Day 2 night bids at the auction and ends up in the brawl
-        2: Day 7 evening at Devgarh, booked as a hotel guest under a silly name
+      plan: get the plate (then the jewel) for his client, a Hong Kong collector, Mr Lau, politely; at Devgarh by Day 7 evening, booked as a hotel guest under a silly name
+      due: Day 2 night bids at the auction and ends up in the brawl
     drives:
       want: his commission — the plate, then the jewel, delivered to Mr Lau
       pull: to do it with style and hurt no one badly — he gives up an advantage rather than injure someone
@@ -729,7 +720,7 @@ npcs:
     character: 70, booming, generous, thirty years ridiculed for his theory; would give anything to be proved right
     voice: booming and generous; quotes Sanskrit, then translates it for you; "my dear fellow"; every answer becomes a lecture
     in_disorder: neither
-    state: {position: Patna, plan: get the plate read in Brahmi; publish; be vindicated, due: {1: Day 3 morning hears of the Brahmi line and gives a newspaper interview, 2: Day 5 morning offers his life savings for the Brahmi half}}
+    state: {position: Patna, plan: get the plate read in Brahmi; publish; be vindicated; offer his life savings for the Brahmi half (Day 5 morning), due: Day 3 morning hears of the Brahmi line and gives a newspaper interview}
     drives:
       want: to be proved right before he dies
       fear: dying a joke
@@ -763,7 +754,7 @@ npcs:
     character: 45, loud, fearless, has broken every bone once; shooting a film at Devgarh palace from Day 6
     voice: loud Bombay Hindi-English; swears cheerfully; orders everyone about, stars included; laughs at injuries, her own first
     in_disorder: neither
-    state: {position: The film studio, plan: finish the film; get her crew to Devgarh, due: {1: Day 2 night the auction brawl wrecks her set next door, 2: Day 6 morning at Devgarh}}
+    state: {position: The film studio, plan: finish the film; get her crew to Devgarh by Day 6 morning, due: Day 2 night the auction brawl wrecks her set next door}
     drives:
       want: the film finished
       fear: a death on her set

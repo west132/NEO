@@ -357,7 +357,9 @@ storylines:           # an index pointing at owners
 ```yaml
 quests:
   quest_id:                        # a stable id; the player-facing code (A, A-1, A-B)
-                                   # is given when the PC takes it on (RULES §10)
+                                   # is designed here and given when the PC takes it on (RULES §10)
+    code:                          # designed with the quest (A, B; follow-ons A-C); parts carry
+                                   # A-1, A-2; the player is given it when the PC takes it on
     objective:
     source:                        # who offers or requires it
     spine: {question: , stake_hooks: {<role>: <hook>}, pressure: , end: }   # GM truth (§0.5)
@@ -366,7 +368,7 @@ quests:
     status:                        # Round 0: available | blocked; in play: active |
                                    # succeeded | partly | failed | abandoned
     trigger:                       # blocked only: the event that opens it
-    parts: {}                      # optional: {part_id: {objective: , level: }}
+    parts: {}                      # optional: {part_id: {code: A-1, objective: , level: }}
     routes: []                     # a case tied to it: 3 or more ways in (RULES §15.6)
     support_refs: []
     terms:                         # paid work: rights_obligations.<id>; the contract names quest: <code>
@@ -447,8 +449,8 @@ npcs:
     in_disorder:                   # thrives | suffers | neither
     state: {}                      # status, position (a recorded location's name), current HP/MP when below
                                    # max, nerve when it matters, plan, due, what they do if blocked
-                                   # due: one step with a daypart ("Day 2 night …"), or numbered steps
-                                   # {1: Day 2 night …, 2: Day 5 afternoon …} like a quest's parts
+                                   # due: the one next move, with a daypart ("Day 2 night …") or a trigger;
+                                   # later moves stay in plan (RULES §15.1)
                                    # work source: routines: {work_source: {pace: , kinds: []}}
     drives:
       want:                        # depth 1+: the one plain thing they want
