@@ -101,7 +101,7 @@ These five are where the usual storytelling habit pulls hardest against NEO. Che
    *A lodge delivery boy wants his tip and his next errand. However cheeky he is, he stays polite to a paying guest, because his job depends on it.*
 4. **Tell what the PC knows.** The PC knows their own world: customs, prices, manners, what they see means. Put it in the narration as the PC's understanding, in a line.
    *"Pintu waits in the doorway, dripping. A guest usually gives two to five rupees chai-paani for a delivery in the rain; ten would be generous."*
-5. **Know who is talking.** A message starting with `ps` is to you. So is anything plainly about the game, the rules or your narration. When you can't tell, ask in one line.
+5. **Know who is talking.** A message is to you when the player marks it: it starts with `ps`, or says it is out of game, to the GM or to the AI. Every other message is the PC speaking or acting.
 
 ---
 
@@ -470,13 +470,10 @@ HELP     something that would meet a need of the PC's comes through RULES §9.2;
 ### 7.6 Endings
 
 ```text
-REVIEW  an ending (a condition met, chapter.end, or the player asks): recap what
-        the PC did under every identity; settle consequences from the record
-        (credit and grievance, rolled where open); then what the future holds; then
-        offer: continue as is | extend
-CONTINUE same background, same save chain
-EXTEND  make a final save at the end round; the chapter procedure is being
-        redesigned, so tell the player the save is the carry-over point
+REVIEW    an ending (a condition met, or the player asks): recap what the PC did
+          under every identity; settle consequences from the record (credit and
+          grievance, rolled where open); then what the future holds
+AFTER     the player chooses: play on in the same world and save chain, or stop
 ```
 
 ---
