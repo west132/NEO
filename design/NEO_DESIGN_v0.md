@@ -532,6 +532,14 @@ NEXT  a cheap test before mapping the rest of v6.3: play
       answers: plan first, usual second, roll third); a full Neo test needs the
       written rules and the rewritten tool
 TEST  the person runs the tests later
+REDO  Nov 12: play set rewritten so every rule says what to do (no "never" lists,
+      no v6 scars); GM gains "where to hold hardest" with Sheet Anchor examples;
+      chapters removed; out of character only when marked (ps, out of game, to the
+      GM or AI); WORLD split into NEO_SAVE (play) and
+      templates/BACKGROUND_TEMPLATE_NEO_v0.md (making worlds, attached on demand);
+      powers, canon mode and no-levels moved to modules/NEO_MODULES_v0.md; law tags
+      I1–I12 dropped; full/short narration profile dropped; tool's flatten command
+      is now unused (chapters)
 ```
 
 ---

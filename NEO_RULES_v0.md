@@ -1,125 +1,120 @@
 # NEO RULES — v0
 
-How the game resolves: what a human referee with dice would work out the same way. The GM (NEO_GM) calls a section when its flow step needs it; WORLD holds every fact these rules read.
+How the game resolves: what a human referee with dice would work out the same way. The GM opens a section when a step of the turn points to it. The background and the save hold every fact these rules read.
 
 ```text
-TOOL     neo_math owns every number: rolls, modifiers, caps, bands, damage, XP,
-         growth, points, dues; this file never restates its maths
-INPUT    the GM fills a form; the tool reads it as a JSON file or stdin, never as
-         command-line text; values the save already holds (level, tier, HP, gear)
-         are read by the tool from the save, never typed by the GM
-OUTPUT   the tool prints the roll line; the GM copies it verbatim, never retypes
-NO TOOL  without a code tool there is no roll; the GM says so and stops
-FORMAT   terse rules; tags (§x, In) are references, never restated
+TOOL     neo_math makes every number: rolls, modifiers, caps, bands, damage, XP,
+         growth, points, dues; this file says what goes in and what comes out
+INPUT    you fill a form; the tool reads it as a JSON file or stdin; values the
+         save already holds (level, tier, HP, gear) the tool reads from the save
+OUTPUT   the tool prints the roll line; copy it word for word into the turn
+MODULES  powers (MP), canon mode and play without levels live in
+         modules/NEO_MODULES_v0.md; a background that uses one says so in its
+         setting, and the player attaches that file
 ```
 
 ---
 
 ## 1. The law
 
-The law is GM §1. Tags I1–I12 in this file cite it.
+The law is GM §1. Every rule here serves it.
 
 ## 2. Possibility
 
+Before any roll, decide which of these the action is:
+
 ```text
-violates recorded reality  → IMPOSSIBLE
-far beyond plausible capability/support  → IMPOSSIBLE
-domain gate blocks required knowledge  → LIMITED or IMPOSSIBLE at that depth
-uncertain  → ROLL
-otherwise  → DETERMINISTIC
-IMPOSSIBLE  no roll, no lowered difficulty; show only the visible reason
-RETRY  repetition never makes it possible; needs changed leverage, information,
-  position, tools, assistance, timing, or conditions (I10, I11)
-DOMAIN GATE capability never replaces missing knowledge; interpretation depth ≤
-  recorded skill/expertise/access; another actor's expertise changes
-  feasibility or gives their own conclusion, never the player's capability
+IMPOSSIBLE  it breaks recorded reality, or lies far beyond what this actor and
+            their support could do → no roll; show the visible reason
+LIMITED     the actor lacks the knowledge to go that deep (a layman reading a
+            surgeon's notes) → they get as far as their recorded skill, expertise
+            and access reach
+UNCERTAIN   → the action form (§3)
+CERTAIN     → it happens
+RETRY       a failed or impossible action becomes possible again when something
+            real changes: leverage, information, position, tools, help, timing,
+            conditions
+EXPERTS     another actor's expertise gives their own conclusion or changes what
+            is feasible; the PC's own skill stays the PC's
 ```
 
 ---
 
 ## 3. The action form
 
-Every uncertain action is one form. One slot per thing: a fact goes in exactly one slot (I8).
+Every uncertain action is one form, filled and run before any dice. Each fact goes in exactly one slot.
 
 ```text
 FORM (JSON)
   actor        id of who acts
-  action       one line, what they attempt
-  skill        skill exercised (tool reads level and tier from the save)
+  action       one line: what they attempt
+  skill        the skill used (the tool reads level and tier from the save)
   opposition   one of:
-                 {actor: <id>, domain: <skill>}   an opposed actor (tool reads
-                                                  its capability)
-                 {level: <n>}                     a committed task, hazard or
-                                                  quest/segment level
+                 {actor: <id>, domain: <skill>}   an opposed actor
+                 {level: <n>}                     a committed task, hazard, or
+                                                  quest or part level
                  {grade: forgiving | easy | ordinary | awkward | demanding |
-                  severe | extreme}               no numeric challenge: the task's
-                                                  own difficulty
+                  severe | extreme}               the task's own difficulty
   tool         {fit: unsuitable | poor | normal | good | exceptional,
                 condition: serviceable | worn | critical}   omit if none
-  gear_tier    the item whose tier applies, if any (tool reads its tier)
-  conditions   list, each: {category, effect, fact}
+  gear_tier    the item whose tier applies, if any
+  conditions   list, each {category, effect, fact}
                  category: environment | time | sensory | position | simultaneous
                  effect:   adverse | severe | favourable
-                 fact:     the concrete state fact; one per category
-  lasting      lasting conditions this action touches, each: {condition, category}
-               — the category it hampers; counts once, in a category nothing else
-               uses; the tool checks it is recorded on the actor
+                 fact:     the concrete fact; one per category
+  lasting      lasting conditions this action touches: {condition, category}
   danger       what is present that can hurt: {what, reaches: yes | no,
                direct_result: none | harm | death | crippling | capture}
-  cost_form    §4 FORMS: the form failure takes, one the danger would normally take
+  cost_form    the form failure takes (§4 FORMS)
   reach        partial | full | decisive (§4 REACH)
   damage       where harm is at stake: {dealt: <dice>, target_soak, taken: <dice>,
-               own_soak, attackers: <n>} (§5 DAMAGE); the tool applies the hit
-  lite         true for the one-line roll format
-  capability_grade  only without numeric progression: deficient | basic |
-               competent | advanced | exceptional
-  background, save, deltas   the world files: the BACKGROUND, the newest save, a file
-               of every GM-Δ block since that save
+               own_soak, attackers: <n>} (§5)
+  background, save, deltas   the background, the newest save, and a file of every
+               GM-Δ block since that save
 ```
 
 ```text
-BIND     the form is filled and the tool run before any dice; immutable after;
-         the action materially changes before the roll → new form
-CHALLENGE the opposed actor's or task's power goes in opposition only; its attacks
-         and menace are the danger (§4), never also a condition (I8)
-CONDITION nonzero needs a concrete state fact that independently changes execution
-         and is counted nowhere else; a category counts once; keeps its value until
-         its fact changes; never raised to enable skill growth
-POSITION a bad position raises the cost, never also a condition (I8)
-HP LOSS  changes no roll; only a lasting condition reaches rolls, through `lasting`
-NEVER    narrative importance, desired outcome, XP hunger, drama → 0
-DICE     genuine randomness only (I10); no critical-success tier
+BIND        once filled and run, the form stands; if the action really changes
+            before the roll, fill a new form
+OPPOSITION  an opponent's power goes in opposition; its attacks and menace go in
+            danger (§4)
+CONDITION   each one is a concrete fact that changes how the action goes; one per
+            category; it holds until its fact changes
+POSITION    a bad position raises the cost (§4)
+HP          lost HP leaves rolls as they are; a lasting condition is how harm
+            reaches a roll, through `lasting`
+ZERO        what the story wants, XP and drama add nothing to a form
 ```
 
-The tool combines: capability against challenge into the capability modifier, the conditions into Difficulty with its caps, tool fit and condition into the tool modifier, the gear tier into effective capability, then rolls 2d10. Success ⟺ total ≥ Difficulty. (Bands, caps and clamps: neo_math.)
+The tool combines capability against challenge, conditions into Difficulty with its caps, tool fit and condition, and gear tier, then rolls 2d10. Success is total ≥ Difficulty.
 
 ## 4. Stakes
 
+Set on the form, before the roll.
+
 ```text
-COST     set by the danger slot, never chosen:
-  LADDER   nothing that can hurt the PC → setback (position worsens, time or
-             resources spent, an option closes)
+COST     the danger slot sets it:
+  LADDER   nothing that can hurt the PC → setback (position worse, time or
+             resources spent, an option closed)
            something that can hurt and reaches them in this action → loss
-             (injury, material loss, exposure, another actor commits against
-             them)
-           its direct result is death, crippling or capture → severe
-           a danger's normal effect decides: a knife fight → loss; a long fall,
-             a gun at the head, a closing trap → severe
-  FORMS    the form a failure takes, one the danger present would normally take:
+             (injury, material loss, exposure, someone commits against them)
+           something whose direct result is death, crippling or capture → severe
+           the danger's normal effect decides: a knife fight is loss; a long
+             fall, a gun at the head, a closing trap is severe
+  FORMS    the shape failure takes, one the danger present would normally take:
            separate them · capture someone · put someone in a spot · trade harm
            for harm · inflict harm · take away their stuff · make them buy ·
            activate their stuff's downside · turn their move back on them · a
-           threat acts; the ladder sets how bad, the form how it looks
-REACH    partial  progress, foothold, part of the objective
+           threat acts
+REACH    partial  progress, a foothold, part of the objective
          full     the stated objective
-         decisive objective + a further advantage the situation offers
-         set by what this action can achieve from here, never by drama
-SHOWN    GM §3.3; a shown danger is never reduced, refused quietly, or its cost
-         lowered after
-APPLY    bound stakes as written; success-partial ≠ failure; failure-setback is
-         still failure (I11); physical harm paid in HP (§5)
-HP NEEDS an attacker or hazard that can reach the actor in the chosen action; else
-         setback or loss without harm
+         decisive the objective plus a further advantage the situation offers
+         set by what this action can achieve from where the PC stands
+SHOWN    a danger shown to the player (GM §3.3) keeps the cost it was shown with
+APPLY    as bound; a partial success is a success; a setback is a failure; harm
+         is paid in HP (§5)
+HARM     needs an attacker or hazard that can reach the actor in this action;
+         otherwise the cost is a setback or a loss without harm
 ```
 
 ---
@@ -127,125 +122,78 @@ HP NEEDS an attacker or hazard that can reach the actor in the chosen action; el
 ## 5. Vitals
 
 ```text
-HP   every actor that can be hurt
-MP   actor with a power the setting draws from a pool
-MAX  derived by the tool from overall level (or vitality), size, and best
-     MP-drawing skill's tier; never stored; current HP/MP in actor state
+HP    every actor that can be hurt; the tool derives the maximum from level (or
+      vitality) and size; the save holds current HP
 ```
 
 ```text
-DAMAGE per hit, set by what hits, never by result
-weapons  unarmed 1d3 · light 1d6 · one-handed 1d8 · two-handed 2d6 · bow 1d8
-creatures  small 1d4 · man-sized 1d6 · large 2d6 · huge 3d6
-hazards  light 1d6 · serious 2d6 · grave 4d6  fire, falls, traps, breath
-powers  T1 1d8 · T2 2d6 · T3 3d6 · T4 4d6  damage or HP restored
-soak  light armour 1 · heavy armour 2  per hit; minimum 0
+DAMAGE    per hit, by what hits
+weapons   unarmed 1d3 · light 1d6 · one-handed 1d8 · two-handed 2d6 · bow 1d8
+creatures small 1d4 · man-sized 1d6 · large 2d6 · huge 3d6
+hazards   light 1d6 · serious 2d6 · grave 4d6 (fire, falls, traps)
+soak      light armour 1 · heavy armour 2, per hit; minimum 0
 ```
 
 ```text
-APPLY a roll with harm at stake
-success  partial  foothold, no hit
-  full  one hit on the engaged opponent
-  decisive  hit + further advantage
-failure  setback  position worsens, no HP lost
-  loss  one hit from the source (engaged attacker or hazard)
-  severe  every engaged attacker hits; lone attacker/hazard hits twice
-  (spends each attacker's whole exchange, §8)
+APPLY    a roll with harm at stake
+success  partial: a foothold, no hit · full: one hit on the engaged opponent ·
+         decisive: a hit plus a further advantage
+failure  setback: position worse, no HP lost · loss: one hit from the source ·
+         severe: every engaged attacker hits; a lone attacker or hazard hits twice
+         (each spends that attacker's whole exchange, §8)
 ```
 
 ```text
-STATES
-HP > 0  no effect on rolls
-HP 0  down: incapacitated; further damage kills
-LASTING  {condition, source: body | mind, effect} — a name and one plain effect
-  ("broken leg: harder to run or climb"); body: one hit ≥ ½ max HP, or reaching 0;
-  mind: §11; enters rolls only through the form's `lasting` slot, applied once by
-  the tool
-down untreated 1 hour → 2d10: 11+ wakes at 1 HP, else dies; treatment/healing first
-  stabilises
-OTHER DEATH  helpless actor killable without a roll; certain fatal failure needs no
-  HP (§2); crippling and capture stay severe costs
-```
-
-```text
-RECOVERY
-1 hour rest  ¼ max HP (round down, min 1)
-a night's rest  full HP
-healing item  setting's value; default minor 2d6 · standard 4d6 · strong full
-body condition  never by rest; checked at each growth boundary; removed as its own
-  transition (I7) after real treatment (healer, restoration power, strong
-  healing item, tended rest) for its time: default 3 days · 7 bone/deep ·
-  setting's own rule (BACKGROUND/canon) wins
-MP  BACKGROUND mp_powers.recovery: fast = full after ~10 min out of danger ·
-  slow = ¼/hour rest, full on a night · rest_only = full on a night
-CASTING  cost by the power's tier (tool), paid on cast whether it works or not; no
-  power above caster's tier; not enough MP → no cast; BACKGROUND mp_powers names
-  MP powers; others follow their setting rule
-VISIBILITY  player sees own HP/MP exactly; others only as observable (I5, I9)
-COUNT ONCE  weapon → damage only · armour → soak only · gear tier → §6 ·
-  HP loss changes no roll · lasting conditions are harm's only way to rolls (I8)
+DOWN      at 0 HP an actor is incapacitated; more damage kills; down and untreated
+          for an hour → 2d10: 11+ wakes at 1 HP, else dies; treatment stabilises
+LASTING   {condition, source: body | mind, effect}: a name and one plain effect
+          ("broken leg: harder to run or climb"); body: one hit of half max HP or
+          more, or reaching 0; mind: §11; enters rolls through `lasting`
+DEATH     a helpless actor can be killed without a roll; a fall or trap whose
+          result is certain needs no HP count (§2)
+RECOVERY  an hour's rest: a quarter of max HP (min 1) · a night's rest: full HP ·
+          a healing item: the setting's value, else minor 2d6, standard 4d6,
+          strong full · a body condition heals with real treatment over time
+          (default 3 days, 7 for bone or deep wounds, the setting's rule first),
+          checked at each growth boundary
+SEEN      the player sees the PC's own HP exactly; others' as they look
+ONCE      weapon → damage · armour → soak · gear tier → §6 · lasting condition →
+          `lasting`
 ```
 
 ## 6. Equipment tiers
 
 ```text
-SCOPE  improves only directly supported capability; external to personal mastery
-TIERS  T1 standard professional | T2 superior | T3 exceptional/masterwork |
-  T4 setting-rare/artifact-scale
-APPLY  the strongest applicable item, one per use, through the form's gear_tier
-  slot; never rewrites level; never also tool fit (I8); boost values: tool
-ABILITIES  only where design and source record them; limited effect with real
-  condition, limit, cost, weakness, or range; adds no capability levels
-T4 AUTHORITY only if concept and setting support it; bounded, counterable; never above
-  superior recorded law/authority
-LIMITS  never grants unrelated expertise or skill tier; higher tiers need rare,
-  plausible access (crafting, discovery, institution, materials, transfer,
-  cost, time)
+TIERS    T1 standard professional · T2 superior · T3 masterwork · T4 setting-rare
+APPLY    the best item that applies, one per use, through `gear_tier`; it raises
+         the capability it directly supports
+ACCESS   higher tiers come from real sources: crafting, discovery, an
+         institution, materials, purchase, time
+ABILITIES an item has special abilities only where its record says, each with a
+         real limit, cost or weakness
 ```
 
 ## 7. Skill growth
 
 ```text
-class ceiling  NORMAL → T2 | ELITE → T3 | LEGENDARY → T4
-tier  T1 trained/specialised | T2 advanced | T3 master | T4 setting-top
-default class  common/general NORMAL | professional combat/magic/specialist ELITE |
-  rare named discipline LEGENDARY
-start  unspecified trained skill T1; higher needs explicit mastery evidence
-QUALIFIES  the tool decides from the form, and credits evidence itself:
-  a successful, materially distinct roll; the skill bound before dice; numeric
-  challenge ≥ personal skill level − 2, or
-  Difficulty ≥ 15
-LIMITS  failure 0 · each bound skill once per roll · never incidental skills ·
-  never another actor via this roll · routine/easy/deterministic use and time
-  never advance · training only via a distinct challenge · gear and tool fit never
-  change eligibility · Difficulty never raised for growth
-PERIOD  one credit per skill between growth boundaries; the tool keeps the list
-BOUNDARY  good rest · dedicated training/downtime · settled aftermath of a resolved
-  arc; never ordinary time passing or a lull mid-scene; the tool raises tiers
-  while evidence meets the threshold, up to the class ceiling, for every tracked
-  actor (player + tracked companions)
-OVERFLOW  carries while another tier remains; at the ceiling keeps counting toward
-  a class raise
-NARRATE  a raised tier at the boundary, as a quiet noticed change; never mid-action
-```
-
-```text
-CLASS RAISE
-CEILING  evidence keeps counting at the ceiling; experience alone never breaks it
-SOURCE  (≥1, materially involved while the evidence accrued): a teacher whose class
-  is above the actor's · an institution/tradition teaching at that level · a
-  documented method the actor can access · the actor's own recorded innovation
-  tested under real challenge · LEGENDARY only: a source the setting treats as
-  rare (named tradition, transformative event, discipline few reach)
-RAISE  at a growth boundary, at the ceiling: evidence meets the class threshold
-  (tool) AND a valid source → class +1, evidence 0, record the source (history
-  only; never counts for the next raise)
-NO SOURCE  evidence keeps accruing, nothing happens; in play, the character knows
-  they've hit their limit
-UNREACHABLE source (unwilling master, rival guild's method) = a genuine obstacle
-LEGENDARY  only where the setting has a rare source; else ELITE is the end
-ABILITIES  T1 none · T2 ≤1 recorded · T3 2–3 · T4 (LEGENDARY) one narrow mastery or
-  authority effect; must follow skill, setting, learning history
+TIERS     T1 trained · T2 advanced · T3 master · T4 setting-top
+CLASS     the ceiling: NORMAL → T2 · ELITE → T3 · LEGENDARY → T4; common skills
+          NORMAL, professional combat or specialist ELITE, rare named
+          disciplines LEGENDARY; a trained skill starts at T1
+EVIDENCE  the tool credits it from the form: a successful roll against a real
+          challenge (≥ the skill's level − 2, or Difficulty ≥ 15), one credit per
+          skill between growth boundaries
+BOUNDARY  a good rest · dedicated training or downtime · the settled end of an arc;
+          the tool raises tiers while evidence meets the threshold, up to the
+          class ceiling, for the PC and tracked companions
+NARRATE   a raised tier shows at the boundary, as a quiet change the PC notices
+CLASS UP  at the ceiling, evidence keeps counting; at a growth boundary, enough
+          evidence plus a real source (a teacher of a higher class, an
+          institution, a documented method, the PC's own tested innovation;
+          for LEGENDARY, something the setting treats as rare) → class +1,
+          evidence 0, the source recorded; without a source the PC knows they've
+          reached their limit
+GOOD REST a night's sleep somewhere safe: with allies, at home, or in paid lodging
 ```
 
 ---
@@ -255,53 +203,42 @@ ABILITIES  T1 none · T2 ≤1 recorded · T3 2–3 · T4 (LEGENDARY) one narrow 
 One roll per exchange, run in a batch by the tool.
 
 ```text
-PLAN      the player gives target/objective and how to fight; fight orders +
-          fighting style are the plan
-SET UP    the GM fills one combat form: sides (actors, engaged pairs), the plan,
-          fighting style, stop conditions from the player's words ("retreat below
-          half"), environment facts
-EXCHANGE  one roll for the player's side (an action form), engaged opponent as
-          opposition; success → bound reach, no cost; failure → bound cost, HP
-          where harm (§5); opponents' attacks ARE that cost, never separate rolls
-          vs the player; other opponents = one fact: one condition OR a higher
-          cost, never both, never extra rolls (I8); an enemy acting against an
-          ally or bystander → its own roll
-ATTACK    per exchange per opponent, as its body/weapons allow: man-sized fighter
-  BUDGET  1; creature 1 per independent weapon; reach limits targets; a sweep or
-          breath = one attack hitting each target in its area; the player's roll
-          resolves first and pays its bound cost; every other attack spends one
-          from what remains; failure with no attack left or out of reach →
-          setback, not harm
-BATCH     the tool rolls exchange after exchange and applies damage; it pauses at
-          a turning point: someone falls or is badly hurt · a leader falls · the PC
-          reaches a stop condition from the plan or style · the objective is met or
-          made impossible · the PC goes down
-AT PAUSE  the GM settles morale (below) and checks the world around the fight
-          (noise heard, fire spreading, someone arriving); nothing the plan doesn't
-          cover → the tool continues; something it doesn't → the player decides
-          (GM §5)
-UNCOVERED a case the form can't hold → an action form, never an invented mechanic
+PLAN      the player gives the target or objective and how to fight; their orders
+          and fighting style are the plan
+SET UP    one combat form: sides (actors, engaged pairs), the plan, fighting
+          style, stop conditions from the player's words ("retreat below half"),
+          environment facts
+EXCHANGE  one roll for the player's side, engaged opponent as opposition: success
+          → the bound reach · failure → the bound cost, in HP where harm (§5); the
+          opponents' attacks are that cost; other opponents add one fact: one
+          condition or a higher cost; an enemy acting against an ally or bystander
+          gets its own roll
+ATTACKS   each opponent attacks as its body allows: a man-sized fighter once per
+          exchange, a creature once per independent weapon, a sweep or breath once
+          against everyone in its area; the player's roll pays first, then each
+          remaining attack spends one; a failure with no attack left is a setback
+BATCH     the tool rolls exchange after exchange and pauses at a turning point:
+          someone falls or is badly hurt · a leader falls · a stop condition is
+          reached · the objective is met or lost · the PC goes down
+AT PAUSE  settle morale and look at the world around the fight (noise heard, fire
+          spreading, someone arriving); what the plan covers → continue; what it
+          doesn't → the player decides (GM §5)
+OTHER     something the combat form can't hold → an action form
 ```
 
 ```text
-MORALE  combatants have their own survival; to the death is a specific choice, not
-  the default
-SOURCE  setting norms (BACKGROUND norms) → actor drives, obligations, discipline,
-  knowledge (I5), nerve (§11)
-CHECK  at each pause where the fight turned against a side: one of its own
-  falls/badly hurt · leader falls · surprised or plainly outmatched · retreat
-  threatened · staying costs more than it gains
-SETTLED  never rolled; no recorded reason to hold (cornered, guarding young/lair,
-  fanatic, undead, bound, leader feared more than the enemy) → the losing side
-  withdraws or breaks; can't safely surrender → runs if it can; surrender only
-  from a break, only where survivable; holds until the situation materially
-  changes
-press on  objective/obligation still outweighs the cost
-withdraw  disengages under own power, taking what it can
-surrender  break where surrender is survivable: yields instead of running
-break  cohesion fails; flight, panic
-AFTER  withdrawn/surrendered enemies remain actors with memory, allies, future
-ENVIRON  causally active: can block, break, spread, attract attention, open options
+MORALE    every combatant wants to live; fighting to the death is a reason someone
+          has; settled at each pause where the fight turned against a side (one of
+          its own falls, its leader falls, it is surprised or plainly outmatched,
+          staying costs more than it gains), from the setting's norms, the actor's
+          drives, duty and nerve (§11)
+OUTCOMES  press on · withdraw · surrender (only where surrender is survivable) ·
+          break; a side with a reason to hold (cornered, guarding young, fanatic,
+          bound, more afraid of its leader) holds; a side without one withdraws or
+          breaks
+AFTER     enemies who withdrew or surrendered remain actors, with memory and allies
+SURROUND  the place takes part: it blocks, breaks, spreads, draws attention, opens
+          ways
 ```
 
 ---
@@ -311,78 +248,67 @@ ENVIRON  causally active: can block, break, spread, attract attention, open opti
 ### 9.1 An NPC's answer
 
 ```text
-ORDER    1 PLAN    the actor's plan touches the question → the plan decides, no
-                   roll: fits it → yes; works against it → no, or only on the plan's
-                   terms; a plan with a condition → the condition decides
-         2 SETTLE  the record or the usual answer (GM §3.5 USUAL) settles it (duty,
-                   drive, standing, authority, obvious cost, recorded fact,
-                   setting) → that way, for or against the player, no roll; test:
-                   would it settle the same way if the outcome flipped for the
-                   player? no → open; never rolled to avoid being the one who said
-                   yes
-         3 ROLL    honestly open: one yes/no question, the ask roll
-TORN     the question touches both the actor's want and pull → plan if it covers
-         it; else what the record shows is more pressing now; honestly torn → ROLL,
-         each side's pull as its fact
+ORDER    1 PLAN    the actor's plan covers the question → the plan answers: what
+                   fits it is yes; what works against it is no, or yes on the
+                   plan's terms
+         2 SETTLE  the record or the usual answer (GM §3.5 USUAL) settles it: duty,
+                   drive, standing, authority, obvious cost, setting; check it by
+                   flipping the stakes: would it settle the same way if it went
+                   against the player? yes → that answer
+         3 ROLL    honestly open → one yes/no question, the ask roll
+TORN     the question touches both want and pull → the plan if it covers it, else
+         whichever the record shows is more pressing now; honestly torn → roll,
+         each side's pull as a fact
 ```
 
 ```text
-ASK ROLL  tool `ask`: 2d10 + likelihood, clamp −3..+3; each point a recorded fact,
-  visible or hidden (shown as "hidden cause"); both columns written ("none" if
-  empty); ≤2 facts per column; both from the same record at the same specificity
+ASK ROLL  tool `ask`: 2d10 + likelihood (−3..+3); up to two recorded facts for and
+          two against, both columns written ("none" if empty), hidden facts shown
+          as "hidden cause"
   +2  strong credit, shared loyalty, they need this · common here
-  +1  good attitude, fitting interest, introduction · plausible here
+  +1  good attitude, fitting interest, an introduction · plausible here
   −1  poor attitude, mild cost, wrong affiliation · unusual here
-  −2  grievance, real cost/risk to them, opposed loyalty · rare here
-  +2  canon mode: canon records this outcome, causes unchanged by play
-  "here" = settlement size and the zone's surface, read together; an actor's own
-  plan or act reads ZONE instead, never both
-  attitude counts ±1 only where no credit/grievance entry counts (I8)
-  the asked actor's own want or fear the answer touches takes a column slot
-  first, at record weight
-  ≥16  YES, AND  more than asked, within means and authority
-  12–15  YES  as asked
-  7–11  NO, BUT  partly: less, later, or on their terms (price, condition, favour
-  back); never a smaller free gift
-  ≤6  NO, AND  refused + smallest trouble from this actor's state and reach,
-  proportionate (remark, suspicion, raised price, description passed on);
-  never a new obstacle aimed at what the player carries, hides, plans (I6)
-APPLY  the answer stands; narration never moves it; YES within means/authority;
-  cost to them already in likelihood; sets this exchange, not the relationship
+  −2  grievance, real cost or risk to them, opposed loyalty · rare here
+  "here" reads settlement size and the zone's surface together
+  attitude counts where no credit or grievance does
+  the actor's own want or fear that the answer touches takes a slot first
+  ≥16    YES, AND  more than asked, within their means and authority
+  12–15  YES       as asked
+  7–11   NO, BUT   partly: less, later, or on their terms (a price, a condition,
+                   a favour back)
+  ≤6     NO, AND   refused, plus the small trouble this actor can cause from where
+                   they stand (a remark, suspicion, a raised price, a description
+                   passed on)
+APPLY     the answer stands for this exchange; the relationship moves only by
+          §15.1 CHANGE
 ```
 
 ```text
-ZONE  an actor's uncertain plan or act (never the PC's own) reads the zone where it
-  happens: open act → surface · hidden act → undercurrent; in_disorder: thrives ·
-  suffers · neither; points by zone step: tool; counts once: one likelihood point,
-  or one condition in an action form (favourable at most), never both, never
-  beside "here" (I8); surface −3: an institution's response cannot reach the zone
-INFLUENCE  persuade/deceive/intimidate/bargain = player action; an action form only
-  when how well it's done is uncertain; plain ask → no roll; feeds the answer,
-  never replaces it: success +2 likelihood (decisive +3) · failure −2 + its bound
-  cost · changed fact (proof, corrected belief) → SETTLE again; takes one column
-  slot; a failure's bound cost may leave one grievance or belief, which later
-  counts instead of −2, never beside it (I8)
-IDENTITY  actors react to who they believe they deal with (I5): a false name,
-  livery, concealed face, misattributed reputation → a real reaction to a wrong
-  belief
+ZONE       an NPC's uncertain plan or act reads the zone where it happens: open →
+           surface, hidden → undercurrent; their `in_disorder` says whether
+           disorder helps them (thrives), hurts them (suffers) or neither; the
+           tool turns it into one likelihood point or one favourable condition
+INFLUENCE  persuading, deceiving, intimidating, bargaining are player actions; an
+           action form when how well it's done is uncertain: success +2 likelihood
+           (decisive +3) · failure −2 and its cost; proof or a corrected belief →
+           settle again
+IDENTITY   people react to who they believe they're dealing with: a false name,
+           livery, a hidden face gets a real reaction to a wrong belief
 ```
 
 ### 9.2 Help
 
 ```text
-NOTHING  a person, thing or event exists only from the world's own causes, never
-         to help the PC
-EXISTS   designed by the WORLD, or usual here (a taxi in Bombay; GM §3.5 USUAL) →
-         exists, no roll
-ROLL     possible but not usual, and the player asks → 2d10 ≥ 15
-REACH    −1 to the target per source, each once, at most −3: the PC's own network ·
-         a related NPC's network the PC can actually call on · an organisation the
-         PC belongs to with reach here; a place hostile to the PC's people +1;
-         the GM names the sources on a help form, the tool applies them
+SOURCE   people, things and events come from the world's own causes
+EXISTS   in the background, or usual here (a taxi in Bombay; GM §3.5 USUAL) →
+         it exists, no roll
+ROLL     possible but unusual, and the player asks → help form, 2d10 ≥ 15
+REACH    −1 to the target per source, at most −3: the PC's own network · a related
+         NPC's network the PC can call on · an organisation the PC belongs to with
+         reach here; a place hostile to the PC's people +1
          odds: 16+ 15% · 15+ 21% · 14+ 28% · 13+ 36% · 12+ 45%
-NO       impossible in this setting; never offered unasked
-ONCE     a roll's answer is fixed; asking again needs a changed fact (I10)
+OUTSIDE  impossible in this setting → no
+ONCE     the answer stands; asking again needs a changed fact
 ```
 
 ---
@@ -391,238 +317,149 @@ ONCE     a roll's answer is fixed; asking again needs a changed fact (I10)
 
 ```text
 QUEST    an objective the PC has taken on: offered by an actor, required by a deal,
-         or set by the PC; not intent, a pressure, or a case truth
-RECORD   code · objective · source · level (for XP) · status · parts (optional)
-         · terms at rights_obligations when paid (the quest points to them)
-LEVEL    the fixed challenge of the undertaking, from its committed cause, task and
-         opposition inside the location's band; player level, pay, pacing, XP
-         appetite, roll, outcome → 0; immutable: a transformed challenge → a new
-         part or quest
-WHICH    an action's challenge: 1 its direct opponent/task · 2 the engaged part's
-  LEVEL  level · 3 the quest's level · 4 its own, derived and bound before the roll;
-         travel, talk, preparation, scouting, support don't inherit a quest level
-ACCEPT   any clear commitment: explicit take/accept · a direct commitment ("I'll
-         go") · pay agreed in talk or contract · starting the work without
-         reservation · a prior conditional acceptance now true
-NOT      asking, checking, comparing, negotiating without commitment; the PC's own
-         stated goals are not quests
-ON       set active before travel or work; acceptance + first action in one input
-  ACCEPT → execute, no confirmation
-CLOSE    objective met, partly met, failed, or abandoned → in the same change:
-         status letter · quest XP (§13) · payment, else an owed entry with a due
-         (§12) · terms closed
-BLOCKED  a quest recorded but not yet open; its trigger opens it; the tool lists it
-         at each time call; met → available, reaching the PC only by a real
-         channel, or active if the PC is already in it
+         or set by the PC
+RECORD   code · objective · source · level · status · parts (optional); paid work
+         points to its terms in rights_obligations
+LEVEL    the fixed challenge of the job, from its cause, task and opposition within
+         the location's band; a job that truly changes becomes a new part or quest
+WHICH    an action's challenge: its direct opponent or task, else the engaged
+  LEVEL  part's level, else the quest's level, else its own, set before the roll;
+         travel, talk and preparation carry their own
+ACCEPT   any clear commitment: a yes · "I'll go" · pay agreed · starting the work ·
+         an earlier conditional yes coming true; asking, comparing and haggling
+         are still deciding; the PC's own goals stay goals
+START    accepting and acting in one message → set it active and play the action
+CLOSE    met, partly met, failed or abandoned → in the same change: status, quest
+         XP (§13), payment or an owed entry with a due (§12), terms closed
+BLOCKED  recorded but not open yet; its trigger opens it; then it reaches the PC
+         through a real channel
 ```
 
 ```text
 CODES
-  NEW       an independent quest takes the next unused letter: A, B, C … Z, AA, AB
-  PARTS     stages of the same objective: A-1, A-2, A-3; no parts → just A
-  FOLLOW-ON a case that grew out of another takes a new letter after its origin:
-            A-B (B grew out of A); A-B-D (D grew out of A-B); two origins → the
-            main one in the code, the other in its source line
-  UNIQUE    the last letter is unique in the campaign, never reused
-  WHEN      given when the quest becomes the PC's, never at design time
-  FIXED     codes never change; carried across chapters
+  NEW       an independent quest takes the next unused letter: A, B … Z, AA, AB
+  PARTS     stages of one objective: A-1, A-2, A-3
+  FOLLOW-ON grown out of another: A-B (B grew out of A), A-B-D; two origins → the
+            main one in the code, the other in its source
+  WHEN      given when the quest becomes the PC's
+  FIXED     a code stays the same for the whole campaign; letters are used once
   STATUS    the record holds the word: active · succeeded · partly · failed ·
-            abandoned; wherever the code is shown it carries the letter: (none)
-            active · s · p · f · a (A-1s, A-2p, A-Cf, Ba)
-  XP        each code pays once; a whole quest pays only what its parts didn't
+            abandoned; the code shows a letter: (none) · s · p · f · a
+            (A-1s, A-2p, A-Cf, Ba)
+  XP        each code pays once; a whole quest pays what its parts didn't
 ```
 
 ---
 
 ## 11. Nerve
 
-TRIGGER: horror witnessed (atrocity, a body plainly murdered, the impossible) · undercurrent brush, incident, or hostile · loss, betrayal, a day of fear, or a good rest, for someone tracked · an NPC pushed past their line.
-
 ```text
-WHO  PC, tracked companions, NPCs whose state matters (witness, rival, cultist):
-  condition.nerve {baseline, current, tension}; +3 unshakeable · +2 hardened ·
-  +1 steady · 0 ordinary · −1 shaken · −2 fraying · −3 broken
-HORROR  an action form with the horror's difficulty (BACKGROUND horrors, else a
-  body 10 · a ritual 12 · the thing up close 14 · the source 17; ordinary violence
-  never); nerve sets the capability modifier (tool); success low marks, failure
-  high: brush 0/1 · incident 1/2 · hostile 1/2 · the source 2/4; the same horror
-  again → low; 2+ marks at once → mind condition until a good rest
-MARKS  horror as rolled · losing someone with a bond −2 to −3 · betrayed by one −1
-  to −2 · a day of fear or no rest −1 · crossing their own line −1 · a good
-  rest 1 toward baseline · a real scene with a bond +1 · a win over what scared
-  them +1, decisive +2 · treatment by its own rule
-STEPS  reaching −1 or −2 adds a lasting mind condition (§5) fitting what broke them,
-  gone when nerve climbs out of that step or by treatment; −3 breakdown: severe
-  mind condition, demanding action against its trigger infeasible until treated;
-  BACKGROUND may make −3 an ending path
-READ BY  morale (§8), witnesses, an actor's re-plan
-COUNT ONCE  nerve's modifier only on horror checks; elsewhere it acts through its
-  conditions (I8)
+WHO       the PC, tracked companions, and NPCs whose state matters:
+          nerve {baseline, current, tension}; +3 unshakeable · +2 hardened ·
+          +1 steady · 0 ordinary · −1 shaken · −2 fraying · −3 broken
+HORROR    the PC meets a horror (an atrocity, a body plainly murdered, the
+          impossible, an undercurrent brush, incident or hostile) → an action
+          form at the horror's difficulty (the background's horrors, else a body
+          10, a ritual 12, the thing up close 14, its source 17); nerve sets the
+          modifier; success marks low, failure high: brush 0/1 · incident 1/2 ·
+          hostile 1/2 · the source 2/4; the same horror again marks low
+MARKS     losing someone close −2 to −3 · betrayed by them −1 to −2 · a day of fear
+          or no rest −1 · crossing their own line −1 · a good rest 1 toward
+          baseline · a real scene with someone close +1 · beating what scared them
+          +1 (decisive +2)
+STEPS     reaching −1 or −2 adds a mind condition fitting what broke them, gone
+          when nerve climbs back or with treatment; −3 is a breakdown: a severe
+          mind condition, and acting against its cause waits for treatment
+USED BY   horror rolls, morale (§8), witnesses, an actor's re-plan
 ```
 
 ## 12. Consequences and resources
 
 ```text
-CONSEQUENCE  transitions from the resolved event + state, no fixed penalty list; good
-  decisions improve odds, not guarantee; bad ones may survive on luck; damage
-  and failure accumulate; no escalation without a recorded cause
-RECOVERY  collect routinely only if: material exposed, collection possible, ownership
-  permits, taking is routine or reclaims player property, no real danger/
-  legal/time/capacity/preservation tradeoff → update natural owner, consume
-  material time; never auto-take disputed/owned/protected goods; never
-  teleport bulk; real choice → stop (GM §5); once collected, canonical (no
-  repeated commands)
-PAYOFFS  derive from actual outcome + canonical sources; filter by ownership,
-  authority, access, causality; apply once at natural owner; earned but
-  undelivered → owed entry at the payer; any form (payment, items, service,
-  knowledge, access, reputation, contacts, rights, future opportunity); 0
-  valid; cash doesn't suppress others; never paid twice (I8); desire/quest status
-  alone never create reward; training/access grant no counters or tiers;
-  books/records grant possession/access; expertise only via real learning
-DISCHARGE  an owed entry needs payer ability + willingness, contact/channel, met
-  conditions; check on meeting the payer, a condition coming due, or a
-  delivery underway; deliver once at owner, clear (I7); payer
-  can't/won't → entry stays, changes, or fails (state, not error; I11)
-FATIGUE  endurance shifts limits, not infinite unless recorded; wakefulness,
-  repeated fighting, forced travel, wounds, toxins, cold or heat, poor rest
-  accumulate fatigue → impair demanding action, awareness, recovery,
-  judgement; substantial sleep reduces it; short rest never erases major
-  sleep debt; stop only when rest vs continue is a real decision
-FOOD/WATER  ordinary intake assumed in settled travel when affordable/available; track
-  when shortage, cost, deprivation, wilderness matters
-EQUIPMENT  serviceable → worn → damaged → critical/unusable; use, weather, neglect,
-  strain worsen; maintenance preserves; real damage needs time, skill, tools,
-  materials, or a professional; never silent repair
-SUPPLIES  consumables, ammunition, medicine, preparations, repair materials finite;
-  resupply needs a recorded process, access, materials/cost, time
-TRACK  exact when the number matters now (arrows in a fight, specific antidote
-  doses, last charges) · usage die for bulk (rations, oil, common ammo,
-  bandages, feed, rope, reagents)
-USAGE DIE  d12 → d10 → d8 → d6 → d4 → empty; material draw (real quantity: a day's
-  travel, a night's light, a fight, treating a wound) → roll current die;
-  1–2 → step down; below d4 → exhausted; incidental use doesn't draw; never
-  resets or refills itself (not even "a kit"); rises only by real resupply;
-  d4 visible to the handler; player learns the same way (I5)
-ACQUISITION  items, services, crafting follow availability, ownership/authority,
-  institutions/trade, location/transport, money/exchange, materials, provider
-  capability, permission, time; settlement size and surface shift likelihood/variety,
-  not a hard cap; ordinary work → appropriate source; superior → matching
-  recorded capability; rarest → exceptional recorded source; a remote
-  specialist may qualify; a metropolis guarantees nothing
-  exception: an item point spend needs no merchant, channel, travel, time (§14)
-PRICES  a price, wage, fee, or payment the BACKGROUND price list doesn't give →
-  what it costs in BACKGROUND economy_model (none → the real economy nearest the
-  setting's era and place), in the setting's currency, by its value to the
-  buyer (quantity, quality, risk); quest level, pacing, player level → 0; a
-  setting's own money rule wins
-COSTS  track practical condition wherever it can affect play; never erase a real
-  cost by omission
+RESULTS     come from what happened and the state of things; good choices improve
+            the odds, bad ones may survive on luck; harm and failure add up
+GATHERING   the PC picks up what is exposed, theirs or plainly free to take, with
+            no danger or trade-off → it's theirs, and takes the time it takes; a
+            real choice → stop (GM §5)
+PAYOFFS     from what actually happened: pay, items, service, knowledge, access,
+            reputation, contacts, rights, future chances; paid once, to the one who
+            earned it; earned but not yet paid → an owed entry at the payer
+PAYING      an owed entry is checked when the PC meets the payer, a condition comes
+            due, or delivery is underway; the payer must be able and willing; a
+            payer who can't or won't leaves the entry standing, changed or failed
+FATIGUE     long waking, repeated fighting, forced travel, wounds, cold, heat and
+            poor rest add up and weigh on demanding action, awareness and
+            judgment; real sleep clears it
+SUPPLIES    consumables, ammunition, medicine and materials run out; restocking
+            takes access, money and time; count exactly when the number matters
+            now, else use a usage die: d12 → d10 → d8 → d6 → d4 → empty; each real
+            draw rolls it, 1–2 steps down; only real resupply steps it up
+FOOD        ordinary meals are assumed on settled ground when affordable; track
+            them when shortage matters
+WEAR        equipment goes serviceable → worn → damaged → critical through use,
+            weather and strain; repair takes time, skill, tools or a professional
+BUYING      goods, services and crafting follow availability, ownership, trade,
+            transport, money, materials, the maker's skill, permission and time;
+            bigger towns offer more, and the rarest things need a matching source
+PRICES      the background's price list first; else what it costs in its economy
+            model (or the real economy nearest its era and place), in its currency,
+            by its worth to the buyer
 ```
 
 ---
 
 ## 13. Level and XP
 
-On unless the BACKGROUND sets `numeric_level_xp: false`.
+On unless the background sets `numeric_level_xp: false` (then see the modules file).
 
 ```text
-STATE  progression: {system: numeric_level_xp, state: {level, xp}}
-CAP  35, persisted overall level only; domain capability may exceed it
-LEVEL  overall capability scale, not universal knowledge; no actor reads another's level
-CALIBRATION L1 ordinary trained adult · L3 experienced soldier/skilled professional ·
-  L5 elite mundane specialist · L7–10 setting-elite/superhuman where the
-  archetype supports it · L11–14 exceptional supernatural/high-end mortal ·
-  L15 heroic major figure · L20 legendary, world-class · L25 god-scale · L35 max
-CAPABILITY  actor capability = overall level + the relevant skill's tier bonus
-  (tool); transient, may exceed 35, never rewrites level; several necessary skills
-  → most limiting; incidental skills never lower it; no tracked skill → level only
-  where archetype/trait/expertise records the domain
-CHALLENGE  fixed before any dependent roll: 1 opposed actor → its same-domain
-  capability (a new material actor commits capability first) · 2 persistent
-  task/hazard/device/cause → its committed level · 3 directly applicable
-  quest/part → its committed level · 4 one-off task → derive from cause truth,
-  bind before the roll; recurring → commit at its owner; never inferred after from
-  roll, result, performance, desired difficulty, payment
-OFF  without numeric progression: capability is the actor's absolute domain grade
-  (tool scale); the engaged opponent's power is the base Difficulty, its attacks
-  stay the danger
-```
-
-```text
-AWARD  tool `xp`: the GM gives the actual challenge, the participant, and the scope
-  (routine · minor · meaningful · major · exceptional); the tool owns the formula,
-  gap multipliers, rounding, and level table
-NOT A POOL  every materially contributing tracked participant gets full XP; never
-  divided by party size; no XP for untracked actors
-APPLY  a source naming one resolved scope by id (a quest code, else one event or
-  encounter id in material_history); that scope not already paid; level 35 → xp 0;
-  level-ups carried; output the XP change and level before the scene closes
-ONLY  no other rule changes XP
-COMBAT XP  material participation vs a valid hostile opponent materially overcome
-  (defeated, surrendered, captured, forced to retreat, durably neutralised);
-  each enemy's challenge from canonical capability first; several enemies in
-  one encounter: vs level at encounter start, summed once; mainly escape →
-  one survival scope (event XP) on aggregate challenge; none for harmless
-  targets, allies, farming, duplicate exploits
-EVENT XP  material, independently resolved non-combat challenge, discovery, rescue,
-  negotiation, investigation, survival problem; scope not already paid; none
-  for time, farming, re-describing
-QUEST XP  each code pays once at CLOSE, vs its level; a part (A-1) pays for
-  itself; the whole quest (A) pays only what its parts didn't; combat, event and
-  quest XP never double-pay (I8)
+LEVEL       overall capability, cap 35: L1 ordinary trained adult · L3
+            experienced soldier or skilled professional · L5 elite specialist ·
+            L7–10 setting-elite · L11–14 exceptional · L15 heroic · L20 legendary ·
+            L25 god-scale
+CAPABILITY  level plus the skill's tier bonus (the tool); several skills needed →
+            the weakest
+CHALLENGE   set before any roll that depends on it: an opposed actor's capability
+            in that domain · a task's or hazard's committed level · the quest or
+            part's level · else derived from its cause and recorded
+AWARD       tool `award`: actual challenge, participant, scope (routine · minor ·
+            meaningful · major · exceptional) and the source it pays for; every
+            tracked participant who really contributed gets full XP
+COMBAT XP   for overcoming a real hostile opponent (defeated, surrendered,
+            captured, driven off); several in one encounter count together once;
+            escaping counts as a survival event
+EVENT XP    for a real non-combat challenge resolved: a discovery, a rescue, a
+            negotiation, an investigation, survival
+QUEST XP    at CLOSE, once per code (§10)
+PAID ONCE   each fight, event and code pays once; the tool marks it paid
 ```
 
 ## 14. Item points
 
-On unless the BACKGROUND sets `flexible_item_entitlement: false`. Not help from the world (GM §3.5 HELP): the PC spends their own limited resource on their own preparation.
+On unless the background sets `flexible_item_entitlement: false`. The PC's own resource, spent on their own preparation.
 
 ```text
-PURPOSE  buys back preparation play skipped (a GM fast-forward, a step the player
-  did not think of in time): an ITEM the PC packed all along or finds within reach
-  in the scene, or a PREP action the PC did earlier in skipped time; the GM
-  commits the in-world reason; buys the coincidence, never something from
-  nothing (I3)
-STATE  player.item_points {current, max, rank}; integers ≥ 0; not money, XP,
-  capability, loot; a spend covers the money cost (no money spent)
-MAX  by rank, from social standing and income: outcast · commoner · working_adult ·
-  well_off · elite (tool); changes only when rank or income changes in play
-REFILL  each good rest: a fifth of max, never above max (tool)
-COST  small item or prep (rope, torch, a tip) 1 · solid item or prep (lockpicks,
-  horse hire, a night's watch on a house, a real bribe) 3 · weapon or armour
-  T1 10 · T2 30 · tool or kit T1 5 · T2 15 · BACKGROUND tool_prices: cheap → tool
-  or kit T1 3 · T2 10 · above T2 never; an item with no tier = small or solid
-```
-
-```text
-1 PLAYER  says what they want true; a player action
-2 CHECK  current ≥ cost · setting-valid at that tier · not yet established ·
-  contradicts nothing recorded
-3 SOURCE  commit one plausible in-world reason before narration (I2):
-  ITEM carried/packed, never mentioned · bought or given in skipped time by an
-  actor whose drives and knowledge allow it · found within reach (body, pack,
-  shelf, crate, cache already at the location)
-  PREP done in skipped time where the PC was, with the time and means to do it
-  built only from provisional detail (unobserved, relied on by nothing); possible
-  is enough
-4 APPLY  item_points.current −= cost once; the item is the player's; reason at its
-  owner (I7)
-5 RESOLVE  a prep involving another actor resolves as if done then: that actor's
-  answer (§9.1) or a roll; it can fail; the points stay spent
-6 RENDER  narrate the reason as what happened; continue
-LIMITS  never contradicts recorded state (searched pack, property shown absent) ·
-  never reveals hidden truth, moves an actor, takes recorded property, or makes a
-  debt, obligation, or relationship beyond what the prep itself would · never a
-  unique named artifact, something someone else holds, or the player's own
-  confiscated gear · none valid → spend fails, costs 0, commits nothing
-ACTOR  named in the reason remembers it; nothing else about them changes
-WHERE  on the person: in hand now · within reach: reaching is ordinary, contested →
-  an action form · combat: declared with the objective → available from the next
-  exchange
-TIME  the spend takes none; reaching and using take what they take
-AFTER  established fact; real and visible; perceived and remembered (I5);
-  legality and usability resolve normally; grants the item or prep, never the
-  opportunity, permission, or immunity; can be lost, broken, stolen, sold; never
-  back into points
+PURPOSE   buys back preparation that play skipped: an ITEM the PC packed all along
+          or finds within reach, or a PREP action they did earlier in skipped
+          time; you commit the in-world reason
+STATE     player.item_points {current, max, rank}; max by rank (outcast · commoner
+          · working_adult · well_off · elite, from standing and income); a fifth
+          of max returns each good rest (the tool)
+COST      small (rope, a torch, a tip) 1 · solid (lockpicks, a horse hired, a night
+          watching a house, a real bribe) 3 · weapon or armour T1 10, T2 30 · tool
+          or kit T1 5, T2 15 (cheap-tool settings 3 and 10); up to T2; the points
+          cover the money
+STEPS     1 the player says what they want to be true · 2 check: enough points, it
+          fits the setting and tier, it fits everything recorded · 3 commit one
+          plausible reason: packed and unmentioned, bought or given in skipped
+          time by someone willing, or found within reach; for PREP, done where the
+          PC was with the time and means · 4 spend the points · 5 a prep involving
+          someone else resolves as if done then (their answer or a roll) and can
+          fail · 6 narrate the reason as what happened
+SCOPE     an item or a prep, as ordinary as the reason; unique named things,
+          what someone else holds, and the PC's own confiscated gear come through
+          play
+AFTER     a real item: seen, remembered, can be lost, broken, stolen or sold
 ```
 
 ---
@@ -634,385 +471,290 @@ How the world's records move on their own. The tool runs time; these rules say w
 ### 15.1 Actors
 
 ```text
-ACTOR  NPC or faction; a persistent record only if it recurs or matters (WORLD §11
-  DEPTH); incidental → interaction state only; populate material fields
-action = f(identity/role, state, drives, relationships, rights, knowledge, capability,
-  world state)
-REACT  to material perceived change; decide independently from own state (I5, I6)
-PLAN  next move + due: a clock time, or a trigger the tool can list (an event with a
-  committed time, a channel the actor watches; a cycle like a tide needs its
-  schedule as a world fact); else not a plan; due passes → the move resolves
-  wherever the PC is, reaching them only by real channels (I5); recurring → next
-  due set
-ALWAYS  every important actor (WORLD §11 IMPORTANT) has a plan with a due at every moment;
-  given when the record is created, imported, or becomes important; the tool flags
-  any without one at each time call
-OFFSCREEN  otherwise moves only when elapsed time advances a recorded activity,
-  pressure, or obligation, or a material event changed its state, knowledge,
-  relationships, rights, risk, opportunity; time alone never changes
-  personality, loyalty, goals, relationships, skill
-REPLAN  plan resolved, blocked, failed, obsolete, or undated, or the actor gains new
-  means or a channel opens to it → re-plan at once, from want, pull, fear, line,
-  means, knowledge (I5); never idle while a want is unmet and means exist; the
-  record open between fitting moves → ask roll: YES pursued (AND sooner/bigger) ·
-  NO, BUT weaker/later · NO, AND the next want
-WORK SOURCE  role routes work to the PC (fixer, guild, employer, patron) → routine,
-  pace from its state.routines, else by its zone's surface: ≥0 weekly · −1 twice
-  weekly · ≤−2 every few days; ask roll "fitting work came in?" → YES contacts
-  the PC · NO, BUT thin or went to a rival · NO, AND dry spell
-TEMPER  a new actor not in the BACKGROUND, once: 2d10 ≥17 (≥15 opposing side) →
-  a difficult character fitting the role (rude, greedy, petty, bully…); permanent;
-  shown to all, never aimed at the PC's secrets (I6); attitude still from meeting
-STANCE  on meeting or being asked, from: existing relationship, want, fear, line,
-  what is asked, its cost to them, what they know of the asker, obligation,
-  authority
+ACTOR     an NPC or faction; kept as a record when it recurs or matters (its depth)
+ACTS      from who they are, their state, drives, relationships, rights,
+          knowledge, capability and the world around them; they react to changes
+          they perceive
+PLAN      a next move and a due: a clock time, or a trigger the tool can list;
+          when the due passes the move resolves wherever the PC is, reaching the
+          PC through real channels
+ALWAYS    every important actor has a plan with a due at all times; the tool flags
+          any without one
+OFFSCREEN between moves, an actor changes when time advances something they are
+          doing or an event changes their situation
+REPLAN    a plan resolved, blocked, failed or out of date, or new means or news →
+          re-plan at once from want, pull, fear, line, means and knowledge; an
+          actor with an unmet want and the means keeps pursuing it; honestly open
+          → ask roll: YES pursued (AND sooner or bigger) · NO, BUT weaker or later
+          · NO, AND the next want
+WORK      an actor who routes work to the PC (fixer, guild, employer) checks on
+          its pace (its routines, else by zone: surface ≥0 weekly, −1 twice a week,
+          ≤−2 every few days) → ask roll "fitting work came in?": YES contacts
+          the PC · NO, BUT thin or gone to a rival · NO, AND a dry spell
+POSITION  play people from where they stand: their job, what it pays, who they
+          answer to, what they would lose; that shapes how they treat anyone
+TEMPER    a new actor not in the background rolls once: 2d10 ≥17 (≥15 on an
+          opposing side) → difficult in a way their position allows (a clerk
+          slow-walks, a guard asks for more, a foreman is curt); it shows to
+          everyone, the way it would in their job; their attitude to the PC still
+          comes from the meeting
+STANCE    on meeting or being asked: the relationship, want, fear, line, what is
+          asked, its cost to them, what they know of the asker, duty, authority
 ```
 
 ```text
-RELATION  per relationship, directional, each side its own, never mirrored;
-  faction ≠ members; a side changes only when its actor learns (I5)
-TIE  what the two are to each other; changes only when that fact does
-BOND  what the relationship is to this actor, where it matters: history · means ·
-  habits · wants · unsaid; plays the scene: voice, care, friction, what is noticed
-  or kept back; feeds stance; never a likelihood point or roll modifier (I8)
-STANDING  two records, never one scale: credit (what they know this person did for
-  or with them) · grievance (what they hold against this person); no cancelling;
-  only a real event (restitution, debt settled, apology accepted, grudge
-  outliving cause) reduces either, as its own transition (I7); records the OTHER's
-  acts; what an actor did for someone → their own state/knowledge (feels owed) or
-  rights_obligations (real debt)
-ATTITUDE  current disposition in plain words, mixed where recorded ("warm but
-  angry"); what the record amounts to, never replacing credit/grievance; a new
-  relationship from first meeting, else neutral
-CHANGE  attitude and bond change only on a material relationship event (life saved,
-  betrayal, lie exposed, promise kept/broken, humiliation, sacrifice, long shared
-  hardship); greetings, trade, routine talk, expected help → no change; never
-  recomputed on appearance; warmth and hostility earned, never granted; can fail,
-  sour, cool, persist; what the PC earns, they get: an admirer earned is real
+RELATIONS  each side of a relationship is its own record, changed when that side
+           learns something; a faction and its members are separate
+TIE        what the two are to each other
+BOND       what the relationship means to this side: history, what the other is
+           to them, habits, wants, what goes unsaid; it plays the scene (voice,
+           care, friction, what is noticed or kept back)
+STANDING   two lists: credit (what the other did for them) and grievance (what
+           they hold against the other); each changes by a real event:
+           restitution, a debt settled, an apology accepted, a grudge outlived
+ATTITUDE   a few plain words for what the record adds up to ("warm but angry");
+           a first meeting starts neutral unless the record says otherwise
+CHANGE     attitude and bond move on real relationship events: a life saved, a
+           betrayal, a lie exposed, a promise kept or broken, a humiliation, a
+           sacrifice, long hardship shared; everyday talk, trade and expected help
+           keep them where they are; what the PC earns is real, admirers included
 ```
 
 ```text
-NPC GROWTH  §7 applies; only tracked actors (rivals, recurring enemies, named
-  allies); trigger: a recorded activity exposing them to qualifying challenge
-  (dangerous trade, active campaign, committed teacher); never time alone or the
-  PC's progress (I6); resolved per elapsed period; stops when the activity stops;
-  learning stays; the PC learns of it only through evidence (I5, I9)
-ROUTINES  job + local custom + daylight/season + obligations + circumstances; work,
-  meals, rest, sleep; continuous services in shifts; emergencies break routine;
-  exact schedules only when timing is material
-FAMILIARITY  Round-0 relationships are imported before the first round; familiar
-  actors meet from tie, attitude, bond, never as strangers; shared history only
-  from bond or play, never invented; a scene needs a person → an existing
-  relationship, affiliation or institution first, else a setting-valid actor;
-  never a connection manufactured for the PC
-CANON MODE  mode: canon → canon is the default course; canon actors follow its plans
-  (BACKGROUND canon_course, else the source) unless play changed their causes:
-  settled, never rolled; attempts resolve normally (§3, §8); +2 in answers (§9.1);
-  gaps filled from canon; content fits around canon, never replaces a canon actor,
-  location or event; a beat never moves the PC; its actors pursue it with their
-  means; it can pass without the PC
-COMPANIONS  joining or leaving needs causal support; no auto-joining; solo stays
-  valid; on joining, committed before the first material action (I2): identity,
-  capability (level if numeric), current HP, equipment + consumables (exact or
-  usage die), risk drives (caution, pride, when they ask for help, when they
-  withdraw); act from that record: own gear by own judgement; may ask for help,
-  propose retreat, refuse a reckless order; the PC's property stays the PC's;
-  earn XP and skill evidence from their own rolls, in the same pass as the PC
-JOIN AIM  an actor joins the PC's undertaking (companion, partner, hire, ally):
-  before its first act, weigh from the record, never by default:
-  want  its own, at record weight: strong = tied to an obligation, client, debt,
-    fear, identity · weak = a preference
-  clash  with the PC's goal now, on this path, not in principle
-  ties  bond, credit, grievance as recorded (STANDING); never from friendliness
-  → own  strong want that clashes or will: want and plan stay its own; mode:
-    paths together → follows fully · split ahead → follows outwardly, keeps and
-    may hide the aim · split now → works against
-  → adopt  weak want, no clash, or recorded ties outweigh it: takes the PC's goal,
-    helps in earnest
-  → none  no want of its own: any reason follows (pay, curiosity, nowhere better);
-    a thin record is filled from character first, never read as none
-  record  npcs.<id>.state.aim {row, mode, want, split}; own: plan = its own next
-    move with a due, split = a registered trigger; never "follow/help the PC"
-  weigh again only on a material relationship event (CHANGE), the split reached,
-    or the want met or lost; never per scene
+FAMILIAR   people the PC already knows meet them from their tie, attitude and
+           bond; shared history comes from the bond or from play
+NEEDED     a scene needs a person → an existing relationship, affiliation or
+           institution first, else someone the setting would put there
+COMPANIONS someone joins for a reason in the world; on joining, record their
+           capability, HP, gear and when they'd ask for help, push back or leave;
+           they act from that record, fight with their own gear, earn their own XP
+           and skill evidence, and can refuse a reckless order
+JOIN AIM   before a joiner's first act, weigh from the record:
+           own   a strong want of theirs (tied to duty, a client, a debt, a fear,
+                 who they are) that clashes with the PC's goal → they keep their
+                 own aim and plan: paths together → follow fully · split ahead →
+                 follow outwardly and may hide it · split now → work against
+           adopt a weak want, no clash, or ties that outweigh it → they take the
+                 PC's goal and help in earnest
+           none  no want of their own → any reason serves (pay, curiosity); a thin
+                 record is filled from character first
+           record npcs.<id>.state.aim {row, mode, want, split}; weigh again on a
+                 real relationship event, the split reached, or the want met or lost
+GROWTH     a rival, recurring enemy or named ally with a recorded activity that
+           challenges them (a dangerous trade, a campaign, a teacher) grows by §7
+           over time; the PC learns of it through evidence
+ROUTINES   job, local custom, daylight, season and duty set what people do and
+           when; exact schedules only when timing matters
 ```
 
 ### 15.2 Time
 
 ```text
-world_state.time = {season, day_index, date, clock_minutes, daypart,
-  precision: exact | daypart | degraded}
-date  only when recorded; else day_index; never invented
-clock  clock_minutes 0..1439 when known, else daypart
-daypart  night 00–06 · morning 06–12 · afternoon 12–18 · evening 18–24
-lost  precision degraded, reason in continuity_status, until an unambiguous
-  in-world anchor (I12)
-SPAN  the GM sets a believable duration for the PC's action; the tool runs it once:
-  day rollover (nerve day marks), month rollover (every 30 days: monthly stability
-  marks), every due ≤ the new time in time order (plans §15.1, pressures §15.5,
-  pending and payoffs §12), one surface roll per daypart the PC spends in a zone
-STOP  the tool stops at the first event that could reach the PC (in the PC's zone,
-  aimed at the PC, or a surface or undercurrent encounter) and returns only up to
-  it; the GM judges: it reaches the PC → time stops there, the scene opens; it
-  doesn't → the tool continues; the GM never sees past a stop
-FIRE  at its due a plan or pressure acts if its cause still holds: resolve from
-  state, outcome uncertain → ZONE (§9.1); cause gone → an actor re-plans (§15.1), a
-  pressure is stopped (§15.5); a trigger is checked against what has happened:
-  met, even earlier unnoticed → fires now, from current state
-EVERYWHERE  a due fires wherever its actor or pressure is, reaching the PC only by
-  real channels (I5); a skipped stretch runs like any other; skipping never jumps a
-  due
-COSTS TIME  travel, investigation, preparation, repair, crafting, shopping, meals,
-  sleep, aftermath (nonzero); preparation ≠ rest; urgency constrains delay
+CLOCK     world_state.time {season, day_index, date, clock_minutes, daypart,
+          precision: exact | daypart | degraded}; a date only when recorded;
+          dayparts: night 00–06 · morning 06–12 · afternoon 12–18 · evening 18–24
+SPAN      set a believable duration for what the PC does; the tool runs it once:
+          day and month rollovers, every due in time order (plans, pressures,
+          pending, payoffs), a surface roll per daypart the PC spends in a zone
+STOP      the tool stops at the first event that could reach the PC (in their zone,
+          aimed at them, or an encounter) and returns up to there; it reaches them
+          → the scene opens there; it passes them by → the tool continues
+FIRE      at its due a plan or pressure acts if its cause still holds, from the
+          state of things (uncertain → ZONE, §9.1); cause gone → the actor
+          re-plans, the pressure stops; a trigger already met fires now
+EVERYWHERE dues fire wherever their actor or pressure is; skipped time runs like
+          any other
+TAKES     travel, investigating, preparing, repairing, crafting, shopping, meals,
+TIME      sleep and aftermath all take time
 ```
 
 ### 15.3 Encounters
 
-TRIGGER: each daypart the PC spends in a zone (surface) · contact with a zone's undercurrent. Never: round count, idleness, quiet, wish for content.
+Rolled for each daypart the PC spends in a zone, and on contact with a zone's undercurrent.
 
 ```text
-SURFACE  one roll per zone per daypart the PC spends there; an active quest, job,
-  or travel to it never cancels it; the tool gives occurs, kind (hostile |
-  ordinary), and where in the band (low · middle · top · top + a rare cause the
-  band allows); +3 Sanctuary never rolls
-  POOL  the zone's encounters of the rolled kind fitting time and location; none of
-  that kind → the other; empty → nothing
-UNDERCURRENT  on contact: the PC enters one of its sites · is out during its hours ·
-  acts on its trail · its pressure advances while the PC is there; one roll per
-  zone per daypart; the tool gives occurs and the result:
-  sign  wrongness a local would misread
-  brush  contact without harm → horror check (§11)
-  incident  something happens to someone → horror check
-  hostile  it acts against those present (§8) → horror check
-  POOL  BACKGROUND undercurrent_pool, by result
-ELSE  nothing happens
-CAUSE  chosen from the pool without looking at the PC's cargo, secrets, plans;
-  committed before its evidence (I2); acts from its own nature: fight, flight,
-  parley; a quest only if a bounded undertaking exists (§10)
+SURFACE      one roll per zone per daypart the PC is there, whatever they're doing;
+             the tool gives whether it occurs, its kind (hostile | ordinary) and
+             where in the zone's band; +3 Sanctuary has none; drawn from the
+             zone's encounters of that kind fitting the time and place
+UNDERCURRENT on contact (the PC enters one of its sites, is out in its hours, acts
+             on its trail, or its pressure moves while they're there), one roll per
+             zone per daypart: sign (wrongness a local would misread) · brush
+             (contact, no harm) · incident (something happens to someone) ·
+             hostile (it acts against those present); the last three call for a
+             horror check where the setting has horrors (§11)
+CAUSE        drawn from the zone's own lists, by the roll; the cause acts from its
+             own nature: fight, flight, parley
 ```
 
 ### 15.4 Places and stability
 
 ```text
-BAND  limits which causes can plausibly exist in a place; produces no number
-ORDER  cause from anchors within band → commit → derive its level from the cause →
-  check in band; outside → fix the cause, never clamp (I2, I3)
-DERIVE  from settlement size, institutions, garrison, threats, frontier proximity,
-  known sites; the PC's level or party strength → 0
-AUTHOR  BACKGROUND for recorded locations; else derived and committed on first
-  contact; then stable; changes only by a causal world event (war front, site
-  opened)
-LIMIT  bounds locally generated opportunities; never rewrites a recorded actor
-CLOSED  a location with `closed`: no entry, no fighting or bribing through, no detail
-  of its cause beyond what is public; lifts only on its recorded date or cause
+BAND      limits which causes can plausibly exist in a place; from settlement size,
+          institutions, garrison, threats, nearby sites; a cause outside the band
+          is replaced by one inside it
+SET       recorded places from the background; others on first contact, then fixed;
+          a band changes through a real event (a war front, a site opened)
+CLOSED    a place marked `closed` can't be entered or bought into until its
+          recorded date or cause
 ```
 
 ```text
-STABILITY  surface (−3..+3), undercurrent (none..−3), nerve (−3..+3, §11):
-  {baseline, current, tension}, a zone layer also `stepped: <day_index>`;
-  baseline = what it normally is, from recorded facts (a zone: the facts behind its
-  band, never the PC's level; a person: their history); current starts at
-  baseline; unset → derived and committed on first contact
-TENSION  events add marks; the tool steps current when the boundary's marks are
-  reached (more marks for the outer steps); marks past it stay in tension; a mark
-  against tension's sign cancels first
-BASELINE  an act that improves a layer stops at its baseline; past it takes a
-  lasting cause (garrison posted, ward built, breach that never closes), which
-  moves baseline; worsening has no baseline limit
-ZONES  one step per zone layer per week (`stepped` records the day), extra marks
-  wait in tension; a building or room names its zone and uses it; a location with
-  its own control (keep, vault) may be its own zone
-SURFACE  how the zone behaves openly: +3 Sanctuary · +2 Secure · +1 Calm ·
-  0 Ordinary · −1 Uneasy · −2 Unstable · −3 Collapsed
-  marks: its pressure advances 1, signed by direction (§15.5) · its cover fails −1 ·
-  the hidden goes public −2 · a visible cause removed +1 · a decisive act +2 ·
-  each month no pressure touched it, 1 toward baseline
-UNDERCURRENT  what is hidden there: none · −1 · −2 · −3
-  marks: its pressure advances 1, signed by direction · a hidden cause removed +1 ·
-  a decisive act +2; never heals with time
-COVER  an actor (an agency, a city office, plain denial); its covering is its plan;
-  first receiver of witness reports of the hidden (§15.7); its plan failing →
-  surface marks; no cover → undercurrent −2 or deeper takes surface −1 each month
-SIGNS  each state shows signs someone could notice; the PC learns it from them (I5)
+STABILITY  surface (−3..+3) and undercurrent (none..−3): {baseline, current,
+           tension}, a zone also `stepped: <day_index>`; baseline from the place's
+           own facts; current starts there
+SURFACE    how it behaves openly: +3 Sanctuary · +2 Secure · +1 Calm · 0 Ordinary ·
+           −1 Uneasy · −2 Unstable · −3 Collapsed
+TENSION    events add marks; the tool steps current when enough gather; marks of
+           the opposite sign cancel first; a zone steps once a week at most
+MARKS      surface: its pressure advances 1 (signed) · its cover fails −1 · the
+           hidden goes public −2 · a visible cause removed +1 · a decisive act +2 ·
+           each quiet month 1 toward baseline
+           undercurrent: its pressure advances 1 · a hidden cause removed +1 · a
+           decisive act +2; it stays until someone acts on it
+BASELINE   improving stops at baseline; going past it takes a lasting cause (a
+           garrison, a ward), which moves the baseline
+COVER      the actor who keeps the hidden hidden; their covering is their plan and
+           they hear witness reports first (§15.7); their plan failing marks the
+           surface; with no cover, an undercurrent of −2 or deeper marks the
+           surface −1 each month
+SIGNS      every state shows signs someone could notice; that is how the PC learns
+           it
 ```
 
 ### 15.5 Pressures
 
 ```text
-PRESSURE  a recorded persistent condition or force that matters (not only threats);
-  0..n; moves by world time and events; effects stay with natural owners;
-  trajectory = expected direction, not locked
-TRACK  a pressure bound to a zone moves that zone, no counter of its own; several
-  zones → one track each
-CLOCK  a pressure bound to no zone, or a short emergency paced in hours or days,
-  faster than a zone can move; a clock adds no zone marks
-DUE  every pressure always has one, like an important actor (§15.1 ALWAYS)
-PACE  every <interval> while <condition>: how often it can really advance + what
-  must hold; world-scale moves in weeks or months, never nightly; none → every
-  rest/downtime period
-CHECK  at its due (then due += interval) and when a resolved event touched it:
-  advances once if it actually operated (not if its actors stopped, are absent, out
-  of resources, or had no opportunity); a plainly accelerating event may advance
-  one extra; the PC may advance, reverse, stall, destroy; never round count,
-  pacing, quiet
-ADVANCE  track: one mark at its zone and layer, signed by direction (zone weekly
-  limit) · clock: fill one segment
-ON STEP / ON FILL  committed at creation: the world's action if nobody interferes;
-  never aimed at the PC (I2, I6); track: fires when its layer reaches that step ·
-  clock: fires on the last segment; happens present or not; the PC learns of it
-  through a real channel (I5)
-STOPPED  condition fails → holds; its actors re-plan; a new plan may open a new
-  pressure
-STAGES  track: the layer's steps are its stages, each with signs · clock: optional
-  early (its actors can still be stopped) → late (it will happen; brace) → fill,
-  one sign per stage someone could notice
-HIDDEN  unless the PC has observed enough to infer it; never show a hidden layer's
-  tension or an undiscovered clock's segments (I9)
-REUSE  clock shape for any count toward a target and any long undertaking, at its
-  owner
+PRESSURE  a recorded force or condition that moves the world over time (not only
+          threats); its trajectory is a direction, not a fate
+TRACK     bound to zones: each advance is one mark at its zone and layer
+CLOCK     bound to no zone, or a short emergency in hours or days: each advance
+          fills one segment
+DUE       every pressure has one; the tool flags any without
+PACE      every <interval> while <condition>; world-scale moves in weeks or months
+CHECK     at its due (then due += interval) and when an event touches it: it
+          advances once if it actually operated, once more for a plainly
+          accelerating event; the PC can advance, reverse, stall or end it
+ON STEP   written when it's made: what the world does when a track reaches a step
+ON FILL   or a clock fills; it happens whoever is there; the PC learns of it
+          through a real channel
+STOPPED   its condition fails → it holds; its actors re-plan
+STAGES    a track's steps are its stages; a clock may have early (still stoppable)
+          and late (coming; brace); each stage has a sign someone could notice
+HIDDEN    a pressure the PC hasn't inferred stays out of the readable save
+COUNTS    any count toward a target or long undertaking is a clock at its owner
 ```
 
 ### 15.6 Cases and hidden truth
 
 ```text
-TRIGGER  a hidden cause is committed that must hold across more than one future
-  contact
-OWNER  an actor did it → the actor · a pressure → the pressure · one location fact →
-  the location · spans several owners → a case; references owners, copies nothing
-  (I1)
-CREATE  cause committed and written first; never an empty shell
-LIMITS  player theory never rewrites a pre-contact cause; misleading information
-  needs its own cause; no path to discovery → stays undiscovered; a missing prior
-  cause is never built backward (I2, I12)
-EVIDENCE  baseline: competent + relevant skill + examining the right spot → found,
-  no roll; uncertain only: time, cost, noticed/traces, beyond-baseline finds,
-  meaning; interpretation gated by §2; all other failure stays possible (I11)
-SOLVABLE  a case tied to a quest needs ≥3 independent routes the PC can reach from
-  where they stand (different person, location, or record); routes through one
-  shared door, record, person, or access the PC lacks count as one; fewer than 3
-  → add routes from its actors' own plans (someone searching, a witness who comes
-  forward, a nervous accomplice, a client who calls), committed in the case before
-  play reaches it; never added during play (I3)
-CHECK  at creation, and before a quest attaches to it; never in play
-LIMIT  routes the PC's own failures close stay closed (I11); governs how cases are
-  built, never a lead, hint, or rescue after creation or after a failure
-STUCK  no reachable route left on an active quest, or the player asks → the known
-  leads as numbered options (what, where, rough cost/risk); never a hidden route or
-  new fact (I9); a menu, not a limit: free wording stays a normal action
+CASE      a hidden cause that must hold across more than one contact; it lives at
+          the actor, pressure or place it belongs to, or as a case when it spans
+          several
+CREATE    the cause is written first; evidence follows from it; misleading
+          information has its own cause
+FIXED     the cause stays as written, whatever the player's theory
+EVIDENCE  a competent person with the right skill examining the right spot finds
+          what is there, no roll; rolls decide time, cost, being noticed, finds
+          beyond the obvious, and what it means (§2 LIMITED)
+SOLVABLE  a case tied to a quest has 3 or more independent routes the PC can reach
+          (a different person, place or record each); fewer → add routes from its
+          actors' own plans (someone searching, a witness who comes forward, a
+          nervous accomplice), written into the case before play reaches it;
+          checked when the case is made
+CLOSED    a route the PC's own failure closes stays closed
+STUCK     no reachable route on an active quest, or the player asks → list the
+          leads the PC knows as numbered options (what, where, rough cost and
+          risk); the player may still do anything else
 ```
 
 ### 15.7 Witnesses and response
 
 ```text
-CHAIN  act → witness (who, what they saw, a recognised person or only a
-  description) → witness acts (report, stay silent, flee, bargain, sell, act alone,
-  tell one) → receiver, and whether they care (setting norms) → the response the
-  institution can actually mount (reach, resources, priorities) → the PC meets it
-  when it arrives
-NO WITNESS  no attribution; the act and its physical consequences stay real (body,
-  goods, door); linking needs the chain (I2, I5); a trace the PC left can still be
-  found by someone who looks (a detective working the scene)
-VALID  silencing a witness (with consequences); a witness lies, misremembers, names
-  the wrong person
-PARTIAL  recognition attaches to a description in the holder's knowledge
-  (suspicions), may settle on the wrong person
-RESPONSE  within actual reach (ZONE); costs people, money, attention; follows its
-  own priorities, not severity; officials may be corrupt, indifferent, overworked,
-  invested; pursuit may stop when costly or run long when personal
-BELIEF  a receiver judges the source and chooses to believe it or not
+CHAIN     act → witness (who, what they saw, a face or a description) → what the
+          witness does (reports, keeps quiet, flees, bargains, sells it, tells one
+          person) → who hears it and whether they care (setting norms) → the
+          response that institution can actually mount → it reaches the PC
+UNSEEN    an act nobody saw is tied to no one; the body, the goods and the broken
+          door stay real, and someone who looks may follow the PC's traces
+WITNESSES may lie, misremember, name the wrong person, or be silenced (with
+          consequences); a description may settle on the wrong person
+RESPONSE  within real reach (ZONE); it costs people, money and attention, and
+          follows the institution's priorities; officials may be corrupt,
+          indifferent, overworked or invested; pursuit runs long when it's personal
+BELIEF    whoever hears it judges the source and decides whether to believe it
 ```
 
 ### 15.8 Character and values
 
 ```text
-SOURCE  behaviour = drives + circumstances + beliefs + what they think they can get
-  away with; never to look admirable, never to look grim
-RANGE  a settlement holds what its conditions produce: decent, petty, generous,
-  cowardly, zealous, warm to own and vicious to outsiders, tired
-NEVER  better or worse than the situation supports · soften a recorded setting into
-  modern sensibility · import one it never had
-CULTURE  recorded prejudices, loyalties, superstitions, hierarchies, cruelties
-  belong to the actors and cultures holding them
-TRAIT  a character line sets what an actor tries, how, and its voice; never whether
-  it works: uncertain → §3 or §8, actor vs actor = one roll, the other as challenge;
-  comic luck colours a result, never makes it
-CONTENT  what the campaign depicts is set once in the BACKGROUND; never improvised
-  per scene or narrowed in play
+SOURCE    people act from drives, circumstances, beliefs and what they think they
+          can get away with
+RANGE     a place holds what its conditions produce: decent, petty, generous,
+          cowardly, zealous, warm to their own and hard on outsiders, tired
+SETTING   play the setting's own values and prejudices as its people hold them,
+          at the level the situation supports
+TRAIT     a character trait sets what an actor tries, how, and how they sound;
+          whether it works comes from §3 or §8 (actor against actor: one roll,
+          the other as challenge)
+CONTENT   what the campaign depicts is set in the background's content_bounds
 ```
 
 ### 15.9 Development threads
 
 ```text
-THREAD  a persistent unfinished development direction of the PC, from explicit
-  intent or recorded play
-NOT  a quest, pressure, content promise, autonomous arc
-DERIVE  requirements, paths, trainers, resources, contacts from canonical sources;
-  not stored
-TIME  never advances it unless a recorded actor or pressure acts on it
-READ BY  an existing actor who knows the direction and has their own reason
-  (teacher's test, guild door, rival challenge, patron's favour), by REACT and PLAN
-LIMIT  supplies no actor, opportunity, resource (I3, I5); none who knows and cares →
-  nothing, however long
-CLOSE  advances only by its own valid transitions; completed/abandoned recognised at
-  a growth boundary
+THREAD    a direction the PC is growing in, from their stated intent or play
+MOVES     when an existing actor who knows of it acts for their own reason (a
+          teacher's test, a guild door, a rival's challenge); recognised as done
+          or dropped at a growth boundary
 ```
 
 ### 15.10 Endings
 
 ```text
-ARC END  a main quest or bounded arc ends or changes beyond recognition → discard
-  unused future planning (not history)
-NEXT  only from pending consequences, pressures, actor state and drives, or ordinary
-  setting-anchored generation; dead or removed actors, resolved causes, failed
-  prerequisites stay invalid; no escalation because content ended
-CONDITIONS  ending_conditions; 0..n, an open world needs none; chapter.end is one;
-  committed before the decisions they govern, never rewritten after player
-  choices; outcomes the player may pursue, ignore, miss (I6, I11); hidden ones
-  natural and discoverable; the full set revealed at the end
-CHECK  only when a resolved event changed state a condition depends on; never on
-  schedule, round count, or length; met → ending review (GM §7.6); permanently
-  unreachable → closed for good; none left → ends in that state, no new ending
+ARC END     a main quest or arc ends → drop its unused future planning; history
+            stays
+NEXT        what follows comes from pending consequences, pressures, actors'
+            state and drives, and the setting
+CONDITIONS  ending_conditions (an open world needs none): written before the
+            choices they govern; the player may pursue, ignore or miss them;
+            checked when an event changes what they depend on; met → the ending
+            review (GM §7.6); unreachable → closed
 ```
 
 ---
 
 ## 16. The tool
 
-neo_math takes one JSON form, from a file or stdin, and prints one JSON result. `{"cmd": "forms"}` lists every form and its fields. Lines under `copy` go into the turn verbatim; lines under `gm_delta` go into the round's GM-Δ block.
+neo_math takes one JSON form, from a file or stdin, and prints one JSON result. `{"cmd": "forms"}` lists every form and its fields. Lines under `copy` go into the turn word for word; lines under `gm_delta` go into the round's GM-Δ block.
 
 ```text
-WORLD FILES  forms that read the world take: background (required) · save (the
-             newest, once one exists) · deltas (a file of every GM-Δ block since
-             that save)
+WORLD FILES forms that read the world take: background (required) · save (the
+            newest, once one exists) · deltas (a file of every GM-Δ block since)
 action     §3: capability, Difficulty, tool modifier, roll line, result, reach or
-           cost, damage applied, growth credited when it qualifies (§7)
-help       §9.2: ask, sources (≤3), hostile → target, roll line, exists or not
-ask        §9.1: who, question, for and against (≤2 facts each, 1 or 2 points)
-combat     §8: side, opponents, conditions, stop → exchanges in a batch, pausing
-           at the first turning point with every fighter's HP; send it again with
-           the HP as it stands to continue
+           cost, damage applied, growth credited
+help       §9.2: ask, sources (up to 3), hostile → target, roll line, exists or not
+ask        §9.1: who, question, for and against (up to 2 facts each, 1 or 2 points)
+combat     §8: side, opponents, conditions, stop → a batch of exchanges, pausing at
+           the first turning point with every fighter's HP; send it again with HP as
+           it stands to continue
 span       §15.2: from {day, clock}, minutes, pc_zone, arrived → events in time
-           order (dues, day and month rollovers, encounter rolls), stopping at the
-           first that could reach the PC; triggers to check; flags (an important
-           actor or a pressure with no due, a malformed quest code); after a stop,
-           send it again with the returned resume fields
-check      GM §7.1: a background before play → findings: frame, NPC fields and
-           depth, dues (incl. a day with no time of day), important actors and
-           pressures without a due, quests at Round 0, cases with < 3 routes,
-           broken references; ok when nothing but untimed dues; it can't judge
-           design
+           order, stopping at the first that could reach the PC; triggers to check;
+           flags; after a stop, send it again with the returned resume fields
+check      a background before play → findings (frame, NPC fields and depth, dues,
+           important actors and pressures without a due, quests at Round 0, cases
+           with fewer than 3 routes, broken references); ok when only untimed dues
+           remain; design is judged by the person making it
 selfcheck  GM §6: answers {npc_positions, quests, money, hp}, round → each answer
-           against the save, the tool's own checks, the verdict; positions are
-           answered with the location's recorded name
+           against the save, the tool's own checks, the verdict
 award      §13: actor, challenge, scope, source → XP, level, the paid marker
 boundary   §7: tiers and class at a growth boundary
 points     §14: item-point maximum, spend, refill
 stability  §15.4: marks and steps for a zone layer or nerve
 encounter  §15.3: one surface or undercurrent roll
 vitals · harm · heal · cast · time · roll   single calculations (§5)
-merge      WORLD §19: previous save + GM-Δ blocks → the next capsule
-validate   a save: readable, capsule survival against the previous save, dues
-flatten    GM §7.6: BACKGROUND + final save → one world, records open or closed
+merge      NEO_SAVE: previous save + GM-Δ blocks → the next capsule
+validate   a save: readable part, every capsule record carried, dues
 ```
 
 ---
