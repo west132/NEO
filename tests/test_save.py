@@ -26,8 +26,8 @@ class Save(unittest.TestCase):
 
     def test_selfcheck_passes_on_right_answers(self):
         o = run({"cmd": "selfcheck", **W.w20, "round": 50, "answers": {
-            "npc_positions": {"bakshi": "Bakshi's shop", "meera_raghavan": "the train to Bombay"},
-            "quests": {"B": "succeeded", "side_palace_night": "blocked"},
+            "npc_positions": {"rosa_delgado": "Site-88", "leo_brandt": "Site-19"},
+            "quests": {"B": "succeeded", "darrows_list": "blocked"},
             "money": "1350", "hp": 12}})
         self.assertEqual(o["verdict"], "pass", o["copy"])
 
@@ -45,18 +45,18 @@ class Save(unittest.TestCase):
 
     def test_duplicate_quest_letter_is_flagged(self):
         d = W.p("d4.txt")
-        put(d, "GM-Δ 21 ⟵ 20\n  + quests.tq_syamantaka.code :: B\n")
+        put(d, "GM-Δ 21 ⟵ 20\n  ~ quests.night_shift.code :: B\n")
         o = run({"cmd": "selfcheck", **W.w20, "deltas": d, "answers": {"hp": 12}})
         self.assertTrue(any("letter B" in x for x in o["tool_checks"].get("quest_codes", [])))
 
     def test_important_actor_without_a_due_is_flagged(self):
         d = W.p("d5.txt")
-        put(d, "GM-Δ 21 ⟵ 20\n  ~ npcs.bakshi.state.due :: none\n")
+        put(d, "GM-Δ 21 ⟵ 20\n  ~ npcs.rosa_delgado.state.due :: none\n")
         o = run({"cmd": "selfcheck", **W.w20, "deltas": d, "answers": {"hp": 12}})
-        self.assertIn("npcs.bakshi", o["tool_checks"].get("important_without_due", []))
+        self.assertIn("npcs.rosa_delgado", o["tool_checks"].get("important_without_due", []))
         s = run({"cmd": "span", **W.w20, "deltas": d, "from": {"day": 2, "clock": 1320},
-                 "minutes": 10, "pc_zone": "chor_bazaar"})
-        self.assertTrue(any("npcs.bakshi" in f for f in s["flags"]))
+                 "minutes": 10, "pc_zone": "site19"})
+        self.assertTrue(any("npcs.rosa_delgado" in f for f in s["flags"]))
 
     def test_background_meets_its_depth_fields(self):
         o = run({"cmd": "selfcheck", **W.w20, "answers": {"hp": 12}})

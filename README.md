@@ -14,7 +14,7 @@ Attach these to a chat with a model that can run code, then send: `Load the NEO 
 | `neo_math_v0.py` | The tool. Part of the rules: run it with one JSON form in, one JSON result out. |
 | `worlds/BACKGROUND_<name>_NEO_v0.md` | One world. Attach exactly one. |
 
-Add `modules/NEO_MODULES_v0.md` when the background uses powers (MP), canon mode, or play without levels. The background's setting says so; Sheet Anchor uses none of them.
+Add `modules/NEO_MODULES_v0.md` when the background uses powers (MP), canon mode, or play without levels. The background's setting says so.
 
 To continue a campaign: the same files and your newest save. Send: `Continue from this save.`
 

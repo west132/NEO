@@ -560,6 +560,9 @@ TEST  Nov 12: 20-round Sheet Anchor test (West.L, treasure hunter). Opening,
       terms and code (RULES §10) · merge applies a whole-record change field by
       field, splitting a whole parent first · paid or closed dues aren't overdue ·
       incidental dues accepted
+WORLD Nov 12: Sheet Anchor deleted by the author. The author's SCP Omega-99 v6
+      background converted to NEO (worlds/BACKGROUND_SCP_OMEGA99_NEO_v0.md) and
+      made the test world; the 55 tests now run on it
 ```
 
 ---

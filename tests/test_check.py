@@ -2,22 +2,19 @@ import os, tempfile, unittest
 from _run import run, BG
 
 BREAKS = [
-    ("  ruud_kasteel:\n    depth: 2\n", "  ruud_kasteel:\n", "npcs.ruud_kasteel :: no depth"),
-    ("    voice: fast and exact, like a lecture", "    vocie: fast and exact, like a lecture",
-     "npcs.meera_raghavan :: depth 3 lacks voice"),
-    ("      due: Day 2 night the auction — Sterne, Lara, Hawk bid",
-     "      due_old: Day 2 night the auction — Sterne, Lara, Hawk bid",
-     "npcs.bakshi :: important and has no plan"),
-    ("    status: blocked\n    trigger: someone reads", "    status: blocked\n    trigger_x: someone reads",
-     "quests.side_palace_night :: blocked with no trigger"),
-    ("      due: Day 6\n      on_fill: the hill road", "      due_x: Day 6\n      on_fill: the hill road",
-     "active_world_pressures.monsoon :: no due"),
-    ("    actors: [julian_sterne, ruud_kasteel, anselm_hartog]",
-     "    actors: [julian_sterne, ruud_kasteel, anselm_hartog, mr_lau]", "no actor \"mr_lau\""),
-    ("    name: Chor Bazaar\n    zone: bombay", "    name: Chor Bazaar\n    zone: bombey",
-     "locations.chor_bazaar.zone :: no location \"bombey\""),
-    ("state: {position: Juhu aerodrome,", "state: {position: the moon,",
-     "npcs.joe_dsouza.state.position :: \"the moon\""),
+    ("  priya_raman:\n    depth: 1\n", "  priya_raman:\n", "npcs.priya_raman :: no depth"),
+    ("    voice: warm and dry;", "    vocie: warm and dry;", "npcs.rosa_delgado :: depth 3 lacks voice"),
+    ("      due: A-1 Day 1 08:30 meets West", "      due_old: A-1 Day 1 08:30 meets West",
+     "npcs.rosa_delgado :: important and has no plan"),
+    ("    status: blocked\n    trigger: Leo's behaviour", "    status: blocked\n    trigger_x: Leo's behaviour",
+     "quests.darrows_list :: blocked with no trigger"),
+    ("      due: Day 75\n      on_fill: Rosa learns", "      due_x: Day 75\n      on_fill: Rosa learns",
+     "active_world_pressures.rosa_transfer :: no due"),
+    ("    actors: [felix_darrow, leo_brandt]", "    actors: [felix_darrow, leo_brandt, mr_x]",
+     "no actor \"mr_x\""),
+    ("      position: Site-19 labs", "      position: the moon",
+     "npcs.tomas_reyes_hart.state.position :: \"the moon\""),
+    ("  night_shift:\n    code: C\n", "  night_shift:\n", "quests.night_shift :: no code"),
 ]
 
 
