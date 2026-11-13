@@ -1,0 +1,132 @@
+GM-Δ 0
+  ~ player.identity.name :: Tom Kell
+  ~ player.identity.age :: 24
+  ~ player.identity.origin :: Whitechapel born; docker's son; worked the London Docks from fourteen
+  ~ player.identity.history :: ran with the Clinkers, a small Whitechapel gang; went Rook on Day 3 when Jacob Frye took the Clinkers' pub
+  ~ player.appearance :: broad, broken nose, red scarf of the Rooks, docker's hands
+  ~ player.archetype :: Rook
+  ~ player.job :: Rook enforcer
+  ~ player.belongs :: [rooks]
+  ~ player.gender :: man
+  - player.skills.[ROLE skills from the role table] :: role set at Round 0
+  + player.skills.brawling :: {class: NORMAL, tier: T2, evidence: 0, class_source: the docks and the Clinkers, abilities: []}
+  + player.skills.streetwise :: {class: NORMAL, tier: T2, evidence: 0, class_source: Whitechapel born, abilities: []}
+  + player.skills.blades :: {class: NORMAL, tier: T1, evidence: 0, class_source: street fighting, abilities: []}
+  ~ player.traits :: [gang name on the street — "Kell of the Rooks"]
+  ~ player.expertise.established :: [Whitechapel streets, pubs and fences, the docks]
+  ~ player.expertise.limitations :: [no Assassin training, no letters beyond his name]
+  ~ player.condition.hp :: 14
+  - player.equipment.r0_01 :: role gear replaces the placeholder
+  + player.equipment.knuckle_duster :: {"name": "knuckle-duster", "type": "light weapon", "capability_domain": "brawling", "condition": "serviceable", "tier": "T1"}
+  + player.equipment.cane :: {"name": "weighted cane", "type": "one-handed weapon", "capability_domain": "brawling", "condition": "worn", "tier": "T1"}
+  + player.equipment.cosh :: {"name": "leather cosh", "type": "light weapon", "capability_domain": "brawling", "condition": "serviceable", "tier": "T1"}
+  ~ player.money.cash :: 3s
+  ~ player.item_points :: {rank: commoner, basis: a Rook's share and docker's pay, current: 40, max: 40}
+  ~ player.knowledge.facts.role :: Jacob Frye runs the Rooks now; the Blighters want the Ten Bells back
+  + player.knowledge.facts.clara :: knows Clara O'Dea by sight — the urchin girl who sees everything
+  ~ npcs.henry_green.state.due :: A-1s Day 1 morning meets the twins at his shop (test fixture: done)
+  ~ npcs.evie_frye.state.due :: A-3s Day 2 morning starts Henry's records (test fixture: done); A-3 when beat_2 opens, the Kenway mansion
+  ~ npcs.jacob_frye.state.due :: A-1s Day 3 evening took over the Clinkers at the Ten Bells (test fixture: done)
+  + locations.ten_bells :: {name: "the Ten Bells", zone: whitechapel, conditions: {features: ["the Rooks' pub since Day 3", "a long bar", "a back yard to the alley"]}, challenge_band: {min: 1, max: 3, basis: "a gang pub"}}
+  ~ npcs.frederick_abberline.state.due :: A-1s Day 4 morning posted bounties (test fixture: done); A-1 when a bounty is brought in, pays it
+  ~ npcs.clara_odea.state.due :: Bs Day 5 afternoon sent a runner to Jacob (test fixture: done); B when the Rooks answer, shows them the mill
+  ~ npcs.jacob_frye.state.due :: A-1 Day 6 21:00 leads the Rooks on the Blighter stronghold in the Black Eagle cooperage yard, Brick Lane
+  + npcs.jacob_frye.state.plan.next :: A-1 take the first Blighter stronghold in Whitechapel (the cooperage yard), to start the Rooks' push on the borough
+  + locations.cooperage_yard :: {name: "the Black Eagle cooperage yard, Brick Lane", zone: whitechapel, conditions: {features: ["a walled yard off Brick Lane behind Truman's brewery", "stacked barrels", "a two-storey cooperage the Blighters use as a counting house", "a cart gate and a wicket door"], held_by: "a Blighter crew; protection money counted there"}, challenge_band: {min: 2, max: 4, basis: "a Blighter stronghold"}}
+  + npcs.alf_tanner :: {"depth": 1, "name": "Big Alf Tanner", "job": "Rook, ex-Clinker", "belongs": ["rooks"], "gender": "man", "character": "slow-talking, steady, likes Tom", "voice": "few words, all of them flat", "drives": {"want": "his share and a quiet pint", "fear": "the workhouse for his mum"}, "in_disorder": "thrives", "state": {"position": "the Ten Bells", "due": "none (incidental)"}, "capability": {"overall_level": 2, "skills": {"brawling": "T1"}}}
+  + npcs.davey_shaw :: {"depth": 1, "name": "Davey Shaw", "job": "Rook, ex-Clinker", "belongs": ["rooks"], "gender": "man", "character": "wiry, mean-tempered, good with a knife", "voice": "sneers and swears", "drives": {"want": "Blighter blood for his brother's broken arm", "fear": "Kaylock's hammer men"}, "in_disorder": "thrives", "state": {"position": "the Ten Bells", "due": "none (incidental)"}, "capability": {"overall_level": 2, "skills": {"blades": "T1", "brawling": "T1"}}}
+  ~ world_state.time :: {season: winter, day_index: 6, date: Day 6 (February 1868), clock_minutes: 1080, daypart: evening, precision: exact}
+  ~ world_state.location :: ten_bells
+  ~ npcs.henry_green.state.due :: A-3 Day 8 morning works through Ethan Frye's notes with Evie at his shop
+GM-Δ 1 ⟵ 0
+  + npcs.rook_crew_a1 :: {name: "three more Rooks from the Brick Lane end (Fitch, Lenny, Old Shem)", depth: 0, job: "Rooks", belongs: [rooks], gender: men, character: "ex-Clinkers and dockers", manner: "loud, nervy, eager", in_disorder: thrives, state: {position: "the Ten Bells", due: "none (incidental)"}, capability: {overall_level: 1}}
+  + npcs.jacob_frye.knowledge.facts.cooperage :: Clara's urchins counted six Blighters on weeknights at the cooperage yard, a crew boss called Rigger, and the protection money counted upstairs on Fridays; tonight is a Thursday
+  + npcs.jacob_frye.state.tactics :: Jacob over the back wall and through the cooperage; Tom's party in at the wicket door when he whistles; nobody touches the money till the Blighters are out
+  ~ world_state.time :: Day 6 21:00, evening
+GM-Δ 2 ⟵ 1
+  + npcs.rigger :: {name: "Rigger (Sam Riggs)", depth: 1, job: "Blighter crew boss at the cooperage yard", belongs: [blighters], gender: man, character: "careful, sour, a counter of coins", voice: "short, flat, swears quietly", drives: {want: "the money counted right and sent up to Kaylock", fear: "being short when Kaylock counts"}, in_disorder: thrives, state: {position: "the Black Eagle cooperage yard, Brick Lane", plan: "count Thursday's takings; send them to the train Friday", due: "A-1 Day 7 morning sends the takings to Kaylock's train"}, capability: {overall_level: 3, skills: {brawling: T1, firearms: T1}}, carried: "a cheap revolver (bow-class 1d8 per shot), five rounds"}
+  + locations.cooperage_yard.conditions.tonight :: "Rigger and one man counting upstairs at a lit window; two Blighters at a brazier in the yard; one sitting by the wicket with a cudgel; one asleep on sacks under the cooperage stairs (six in all)"
+  + player.knowledge.facts.cooperage :: "R2 from the brewery wall: six Blighters — two at the brazier, one on the wicket, one asleep under the stairs, Rigger and one more upstairs counting; Rigger wears a revolver on his belt"
+  ~ world_state.time :: Day 6 21:15, evening
+GM-Δ 3 ⟵ 2
+  + world_state.material_history.r3_cooperage :: "R3 Day 6 21:25 the Rooks took the Black Eagle cooperage yard: Jacob over the back wall and up the stairs, Tom's party through the wicket; Rigger down, three Blighters yielded, two fled over the back wall"
+  + npcs.rigger.condition.conditions.down :: {condition: "beaten down by Jacob on the cooperage stairs", source: body, effect: "down at 0 HP; untreated by 22:25 → survival roll"}
+  ~ npcs.rigger.state.hp :: 0
+  ~ npcs.rigger.state.status :: down on the cooperage stairs (R3)
+  + world_state.pending.cooperage_prisoners :: "the wicket man (HP 5), the counter (HP 12) and brazier man 2 (HP 1, knife-cut) yielded; sitting against the barrels under Rooks' eyes"
+  + world_state.pending.blighters_fled :: {what: "brazier man 1 and the sleeper go over the back wall and run for Kaylock's train with the news", cause: "they broke when Rigger fell", due: Day 6 21:45}
+  ~ npcs.alf_tanner.state.hp :: 4
+  + npcs.alf_tanner.condition.conditions.collarbone :: {condition: "broken collarbone from a cudgel", source: body, effect: "can't lift his left arm; no fighting for a week"}
+  + npcs.jacob_frye.state.carried.revolver :: "Rigger's cheap revolver, four rounds (one fired into the floor as Jacob took it)"
+  + locations.cooperage_yard.conditions.money :: "upstairs on the table: Thursday's protection takings, about £11 in coin and notes, counted into stacks"
+  ~ world_state.time :: Day 6 21:25, evening
+GM-Δ 4 ⟵ 3
+  ~ npcs.jacob_frye.state.plan :: "A-1 hold the cooperage yard tonight as the Rooks' first stronghold; send for every Rook in Whitechapel; split the money: half to the Rooks' chest, half to tonight's men"
+  ~ npcs.jacob_frye.state.due :: A-1s Day 6 21:00 took the cooperage yard; A-1 Day 6 22:00 the Rooks he sent for start arriving at the yard
+  + npcs.jacob_frye.relationships.pc :: {tie: "his Rook", attitude: "pleased, cocky", credit: ["scouted the yard and saw the gun, R2", "first through the wicket, R3"]}
+  + world_state.pending.rook_runners :: {what: "Fitch runs for Rooks from the Ten Bells and the Brick Lane end", cause: "Jacob's order to hold the yard", due: Day 6 22:00}
+  ~ npcs.rigger.condition.conditions.down :: {condition: "beaten down on the cooperage stairs", source: body, effect: "down at 0 HP; Tom's binding failed to stop the bleeding; untreated by 22:25 → survival roll"}
+  ~ world_state.time :: Day 6 21:35, evening
+GM-Δ 5 ⟵ 4
+  ~ locations.whitechapel.undercurrent.tension :: 1 (R5: a Blighter stronghold taken, a hidden cause removed +1, lasting — RULES §15.4)
+  ~ world_state.pending.blighters_fled :: "done 21:45: the two reached Kaylock's train"
+  ~ npcs.rexford_kaylock.state.plan :: "A-1 retake the cooperage yard tonight with the train crew, himself at the front; never backs down in front of his men"
+  ~ npcs.rexford_kaylock.state.due :: A-1 Day 6 22:30 hits the cooperage yard with the train crew; A-1 Day 7 night his men start breaking Rook pubs
+  + npcs.rexford_kaylock.knowledge.facts.cooperage :: "the Rooks took the cooperage and Rigger; Jacob Frye with a revolver at the window (the runners, 21:45)"
+  ~ npcs.crawford_starrick.state.due :: A-1 Day 7 morning hears by Kaylock's wire that the first stronghold fell; orders his lieutenants to crush the new gang
+  + locations.london_hospital :: {name: "the London Hospital, Whitechapel Road", zone: whitechapel, conditions: {features: ["a night porter's lodge", "the accident ward", "house surgeons on night duty"]}, challenge_band: {min: 0, max: 1, basis: "a charity hospital"}}
+  ~ npcs.rigger.state.position :: the London Hospital, accident ward
+  ~ npcs.rigger.condition.conditions.down :: {condition: "fractured skull", source: body, effect: "stabilised by the house surgeon at 21:55; in hospital at least a week"}
+  ~ npcs.rigger.state.status :: in the London Hospital under the name the Rooks gave (R5)
+  ~ npcs.alf_tanner.condition.conditions.collarbone :: {condition: "broken collarbone", source: body, effect: "strapped; can't lift his left arm; no fighting for a week"}
+  ~ npcs.alf_tanner.state.position :: the London Hospital
+  ~ world_state.location :: london_hospital
+  ~ world_state.time :: Day 6 21:55, evening
+GM-Δ 6 ⟵ 5
+  ~ npcs.alf_tanner.state.plan :: "with Shem, sit by Rigger's bed in the London; nobody takes him out (Tom's order)"
+  + npcs.rook_crew_a1.state.split :: "Shem stays at the London with Alf; Lenny back with Tom; Fitch at the yard"
+  ~ world_state.pending.rook_runners :: "done 22:00: YES (R6 ask) — eight more Rooks turned out at the yard, level 1–2, cudgels and knives; with Jacob, Tom, Davey, Lenny, Fitch: thirteen"
+  ~ npcs.jacob_frye.state.due :: A-1s Day 6 22:00 the Rooks arrived; A-1 when Kaylock comes, meets him at the cart gate
+  + npcs.rooks_reinforcements :: {name: "eight Rooks from the Ten Bells and the Brick Lane end", depth: 0, job: Rooks, belongs: [rooks], gender: men, character: "dockers, carters, a couple of lads", manner: "half drunk on the promise of beer", in_disorder: thrives, state: {position: "the Black Eagle cooperage yard, Brick Lane", due: "none (incidental)"}, capability: {overall_level: 1}}
+  ~ world_state.location :: cooperage_yard
+  ~ world_state.time :: Day 6 22:12, evening
+  + player.routines.tonight :: "two Rooks on the brewery wall watching Brick Lane both ways (Tom's suggestion, Jacob's yes)"
+GM-Δ 7 ⟵ 6
+  + world_state.pending.kaylock_attack :: {what: "Kaylock and twelve of the train crew (level 2; cudgels, two sledges, lanterns) come down Brick Lane to the cart gate", cause: "Kaylock's A-1 Day 6 22:30 move", due: Day 6 22:30}
+  ~ npcs.rexford_kaylock.state.position :: Brick Lane, outside the cooperage cart gate
+  ~ world_state.time :: Day 6 22:30, evening
+GM-Δ 8 ⟵ 7
+  + player.fighting_style.yard :: "hit them from both sides in the gate; nobody kills a man who drops his cudgel; if it turns, over the back wall into the brewery" (R8)
+  ~ npcs.rexford_kaylock.state.hp :: 0
+  ~ npcs.rexford_kaylock.state.status :: down in the cooperage cart gate, beaten by Tom Kell and a Rook (R8); helpless
+  + npcs.rexford_kaylock.condition.conditions.down :: {condition: "beaten down in the cart gate", source: body, effect: "down at 0 HP; untreated by 23:35 → survival roll"}
+  + world_state.pending.yard_fight :: "R8 Day 6 22:35: Kaylock's crew broke the cart gate and were caught between the Rooks; six Blighters down (Blighters 1, 4, 5, 6, 11 and Kaylock); when Kaylock fell the rest broke — four hurt ones yielded, three ran up Brick Lane"
+  + world_state.pending.blighters_fled_2 :: {what: "three Blighters run for the train: Kaylock down in the cooperage gate", cause: "they broke when Kaylock fell", due: Day 6 22:50}
+  ~ npcs.davey_shaw.state.hp :: 2
+  + npcs.rooks_reinforcements.state.hurt :: "Rook 3 down (HP 0); Rooks 1, 8, Fitch, Lenny badly hurt; the rest bruised"
+  ~ npcs.jacob_frye.state.due :: A-1 Day 6 22:40 walks to Kaylock with his blade out
+  ~ world_state.time :: Day 6 22:38, evening
+GM-Δ 9 ⟵ 8
+  ~ player.progression.state :: {level: 3, xp: 38}
+  + world_state.material_history.xp_the_cooperage_yard_taken_r3 :: XP paid for the cooperage yard taken (R3): 38 (paid late, R9 — GM slip)
+  ~ player.progression.state :: {level: 3, xp: 93}
+  + world_state.material_history.xp_kaylock_s_crew_beaten_at_the_cart_gate_r8 :: XP paid for Kaylock's crew beaten at the cart gate (R8): 55
+  + quests.tq_whitechapel.code_given :: A-1 (R1: Tom joined Jacob's raid without reservation — given late, R9, GM slip)
+  ~ quests.tq_whitechapel.status :: active
+  ~ npcs.rexford_kaylock.state.status :: dead — killed by Jacob Frye with a kukri in the cooperage cart gate, helpless, Day 6 22:40 (R9)
+  ~ npcs.rexford_kaylock.state.due :: none (dead)
+  - npcs.rexford_kaylock.condition.conditions.down :: dead
+  + world_state.material_history.r9_jacob_remark :: "NO, AND (R9 ask): Jacob told Tom off in front of the Rooks for arguing for Kaylock — a remark; no grievance, the relationship moves only on a material event"
+  ~ npcs.jacob_frye.state.due :: A-1s killed Kaylock; A-1 Day 7 morning takes Kaylock's train with the Rooks before the Blighters regroup
+  ~ locations.whitechapel.undercurrent.tension :: 3 (R9: Kaylock killed, a decisive act +2, lasting; Whitechapel's lieutenant dead)
+  + world_state.material_history.r9_kaylock :: "Day 6 22:40 Rexford Kaylock killed by Jacob Frye in the cooperage cart gate — not on his train as in the game"
+  ~ world_state.time :: Day 6 22:45, evening
+GM-Δ 10 ⟵ 9
+  ~ player.money.cash :: 11s (3s + 8s, Tom's share of half the £11 split among tonight's thirteen; Jacob's order)
+  + npcs.jacob_frye.state.carried.rooks_chest :: "£5 10s, half of Rigger's takings, for the Rooks' chest"
+  ~ world_state.pending.blighters_fled_2 :: "done 22:50: the three reached the train; with Kaylock dead the train crew argue about who leads; one goes to wire Starrick's office"
+  ~ npcs.crawford_starrick.state.due :: A-1 Day 7 morning hears by wire that Kaylock is dead and the first stronghold fell; orders his lieutenants to crush the new gang
+  + world_state.pending.blighter_prisoners :: "seven Blighters tied in the cooperage yard (three from R3, four from R8); Jacob means to turn them loose at dawn without their boots"
+  ~ npcs.davey_shaw.state.position :: the London Hospital (walked in with Tom)
+  ~ world_state.location :: london_hospital
+  ~ world_state.time :: Day 6 23:15, evening

@@ -1,0 +1,82 @@
+— exchange 1 —
+pc vs Rexford Kaylock — 2d10: 9+2 | Capability: +0 | Tool: +0 | Total: 11 | Difficulty: 9 | Success
+Damage: 1d8 (2) − soak 0 = 2 | Rexford Kaylock HP 11 → 9
+jacob_frye vs Blighter 1 — 2d10: 6+9 | Capability: +4 | Tool: +0 | Total: 19 | Difficulty: 9 | Success
+Damage: 1d8 (2) − soak 0 = 2 | Blighter 1 HP 11 → 9
+davey_shaw vs Blighter 2 — 2d10: 6+2 | Capability: +0 | Tool: +0 | Total: 8 | Difficulty: 9 | Failure
+Damage: 1d8 (3) − soak 0 = 3 | davey_shaw HP 12 → 9
+Lenny vs Blighter 3 — 2d10: 2+1 | Capability: +0 | Tool: +0 | Total: 3 | Difficulty: 9 | Failure
+Damage: 1d8 (5) − soak 0 = 5 | Lenny HP 10 → 5
+Fitch vs Blighter 4 — 2d10: 3+5 | Capability: +0 | Tool: +0 | Total: 8 | Difficulty: 9 | Failure
+Damage: 1d8 (7) − soak 0 = 7 | Fitch HP 10 → 3
+Rook 1 vs Blighter 5 — 2d10: 5+3 | Capability: +0 | Tool: +0 | Total: 8 | Difficulty: 9 | Failure
+Damage: 1d8 (3) − soak 0 = 3 | Rook 1 HP 6 → 3
+Rook 2 vs Blighter 6 — 2d10: 5+4 | Capability: +0 | Tool: +0 | Total: 9 | Difficulty: 9 | Success
+Damage: 1d6 (5) − soak 0 = 5 | Blighter 6 HP 9 → 4
+Rook 3 vs Blighter 7 — 2d10: 2+2 | Capability: +0 | Tool: +0 | Total: 4 | Difficulty: 9 | Failure
+Damage: 1d8 (7) − soak 0 = 7 | Rook 3 HP 10 → 3
+Rook 4 vs Blighter 8 — 2d10: 8+7 | Capability: +0 | Tool: +0 | Total: 15 | Difficulty: 9 | Success
+Damage: 1d6 (3) − soak 0 = 3 | Blighter 8 HP 11 → 8
+Rook 5 vs Blighter 9 — 2d10: 8+2 | Capability: +0 | Tool: +0 | Total: 10 | Difficulty: 9 | Success
+Damage: 1d6 (4) − soak 0 = 4 | Blighter 9 HP 12 → 8
+Rook 6 vs Blighter 10 — 2d10: 2+3 | Capability: +0 | Tool: +0 | Total: 5 | Difficulty: 9 | Failure
+Damage: 1d8 (1) − soak 0 = 1 | Rook 6 HP 10 → 9
+Rook 7 vs Blighter 11 — 2d10: 6+5 | Capability: +0 | Tool: +0 | Total: 11 | Difficulty: 9 | Success
+Damage: 1d6 (6) − soak 0 = 6 | Blighter 11 HP 11 → 5
+Rook 8 vs Blighter 12 — 2d10: 8+8 | Capability: +0 | Tool: +0 | Total: 16 | Difficulty: 9 | Success
+Damage: 1d6 (1) − soak 0 = 1 | Blighter 12 HP 12 → 11
+>>> PAUSE 1: Lenny is badly hurt; Fitch is badly hurt; Rook 3 is badly hurt; Blighter 11 is badly hurt
+— exchange 1 —
+pc vs Rexford Kaylock — 2d10: 9+4 | Capability: +0 | Tool: +0 | Total: 13 | Difficulty: 9 | Success
+Damage: 1d8 (3) − soak 0 = 3 | Rexford Kaylock HP 9 → 6
+jacob_frye vs Blighter 1 — 2d10: 7+10 | Capability: +4 | Tool: +0 | Total: 21 | Difficulty: 9 | Success
+Damage: 1d8 (7) − soak 0 = 7 | Blighter 1 HP 9 → 2
+davey_shaw vs Blighter 2 — 2d10: 6+2 | Capability: +0 | Tool: +0 | Total: 8 | Difficulty: 9 | Failure
+Damage: 1d8 (7) − soak 0 = 7 | davey_shaw HP 9 → 2
+Lenny vs Blighter 3 — 2d10: 4+10 | Capability: +0 | Tool: +0 | Total: 14 | Difficulty: 9 | Success
+Damage: 1d6 (5) − soak 0 = 5 | Blighter 3 HP 9 → 4
+Fitch vs Blighter 4 — 2d10: 6+10 | Capability: +0 | Tool: +0 | Total: 16 | Difficulty: 9 | Success
+Damage: 1d6 (4) − soak 0 = 4 | Blighter 4 HP 8 → 4
+Rook 1 vs Blighter 5 — 2d10: 6+3 | Capability: +0 | Tool: +0 | Total: 9 | Difficulty: 9 | Success
+Damage: 1d6 (6) − soak 0 = 6 | Blighter 5 HP 12 → 6
+Rook 2 vs Blighter 6 — 2d10: 3+5 | Capability: +0 | Tool: +0 | Total: 8 | Difficulty: 9 | Failure
+Damage: 1d8 (1) − soak 0 = 1 | Rook 2 HP 10 → 9
+Rook 3 vs Blighter 7 — 2d10: 4+6 | Capability: +0 | Tool: +0 | Total: 10 | Difficulty: 9 | Success
+Damage: 1d6 (4) − soak 0 = 4 | Blighter 7 HP 6 → 2
+Rook 4 vs Blighter 8 — 2d10: 6+1 | Capability: +0 | Tool: +0 | Total: 7 | Difficulty: 9 | Failure
+Damage: 1d8 (2) − soak 0 = 2 | Rook 4 HP 10 → 8
+Rook 5 vs Blighter 9 — 2d10: 7+6 | Capability: +0 | Tool: +0 | Total: 13 | Difficulty: 9 | Success
+Damage: 1d6 (1) − soak 0 = 1 | Blighter 9 HP 8 → 7
+Rook 6 vs Blighter 10 — 2d10: 10+7 | Capability: +0 | Tool: +0 | Total: 17 | Difficulty: 9 | Success
+Damage: 1d6 (1) − soak 0 = 1 | Blighter 10 HP 11 → 10
+Rook 7 vs Blighter 11 — 2d10: 3+9 | Capability: +0 | Tool: +0 | Total: 12 | Difficulty: 9 | Success
+Damage: 1d6 (6) − soak 0 = 6 | Blighter 11 HP 5 → 0 — down
+Rook 8 vs Rexford Kaylock — 2d10: 3+9 | Capability: -2 | Tool: +0 | Total: 10 | Difficulty: 9 | Success
+Damage: 1d6 (3) − soak 0 = 3 | Rexford Kaylock HP 6 → 3
+>>> PAUSE 2: Blighter 1 is badly hurt; davey_shaw is badly hurt; Blighter 5 is badly hurt; Blighter 11 falls
+— exchange 1 —
+pc vs Rexford Kaylock — 2d10: 9+7 | Capability: +0 | Tool: +0 | Total: 16 | Difficulty: 9 | Success
+Damage: 1d8 (1) − soak 0 = 1 | Rexford Kaylock HP 3 → 2
+jacob_frye vs Blighter 1 — 2d10: 3+5 | Capability: +4 | Tool: +0 | Total: 12 | Difficulty: 9 | Success
+Damage: 1d8 (6) − soak 0 = 6 | Blighter 1 HP 2 → 0 — down
+Lenny vs Blighter 3 — 2d10: 5+6 | Capability: +0 | Tool: +0 | Total: 11 | Difficulty: 9 | Success
+Damage: 1d6 (1) − soak 0 = 1 | Blighter 3 HP 4 → 3
+Fitch vs Blighter 4 — 2d10: 5+7 | Capability: +0 | Tool: +0 | Total: 12 | Difficulty: 9 | Success
+Damage: 1d6 (5) − soak 0 = 5 | Blighter 4 HP 4 → 0 — down
+Rook 1 vs Blighter 6 — 2d10: 4+6 | Capability: +0 | Tool: +0 | Total: 10 | Difficulty: 9 | Success
+Damage: 1d6 (5) − soak 0 = 5 | Blighter 6 HP 4 → 0 — down
+Rook 2 vs Blighter 8 — 2d10: 8+8 | Capability: +0 | Tool: +0 | Total: 16 | Difficulty: 9 | Success
+Damage: 1d6 (3) − soak 0 = 3 | Blighter 8 HP 8 → 5
+Rook 3 vs Blighter 9 — 2d10: 2+1 | Capability: +0 | Tool: +0 | Total: 3 | Difficulty: 9 | Failure
+Damage: 1d8 (7) − soak 0 = 7 | Rook 3 HP 3 → 0 — down
+Rook 4 vs Blighter 10 — 2d10: 8+4 | Capability: +0 | Tool: +0 | Total: 12 | Difficulty: 9 | Success
+Damage: 1d6 (6) − soak 0 = 6 | Blighter 10 HP 10 → 4
+Rook 5 vs Blighter 12 — 2d10: 4+9 | Capability: +0 | Tool: +0 | Total: 13 | Difficulty: 9 | Success
+Damage: 1d6 (5) − soak 0 = 5 | Blighter 12 HP 11 → 6
+Rook 6 vs Rexford Kaylock — 2d10: 10+2 | Capability: -2 | Tool: +0 | Total: 10 | Difficulty: 9 | Success
+Damage: 1d6 (4) − soak 0 = 4 | Rexford Kaylock HP 2 → 0 — down
+Rook 7 vs Blighter 5 — 2d10: 7+5 | Capability: +0 | Tool: +0 | Total: 12 | Difficulty: 9 | Success
+Damage: 1d6 (6) − soak 0 = 6 | Blighter 5 HP 6 → 0 — down
+Rook 8 vs Blighter 9 — 2d10: 8+1 | Capability: +0 | Tool: +0 | Total: 9 | Difficulty: 9 | Success
+Damage: 1d6 (6) − soak 0 = 6 | Blighter 9 HP 7 → 1
+>>> PAUSE 1: Blighter 1 falls; Blighter 4 falls; Blighter 6 falls; Rook 3 goes down; Blighter 10 is badly hurt; Rexford Kaylock falls; their leader Rexford Kaylock falls; Blighter 5 falls; Blighter 9 is badly hurt

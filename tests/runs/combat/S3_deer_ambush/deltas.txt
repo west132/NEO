@@ -1,0 +1,96 @@
+GM-Δ 0
+  ~ player.identity.name :: Sam West
+  ~ player.identity.age :: 26 (born January 2000)
+  ~ player.identity.origin :: United States; recruited after three years as a patrol officer in Columbus, Ohio
+  ~ player.appearance :: tall, lean, short black hair, a police-academy posture he hasn't shaken
+  ~ player.gender :: man
+  ~ player.equipment.west_sidearm.name :: Glock 19 he calls "Patience"
+  ~ player.item_points.current :: 60
+  ~ player.item_points.max :: 60
+  ~ player.condition.hp :: 12
+  ~ npcs.rosa_delgado.state.due :: A-1s Day 1 08:30 met West (test fixture: done); A-1s Day 5 first real assignment (test fixture: done)
+  ~ npcs.commander_lindqvist.state.due :: A-1s Day 1 10:00 welcome talk (test fixture: done); Day 75 transfer decision
+  ~ npcs.gus_pembroke.state.due :: Day 16 morning fixes the Omega-99 office door and tells West a story about it
+  ~ npcs.leo_brandt.state.due :: Ls Day 3 a late-night call (West slept through it — test fixture); L Day 12 skips cards night; L Day 29 copies the list if not helped
+  ~ npcs.dmitri_volkov.state.due :: none (incidental; sparring done — test fixture)
+  ~ npcs.priya_raman.state.due :: none (incidental; showed West the van — test fixture)
+  ~ npcs.tomas_reyes_hart.state.due :: none (incidental; report template given — test fixture)
+  ~ quests.probation.status :: active
+  ~ quests.orientation_week.status :: succeeded (test fixture: the first week done)
+  ~ quests.buck_stops_here.status :: active (test fixture: Rosa assigned it Day 11; code K given; K-1 scouts and road watch under way)
+  ~ npcs.stag_coordinator.state.due :: Day 10 visited the new cell (test fixture: done); Day 15 evening next visit (cycle every 5 days)
+  ~ active_world_pressures.stag_network.track.pine_barrens.due :: Day 15
+  + active_world_pressures.stag_network.state.marks :: "Day 10 check advanced once (test fixture): pine barrens undercurrent tension −1"
+  ~ locations.pine_barrens.undercurrent.tension :: -1
+  ~ npcs.stag_cell_leader_east.state.due :: K-2 Day 12 18:15 his cell hits the Route 9 corridor at the evening rush
+  ~ npcs.rosa_delgado.state.position :: New Jersey pine barrens near Cedar Run
+  ~ npcs.rosa_delgado.state.due :: K Day 12 evening road watch on Route 9 with the NJ team; A Day 20 next assignment
+  + npcs.marisol_vega :: {depth: 1, name: "Agent Marisol Vega", job: "Foundation New Jersey team lead", belongs: [foundation, foundation_nj_team], gender: woman, character: "dry, tired of deer, by-the-book on Ethics rules", voice: "flat Jersey deadpan", drives: {want: "the network broken with no civilian hurt", fear: "an Ethics Committee review"}, in_disorder: suffers, state: {position: "New Jersey pine barrens near Cedar Run", plan: "K-1 road watch on the Route 9 corridor at the evening rush; tranquillise and capture, kill only an attacker about to hit a car", due: "K-1 Day 12 17:30 road watch on Route 9"}, capability: {overall_level: 5, skills: {firearms: T2, field_investigation: T2}}}
+  + player.equipment.vest :: {item_id: vest, name: "issued soft vest", type: t1_vest, capability_domain: none, condition: serviceable, tier: T1, special_properties: ["light armour, soak 1"]}
+  + player.equipment.tranq_rifle :: {item_id: tranq_rifle, name: "issued tranquilliser rifle, six darts", type: t1_tranq_rifle, capability_domain: firearms, condition: serviceable, tier: T1, special_properties: ["sedates living targets by dose and size, not by HP; a deer drops in about a minute"]}
+  ~ world_state.location :: pine_barrens
+  ~ world_state.time :: {season: early spring, day_index: 12, date: '2026-03-13', clock_minutes: 1035, daypart: afternoon, precision: exact}
+GM-Δ 1 ⟵ 0
+  + player.routines.road_watch :: "posted at the Cedar Run curve on Route 9 with Rosa, tranquilliser rifle, radio to Vega (R1)"
+  ~ npcs.marisol_vega.state.due :: K-1s Day 12 17:30 road watch posted; K-1 Day 12 21:00 ends the watch
+  + locations.cedar_run_curve :: {name: "the Cedar Run curve, Route 9", zone: pine_barrens, conditions: {features: ["a two-lane highway bending through pines", "a sand pull-off", "evening rush traffic both ways", "a deer crossing sign full of buckshot"]}, challenge_band: {min: 3, max: 6, basis: "coordinated deer attacks on cars"}}
+  ~ world_state.location :: cedar_run_curve
+  ~ world_state.time :: Day 12 17:45, afternoon
+  ~ player.skills.field_investigation.evidence :: 1
+  ~ player.growth_period.credited :: [field_investigation]
+GM-Δ 2 ⟵ 1
+  + locked_case_truths.stag_case.state.tonight :: "R2 the cell at the Cedar Run curve: two scout does on the far shoulder watching traffic; in the pines behind them Twelve-Point and five attacker bucks, waiting for the scouts' signal at the 18:15 rush peak"
+  + npcs.stag_cell_east_attackers :: {depth: 0, name: "five SCP-4968-B attacker bucks", job: "the cell's rammers", belongs: [scp_4968_c], gender: male, character: "commit and rarely survive", manner: "stand too still in the trees", in_disorder: thrives, state: {position: "New Jersey pine barrens near Cedar Run", due: "K-2 Day 12 18:15 with Twelve-Point"}, capability: {overall_level: 2}}
+  + npcs.stag_cell_east_scouts :: {depth: 0, name: "two scout does", job: "the cell's road watch", belongs: [scp_4968_c], gender: female, character: "flee and warn", manner: "heads up, ears turning to every engine", in_disorder: thrives, state: {position: "New Jersey pine barrens near Cedar Run", due: "K-1 Day 12 18:15 signal the rush"}, capability: {overall_level: 1}}
+  + player.knowledge.facts.cell :: "R2 through the scope: two does on the far shoulder watching cars, not grass; behind them in the pines a big twelve-point buck and five more bucks standing dead still"
+  ~ world_state.time :: Day 12 18:05, evening
+GM-Δ 3 ⟵ 2
+  ~ player.equipment.tranq_rifle.special_properties :: ["sedates living targets by dose and size, not by HP; a deer drops in about a minute", "five darts left (R3: one missed)"]
+  ~ npcs.stag_cell_leader_east.state.due :: K-2f Day 12 18:15 the Route 9 hit (called off: seen and shot at, R3); K-2 Day 12 18:30 leads the cell back through the pines toward the bogs
+  ~ npcs.stag_cell_leader_east.state.plan :: "withdraw the cell to the bogs; move the attack corridor away from the Cedar Run curve"
+  + world_state.pending.network_warned :: {what: "NO, AND (R3): the scouts carry it back — the network learns the Cedar Run curve is watched; the coordinator will move the next attack corridor", cause: "the missed dart", due: Day 15 evening}
+  ~ npcs.rosa_delgado.state.plan :: "K flashers on the pull-off; traffic slowed to a crawl past the curve"
+  ~ world_state.time :: Day 12 18:08, evening
+GM-Δ 4 ⟵ 3
+  + npcs.nj_agents :: {depth: 0, name: "Hollis and Diaz, Foundation NJ team", job: field agents, belongs: [foundation, foundation_nj_team], gender: men, character: "Jersey locals, deer-weary", manner: "chew gum, swear at pines", in_disorder: suffers, state: {position: "New Jersey pine barrens near Cedar Run", due: "none (incidental)"}, capability: {overall_level: 3, skills: {firearms: T1}}, carried: "pistols and one tranquilliser rifle between them"}
+  ~ npcs.marisol_vega.state.plan :: "K-2 follow the retreat with West, Delgado, Hollis and Diaz; capture where she can; she stays on the road with the van"
+  ~ player.condition.hp :: 7
+  + world_state.pending.pines_ambush :: "R4 18:40: the track went cold in a stand of scrub oak; three attacker bucks came out of the dark at the pursuers; one hit West in the side (HP 12 → 7)"
+  ~ npcs.stag_cell_east_attackers.state.due :: K-2 Day 12 18:40 three turn on the pursuers in the scrub oak to cover the cell's retreat
+  ~ world_state.time :: Day 12 18:40, evening
+GM-Δ 5 ⟵ 4
+  + player.fighting_style.deer :: "they're trying to kill us: pistols, shoot to stop them (R5)"
+  ~ player.condition.hp :: 2
+  + player.condition.conditions.ribs :: {condition: "cracked ribs from a buck's head", source: body, effect: "hard to breathe; harder to run, climb or aim steady"}
+  + world_state.pending.pines_fight :: "R5 18:41 first exchange in the scrub oak: West hit again (HP 2); Rosa and Hollis hit two bucks hard; Diaz knocked down and up again (HP 9)"
+  ~ world_state.time :: Day 12 18:41, evening
+GM-Δ 6 ⟵ 5
+  + world_state.pending.pines_fight_end :: "R6 18:43: Rosa shot the buck off West; West rolled clear and stayed down; Rosa, Hollis and Diaz put all three attacker bucks down (HP 0) in two more exchanges"
+  ~ npcs.stag_cell_east_attackers.state.status :: "three of five down in the scrub oak (HP 0, alive); two went on with Twelve-Point to the bogs"
+  ~ npcs.stag_cell_east_attackers.state.due :: K-2 when the cell regroups at the bogs, the two left rejoin Twelve-Point
+  ~ npcs.rosa_delgado.state.plan :: "K get West out of the pines; capture the three downed bucks alive for Vega"
+  ~ player.progression.state :: {level: 2, xp: 32}
+  + world_state.material_history.xp_the_three_attacker_bucks_beaten_in_the_scrub_oak_r5_r6 :: XP paid for the three attacker bucks beaten in the scrub oak (R5–R6): 32
+  ~ world_state.time :: Day 12 18:45, evening
+GM-Δ 7 ⟵ 6
+  ~ npcs.stag_cell_east_attackers.state.status :: "three captured alive (R7): darted while down, wounds packed by Hollis and Diaz from the field kits (treatment — stabilised), legs hobbled; two still free with Twelve-Point"
+  ~ player.equipment.tranq_rifle.special_properties :: ["sedates living targets by dose and size, not by HP", "two darts left (R7: three into the downed bucks)"]
+  ~ world_state.time :: Day 12 19:05, evening
+GM-Δ 8 ⟵ 7
+  ~ npcs.marisol_vega.state.due :: K-1s road watch; K-2p Day 12 19:40 took the three captured bucks into the van (the cell leader and two attackers escaped to the bogs); K-3 Day 15 evening watches the network's next corridor
+  + npcs.marisol_vega.relationships.pc :: {tie: "Omega-99's rookie on loan", attitude: "approving, dry", credit: ["spotted the cell before the rush (R2)", "chose to stop shooting and bring them in alive (R7)"]}
+  ~ quests.buck_stops_here.parts.cell_leader.status :: partly (R8: the Cedar Run corridor broken, three attackers captured; Twelve-Point escaped) → shown as K-2p
+  ~ world_state.time :: Day 12 19:40, evening
+GM-Δ 9 ⟵ 8
+  ~ player.condition.hp :: 8 (R9: Vega's medic kit, minor healing 2d6 = 6)
+  ~ player.condition.conditions.ribs :: {condition: "two cracked ribs, strapped by Vega's medic", source: body, effect: "hard to breathe; harder to run, climb or aim steady; heals in about a week with rest"}
+  + world_state.pending.incident_report :: "R9 Vega's incident report: three SCP-4968-B captured alive, two agents hurt, no civilian contact; Ethics will read the shoot decision"
+  ~ world_state.time :: Day 12 20:30, evening
+GM-Δ 10 ⟵ 9
+  ~ player.condition.hp :: 12 (a night's rest at the Cedar Run motel, paid by the Foundation)
+  ~ player.condition.last_rest :: Day 12 night, the Cedar Run motel (good rest: paid lodging)
+  ~ player.growth_period :: {opened: 13, credited: []} (growth boundary: field_investigation evidence 1 — no tier change)
+  ~ world_state.location :: pine_barrens
+  ~ world_state.time :: Day 13 07:00, morning
+  ~ npcs.leo_brandt.state.due :: Ls Day 3 a late-night call; Ls Day 12 skipped cards night (West away in New Jersey; nobody noticed); L Day 29 copies the list if not helped
+  + world_state.material_history.r10_night :: "R10 the night at the motel: a ranger stopped a bogged car on the sand road at midnight (the ordinary encounter; it passed West by); nerve day marks for Day 12: a day of fear −1 and a good rest +1 → no change"

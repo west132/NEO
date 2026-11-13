@@ -1,0 +1,28 @@
+— exchange 1 —
+pc vs Rexford Kaylock — 2d10: 6+6 | Capability: +0 | Tool: +0 | Total: 12 | Difficulty: 9 | Success
+Damage: 1d8 (5) − soak 0 = 5 | Rexford Kaylock HP 16 → 11
+jacob_frye vs Blighter 1 — 2d10: 6+8 | Capability: +4 | Tool: +0 | Total: 18 | Difficulty: 9 | Success
+Damage: 1d8 (1) − soak 0 = 1 | Blighter 1 HP 12 → 11
+davey_shaw vs Blighter 2 — 2d10: 6+8 | Capability: +0 | Tool: +0 | Total: 14 | Difficulty: 9 | Success
+Damage: 1d6 (2) − soak 0 = 2 | Blighter 2 HP 12 → 10
+Lenny vs Blighter 3 — 2d10: 8+8 | Capability: +0 | Tool: +0 | Total: 16 | Difficulty: 9 | Success
+Damage: 1d6 (3) − soak 0 = 3 | Blighter 3 HP 12 → 9
+Fitch vs Blighter 4 — 2d10: 5+4 | Capability: +0 | Tool: +0 | Total: 9 | Difficulty: 9 | Success
+Damage: 1d6 (4) − soak 0 = 4 | Blighter 4 HP 12 → 8
+Rook 1 vs Blighter 5 — 2d10: 6+2 | Capability: +0 | Tool: +0 | Total: 8 | Difficulty: 9 | Failure
+Damage: 1d8 (4) − soak 0 = 4 | Rook 1 HP 10 → 6
+Rook 2 vs Blighter 6 — 2d10: 5+8 | Capability: +0 | Tool: +0 | Total: 13 | Difficulty: 9 | Success
+Damage: 1d6 (3) − soak 0 = 3 | Blighter 6 HP 12 → 9
+Rook 3 vs Blighter 7 — 2d10: 8+4 | Capability: +0 | Tool: +0 | Total: 12 | Difficulty: 9 | Success
+Damage: 1d6 (6) − soak 0 = 6 | Blighter 7 HP 12 → 6
+Rook 4 vs Blighter 8 — 2d10: 10+9 | Capability: +0 | Tool: +0 | Total: 19 | Difficulty: 9 | Success
+Damage: 1d6 (1) − soak 0 = 1 | Blighter 8 HP 12 → 11
+Rook 5 vs Blighter 9 — 2d10: 2+2 | Capability: +0 | Tool: +0 | Total: 4 | Difficulty: 9 | Failure
+Damage: 1d8 (3) − soak 0 = 3 | Rook 5 HP 10 → 7
+Rook 6 vs Blighter 10 — 2d10: 10+5 | Capability: +0 | Tool: +0 | Total: 15 | Difficulty: 9 | Success
+Damage: 1d6 (1) − soak 0 = 1 | Blighter 10 HP 12 → 11
+Rook 7 vs Blighter 11 — 2d10: 5+10 | Capability: +0 | Tool: +0 | Total: 15 | Difficulty: 9 | Success
+Damage: 1d6 (1) − soak 0 = 1 | Blighter 11 HP 12 → 11
+Rook 8 vs Blighter 12 — 2d10: 3+3 | Capability: +0 | Tool: +0 | Total: 6 | Difficulty: 9 | Failure
+Damage: 1d8 (5) − soak 0 = 5 | Rook 8 HP 10 → 5
+{"paused": "Blighter 7 is badly hurt; Rook 8 is badly hurt", "exchanges": 1, "fight_over": false, "side": [{"name": "pc", "hp": 14, "max": 14, "state": "standing"}, {"name": "jacob_frye", "hp": 22, "max": 22, "state": "standing"}, {"name": "davey_shaw", "hp": 12, "max": 12, "state": "standing"}, {"name": "Lenny", "hp": 10, "max": 10, "state": "standing"}, {"name": "Fitch", "hp": 10, "max": 10, "state": "standing"}, {"name": "Rook 1", "hp": 6, "max": 10, "state": "standing"}, {"name": "Rook 2", "hp": 10, "max": 10, "state": "standing"}, {"name": "Rook 3", "hp": 10, "max": 10, "state": "standing"}, {"name": "Rook 4", "hp": 10, "max": 10, "state": "standing"}, {"name": "Rook 5", "hp": 7, "max": 10, "state": "standing"}, {"name": "Rook 6", "hp": 10, "max": 10, "state": "standing"}, {"name": "Rook 7", "hp": 10, "max": 10, "state": "standing"}, {"name": "Rook 8", "hp": 5, "max": 10, "state": "standing"}], "opponents": [{"name": "Rexford Kaylock", "hp": 11, "max": 16, "state": "standing"}, {"name": "Blighter 1", "hp": 11, "max": 12, "state": "standing"}, {"name": "Blighter 2", "hp": 10, "max": 12, "state": "standing"}, {"name": "Blighter 3", "hp": 9, "max": 12, "state": "standing"}, {"name": "Blighter 4", "hp": 8, "max": 12, "state": "standing"}, {"name": "Blighter 5", "hp": 12, "max": 12, "state": "standing"}, {"name": "Blighter 6", "hp": 9, "max": 12, "state": "standing"}, {"name": "Blighter 7", "hp": 6, "max": 12, "state": "standing"}, {"name": "Blighter 8", "hp": 11, "max": 12, 

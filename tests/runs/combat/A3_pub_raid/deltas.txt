@@ -1,0 +1,155 @@
+GM-Δ 0
+  ~ player.identity.name :: Tom Kell
+  ~ player.identity.age :: 24
+  ~ player.identity.origin :: Whitechapel born; docker's son; worked the London Docks from fourteen
+  ~ player.identity.history :: ran with the Clinkers, a small Whitechapel gang; went Rook on Day 3 when Jacob Frye took the Clinkers' pub
+  ~ player.appearance :: broad, broken nose, red scarf of the Rooks, docker's hands
+  ~ player.archetype :: Rook
+  ~ player.job :: Rook enforcer
+  ~ player.belongs :: [rooks]
+  ~ player.gender :: man
+  - player.skills.[ROLE skills from the role table] :: role set at Round 0
+  + player.skills.brawling :: {class: NORMAL, tier: T2, evidence: 0, class_source: the docks and the Clinkers, abilities: []}
+  + player.skills.streetwise :: {class: NORMAL, tier: T2, evidence: 0, class_source: Whitechapel born, abilities: []}
+  + player.skills.blades :: {class: NORMAL, tier: T1, evidence: 0, class_source: street fighting, abilities: []}
+  ~ player.traits :: [gang name on the street — "Kell of the Rooks"]
+  ~ player.expertise.established :: [Whitechapel streets, pubs and fences, the docks]
+  ~ player.expertise.limitations :: [no Assassin training, no letters beyond his name]
+  ~ player.condition.hp :: 14
+  - player.equipment.r0_01 :: role gear replaces the placeholder
+  + player.equipment.knuckle_duster :: {"name": "knuckle-duster", "type": "light weapon", "capability_domain": "brawling", "condition": "serviceable", "tier": "T1"}
+  + player.equipment.cane :: {"name": "weighted cane", "type": "one-handed weapon", "capability_domain": "brawling", "condition": "worn", "tier": "T1"}
+  + player.equipment.cosh :: {"name": "leather cosh", "type": "light weapon", "capability_domain": "brawling", "condition": "serviceable", "tier": "T1"}
+  ~ player.money.cash :: 3s
+  ~ player.item_points :: {rank: commoner, basis: a Rook's share and docker's pay, current: 40, max: 40}
+  ~ player.knowledge.facts.role :: Jacob Frye runs the Rooks now; the Blighters want the Ten Bells back
+  + player.knowledge.facts.clara :: knows Clara O'Dea by sight — the urchin girl who sees everything
+  ~ npcs.henry_green.state.due :: A-1s Day 1 morning meets the twins at his shop (test fixture: done)
+  ~ npcs.evie_frye.state.due :: A-3s Day 2 morning starts Henry's records (test fixture: done); A-3 when beat_2 opens, the Kenway mansion
+  ~ npcs.jacob_frye.state.due :: A-1s Day 3 evening took over the Clinkers at the Ten Bells (test fixture: done)
+  + locations.ten_bells :: {"name": "the Ten Bells", "zone": "whitechapel", "conditions": {"features": ["the Rooks' pub since Day 3", "a long bar", "a back yard to the alley"]}, "challenge_band": {"min": 1, "max": 3, "basis": "a gang pub"}}
+  ~ npcs.frederick_abberline.state.due :: A-1s Day 4 morning posted bounties (test fixture: done); A-1 when a bounty is brought in, pays it
+  ~ npcs.clara_odea.state.due :: Bs Day 5 afternoon sent a runner to Jacob (test fixture: done); B when the Rooks answer, shows them the mill
+  ~ npcs.jacob_frye.state.position :: Whitechapel rail yards
+  + npcs.jacob_frye.state.plan.next :: A-1 scouting Kaylock's rail-yard stronghold with Evie tonight
+  ~ npcs.jacob_frye.state.due :: A-1 Day 8 evening hits the Blighters' rail-yard stronghold with every Rook he can find
+  ~ world_state.time :: {season: winter, day_index: 7, date: Day 7 (February 1868), clock_minutes: 1080, daypart: evening, precision: exact}
+  ~ world_state.location :: ten_bells
+GM-Δ 1 ⟵ 0
+  + npcs.alf_tanner :: {"depth": 1, "name": "Big Alf Tanner", "job": "Rook, ex-Clinker", "belongs": ["rooks"], "gender": "man", "character": "slow-talking, steady, likes Tom", "voice": "few words, all of them flat", "drives": {"want": "his share and a quiet pint", "fear": "the workhouse for his mum"}, "in_disorder": "thrives", "state": {"position": "the Ten Bells"}, "capability": {"overall_level": 2, "skills": {"brawling": "T1"}}}
+  + npcs.mick_doyle :: {"depth": 1, "name": "Mick Doyle", "job": "Rook, the youngest", "belongs": ["rooks"], "gender": "man", "character": "17, quick, eager, scared and hiding it", "voice": "too loud, too fast", "drives": {"want": "to be somebody in the Rooks", "fear": "being thought a coward"}, "in_disorder": "thrives", "state": {"position": "the Ten Bells"}, "capability": {"overall_level": 1, "skills": {"brawling": "T1"}}}
+  + npcs.davey_shaw :: {"depth": 1, "name": "Davey Shaw", "job": "Rook, ex-Clinker", "belongs": ["rooks"], "gender": "man", "character": "wiry, mean-tempered, good with a knife", "voice": "sneers and swears", "drives": {"want": "Blighter blood for his brother's broken arm", "fear": "Kaylock's hammer men"}, "in_disorder": "thrives", "state": {"position": "the Ten Bells"}, "capability": {"overall_level": 2, "skills": {"blades": "T1", "brawling": "T1"}}}
+  + npcs.sal_pruitt :: {"depth": 1, "name": "Sal Pruitt", "job": "landlady of the Ten Bells", "belongs": ["independent"], "gender": "woman", "character": "tough, practical; loyal to whoever keeps her windows in", "voice": "barmaid's patter over a hard edge", "drives": {"want": "her pub standing", "fear": "a fire"}, "in_disorder": "suffers", "state": {"position": "the Ten Bells"}}
+  + npcs.alf_tanner.knowledge.facts.orders :: Jacob's orders: hold the Ten Bells tonight, nobody goes looking for trouble; he and Evie are at the rail yards
+  ~ world_state.time :: Day 7 18:15, evening
+GM-Δ 2 ⟵ 1
+  + npcs.mick_doyle.state.plan :: lookout under the lamp at the Commercial Street corner; whistle and run back at green coats (Tom's order, R2)
+  ~ npcs.mick_doyle.state.position :: Whitechapel, Commercial Street corner by the Ten Bells
+  + player.routines.tonight :: hold the Ten Bells; tables ready to stack by the front door (R2)
+  ~ world_state.time :: Day 7 18:25, evening
+  ~ npcs.henry_green.state.due :: A-3 Day 8 morning works through Ethan Frye's notes with Evie at his shop
+  + npcs.nobby_crane :: {"depth": 1, "name": "Nobby Crane", "job": "Blighter crew boss under Kaylock", "belongs": ["blighters"], "gender": "man", "character": "big, loud, proud of his hammer", "voice": "bellows; calls everyone \"my son\"", "drives": {"want": "the Ten Bells back by morning for Kaylock", "fear": "going back to the train empty-handed"}, "in_disorder": "thrives", "state": {"position": "Whitechapel", "plan": "A-1 break the Ten Bells: windows, bar, any Rook in it"}, "capability": {"overall_level": 3, "skills": {"brawling": "T2"}}}
+  + world_state.pending.ten_bells_raid :: {what: "Nobby Crane and seven Blighters (level 2: two sledgehammers, five cudgels) march on the Ten Bells", cause: "Kaylock's A-1 Day 7 night order", due: Day 7 21:00}
+  ~ npcs.rexford_kaylock.state.due :: A-1s Day 7 night his men start breaking Rook pubs (sent Nobby Crane's crew to the Ten Bells); A-1 Day 8 morning hears how it went on his train
+  ~ world_state.time :: Day 7 21:00, night
+GM-Δ 3 ⟵ 2
+  + player.fighting_style.tonight :: "nobody dies for a pub" — if two of us go down or it goes bad, out the back and down the alley (R3)
+  ~ world_state.environment.town :: the Ten Bells' front windows smashed; the bar mirror broken
+  + npcs.nobby_crane.state.tactics :: windows first, sledges on the door; NO, BUT: no men sent round the back at first, one sent when the door held (R3 ask)
+  + world_state.pending.blighter_sledge_1 :: down in the Ten Bells doorway, HP 0 (R3)
+  + world_state.pending.blighter_sledge_2 :: hurt, HP 1, pulled back by his mates (R3)
+  ~ world_state.time :: Day 7 21:03, night
+  ~ npcs.nobby_crane.state.hp :: 4
+  + npcs.nobby_crane.condition.conditions.split_scalp :: {"condition": "scalp split by a cane", "source": "body", "effect": "blood in his eyes: harder to see in a fight"}
+  ~ npcs.alf_tanner.state.hp :: 4
+  + npcs.alf_tanner.condition.conditions.cracked_ribs :: {"condition": "cracked ribs from a cudgel", "source": "body", "effect": "harder to fight, lift or run"}
+  ~ npcs.davey_shaw.state.hp :: 0
+  + npcs.davey_shaw.condition.conditions.skull :: {"condition": "cudgel to the head", "source": "body", "effect": "down and unconscious; untreated for an hour → survival roll"}
+  + world_state.pending.blighter_back :: the Blighter sent round the back, down in the back passage, HP 0 (Davey's knife)
+  + world_state.pending.blighter_cudgel_1 :: HP 6 (R3)
+  ~ player.condition.hp :: 13
+  ~ world_state.time :: Day 7 21:05, night
+GM-Δ 4 ⟵ 3
+  + world_state.material_history.r4_ten_bells_lost :: R4 Day 7 21:06 the Rooks gave up the Ten Bells to Nobby Crane's crew and went out the back carrying Davey Shaw
+  ~ npcs.nobby_crane.state.position :: the Ten Bells
+  ~ npcs.nobby_crane.state.plan :: A-1 hold the Ten Bells for Kaylock tonight; break what's left of the bar; Sal pays the Blighters from now
+  ~ npcs.sal_pruitt.state.position :: Whitechapel, her sister's on Flower and Dean Street (fled out the back)
+  ~ npcs.davey_shaw.state.position :: carried by Tom and Mick through the alley
+  ~ npcs.alf_tanner.state.position :: with Tom
+  ~ npcs.mick_doyle.state.position :: with Tom
+  ~ world_state.location :: whitechapel
+  ~ world_state.time :: Day 7 21:08, night
+GM-Δ 5 ⟵ 4
+  + locations.london_hospital :: {"name": "the London Hospital, Whitechapel Road", "zone": "whitechapel", "conditions": {"features": ["a night porter's lodge", "the accident ward", "house surgeons on night duty"]}, "challenge_band": {"min": 0, "max": 1, "basis": "a charity hospital"}}
+  ~ npcs.davey_shaw.state.position :: the London Hospital, accident ward
+  ~ npcs.davey_shaw.condition.conditions.skull :: {"condition": "cracked skull", "source": "body", "effect": "stabilised by the house surgeon; in hospital at least a week; no fighting"}
+  + npcs.ezra_watts :: {"depth": 0, "name": "Ezra Watts", "job": "night porter, London Hospital", "belongs": ["independent"], "gender": "man", "character": "tired, careful, seen it all", "manner": "asks the questions he's paid to and writes the answers down", "in_disorder": "suffers", "state": {"position": "the London Hospital"}}
+  + world_state.pending.porter_report :: {what: "the porter's book records a man brought in beaten about the head by friends Tom Kell and Alfred Tanner; the book goes to the police on the morning round", cause: "hospital practice with assault cases", due: Day 8 morning}
+  ~ npcs.alf_tanner.condition.conditions.cracked_ribs :: {"condition": "cracked ribs", "source": "body", "effect": "strapped; harder to fight, lift or run for about a week"}
+  ~ npcs.alf_tanner.state.position :: the London Hospital
+  ~ npcs.mick_doyle.state.position :: the London Hospital
+  ~ world_state.location :: london_hospital
+  ~ world_state.time :: Day 7 21:25, evening
+GM-Δ 6 ⟵ 5
+  ~ npcs.mick_doyle.state.position :: Whitechapel rail yards
+  ~ npcs.mick_doyle.state.plan :: find Jacob at the rail yards; tell him the Ten Bells is lost and Davey is in the London
+  + world_state.pending.mick_finds_evie :: {what: "NO, BUT (R6 ask): Mick misses Jacob in the fog; finds Evie Frye at the yard gate near midnight and tells her", cause: "Mick's search", due: Day 7 23:40}
+  ~ npcs.alf_tanner.state.plan :: stays by Davey's bed at the London
+  + player.knowledge.facts.ten_bells_now :: R6 Nobby Crane, head bandaged, holds the Ten Bells with four Blighters drinking at the broken bar; one on the door; two carried the sledge man and the back-passage man off toward the rail yards; a runner went the same way
+  + world_state.pending.nobby_runner :: {what: "Nobby's runner reaches Kaylock's train with the news: the pub taken, two of his men down, a Rook called Kell with a cane", cause: "Nobby's report", due: Day 7 22:15}
+  ~ npcs.rexford_kaylock.state.due :: A-1 Day 7 22:15 hears from Nobby's runner that the Ten Bells is taken
+  + npcs.nobby_crane.knowledge.facts.kell :: the Rook who split his scalp with a cane was Tom Kell — "Kell of the Rooks" is known by sight on the street (R4)
+  ~ world_state.location :: whitechapel
+  ~ world_state.time :: Day 7 22:00, evening
+GM-Δ 7 ⟵ 6
+  ~ player.knowledge.facts.ten_bells_now :: corrected R7: Nobby (head bandaged) and one Blighter with a hurt hand hold the Ten Bells; the Blighter Davey knifed was carried out, not walking (down, HP 0); four walked north carrying the two downed men, a runner ahead
+  + continuity_status.corrected.r6 :: "R6 narration had the knifed Blighter hopping at HP 0 and five Blighters left in the pub; fixed: he was carried; two left in the pub (GM §7.4)"
+  + world_state.pending.ten_bells_doorman :: down in the Ten Bells doorway, HP 0 (R7, Tom's cane)
+  ~ npcs.nobby_crane.state.hp :: 1
+  ~ npcs.nobby_crane.state.status :: beaten in the back passage of the Ten Bells; yielded to Tom Kell (R7)
+  ~ npcs.nobby_crane.state.position :: the Ten Bells
+  ~ npcs.nobby_crane.state.plan :: "stay alive; get word to Kaylock; blame the Rooks' numbers"
+  + npcs.nobby_crane.relationships.pc.grievance.r7_beaten :: beaten twice by Tom Kell in one night, in front of his own men (R4, R7)
+  ~ player.skills.brawling.evidence :: 1
+  ~ player.growth_period.credited :: [brawling]
+  + world_state.pending.carriers_return :: {what: "three Blighters and the sledge man with 1 HP come back from the train to hold the Ten Bells as Nobby ordered", cause: "Nobby's plan to hold the pub tonight", due: Day 7 23:00}
+  ~ world_state.location :: ten_bells
+  ~ world_state.time :: Day 7 22:04, evening
+  ~ npcs.nobby_crane.state.due :: A-1 when he is free or a Blighter finds him, tells Kaylock it was Kell
+GM-Δ 8 ⟵ 7
+  ~ npcs.rexford_kaylock.state.due :: A-1s Day 7 22:15 heard from Nobby's runner that the Ten Bells is taken; A-1 Day 8 morning doubles protection on every Whitechapel street and sends men to find the Rooks' new pubs
+  + npcs.rexford_kaylock.knowledge.facts.ten_bells :: the Ten Bells taken back for him by Nobby, two men down, a Rook called Kell with a cane (runner, 22:15; he doesn't know Kell retook it)
+  ~ world_state.pending.nobby_runner :: "done: the runner reached the train at 22:15"
+  + npcs.ten_bells_doorman :: {"depth": 0, "name": "unknown Blighter (the Ten Bells doorman)", "job": "Blighter", "belongs": ["blighters"], "gender": "man", "character": "a hired cudgel", "manner": "out cold", "in_disorder": "thrives", "state": {"position": "the Ten Bells", "hp": 0, "status": "down, tied with his own belt"}}
+  - world_state.pending.ten_bells_doorman :: now a record of his own (npcs.ten_bells_doorman)
+  ~ npcs.nobby_crane.state.position :: Whitechapel police station (Leman Street)
+  ~ npcs.nobby_crane.state.status :: in the cells, charged by Sergeant Abberline on his bounty notice; HP 1
+  + player.knowledge.facts.bounties :: Abberline's notice on the station board since Day 4 names Blighter men, Nobby Crane among them at 10s
+  ~ player.money.cash :: 13s (3s + Abberline's 10s bounty on Nobby Crane)
+  ~ npcs.frederick_abberline.state.due :: A-1s paid Tom Kell's bounty on Nobby Crane (R8); A-1 when a bounty is brought in, pays it
+  + npcs.frederick_abberline.relationships.pc :: {"tie": "a Rook who brought in a bounty", "attitude": "wary, interested", "credit": ["brought him Nobby Crane, R8"]}
+  ~ world_state.location :: whitechapel
+  ~ world_state.time :: Day 7 22:35, evening
+GM-Δ 9 ⟵ 8
+  + npcs.joseph_hale :: {"depth": 0, "name": "Joseph Hale", "job": "constable, H Division, one of Abberline's honest men", "belongs": ["metropolitan_police"], "gender": "man", "character": "big, slow, honest", "manner": "rattle on his belt, says sir to everyone", "in_disorder": "suffers", "state": {"position": "the Ten Bells", "plan": "stand at the Ten Bells till the morning relief, Abberline's order (R9)"}}
+  + world_state.pending.hale_at_ten_bells :: {what: "Constable Hale reaches the Ten Bells and stands on the door till morning", cause: "Abberline's YES (R9 ask)", due: Day 7 22:55}
+  + rights_obligations.message_to_jacob :: {"type": "promise", "parties": ["pc", "frederick_abberline"], "state": {"terms": "Tom tells Jacob Frye that Abberline wants a quiet word, not at the station", "status": "open"}}
+  + active_commitments.r9 :: rights_obligations.message_to_jacob
+  ~ world_state.time :: Day 7 22:45, evening
+GM-Δ 10 ⟵ 9
+  ~ world_state.pending.hale_at_ten_bells :: "done: Hale on the Ten Bells door from 22:55; found the tied doorman and is holding him"
+  ~ npcs.joseph_hale.state.position :: the Ten Bells
+  ~ npcs.ten_bells_doorman.state.status :: tied, held by Constable Hale
+  ~ world_state.pending.carriers_return :: "done: at 23:00 three Blighters and the hurt sledge man found a constable on the Ten Bells door; with no crew boss and no orders they shouted, didn't touch him, and went back toward the train"
+  + world_state.pending.kaylock_hears_constable :: {what: "the carriers tell Kaylock there's a peeler on the Ten Bells and Nobby is missing", cause: "the carriers' return", due: Day 7 23:30}
+  ~ npcs.mick_doyle.state.position :: Whitechapel rail yards, the yard gate
+  ~ world_state.pending.mick_finds_evie :: "done: at 23:40 Evie came out to the yard gate; Mick and Tom told her"
+  + npcs.evie_frye.knowledge.facts.ten_bells :: R10 from Tom and Mick: the Ten Bells lost and retaken; Davey in the London; Nobby Crane in Abberline's cells; Abberline wants a quiet word with Jacob
+  + npcs.evie_frye.relationships.pc :: {"tie": "one of Jacob's Rooks", "attitude": "approving, dry", "credit": ["retook the Ten Bells alone and brought her Abberline's message, R10"]}
+  ~ npcs.evie_frye.state.due :: A-1 Day 8 morning tells Jacob about the Ten Bells and Abberline; A-3 when beat_2 opens, the Kenway mansion
+  ~ rights_obligations.message_to_jacob :: {"type": "promise", "parties": ["pc", "frederick_abberline"], "state": {"terms": "Tom tells Jacob Frye that Abberline wants a quiet word, not at the station", "status": "passed to Evie for Jacob, R10"}}
+  ~ world_state.location :: whitechapel
+  ~ world_state.time :: Day 7 23:45, evening
+  ~ world_state.pending.kaylock_hears_constable :: "done 23:30: Kaylock heard of the constable and that Nobby is missing"
+  ~ npcs.rexford_kaylock.knowledge.facts.ten_bells :: a peeler on the Ten Bells door; Nobby missing; a Rook called Kell (23:30)
+  ~ npcs.rexford_kaylock.state.due :: A-1 Day 8 morning doubles protection on every Whitechapel street, asks his bought constables where Nobby is, and sends men to find Kell
