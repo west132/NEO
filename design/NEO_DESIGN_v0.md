@@ -1,6 +1,6 @@
 # Neo — Design record (v0)
 
-The design behind Neo, the next form of the engine. Records decisions only; no rules text yet.
+The design behind Neo, a branch of the engine beside v6.3, not its successor. Records decisions only; no rules text yet.
 
 ```text
 STATUS  AGREED   the person confirmed it
@@ -16,6 +16,9 @@ VERSION Neo starts at v0, apart from the 6.x line
 ## 1. Why Neo
 
 ```text
+AGREED  Neo is a branch, not an upgrade of v6.3 (Nov 13): v6.3 stays its own line;
+        Neo tries another way (thinking vs processing, §3); either may take
+        what works from the other
 AGREED  the engine is a long instruction set read by an AI, not a machine running code;
         the AI interprets, skips, and leans toward pleasing the player
 AGREED  the engine can do better with fewer rules and a better flow; one person
@@ -56,6 +59,30 @@ AGREED  AI GM describes the GM's job; a past mistake goes in only if the job
         description doesn't already cover it (guard against AI_RULES regrowth)
 AGREED  the job description is a standard GM summary, built from established GM
         agendas and principles (see §3a)
+AGREED  in play the work stands on three legs (Nov 13); the layers say what each
+        file holds, the legs who does the work at the table:
+  GM      the thinking: knows the world, plays the people, listens, makes each
+          call by reading the record, the plans and the dice honestly (never from
+          its own wish), sets how hard and what is at stake, reads what a result
+          means, moves the world on, narrates
+  RULES   what both stand on: written as a rulebook the GM knows (what the rule
+          is and why), with a short list of the tool's forms; the numbers live in
+          the tool only
+  TOOL    the processing: work with no judgment in it (dice, sums, time order,
+          record merging, checks against the save, fight exchanges); an AI GM
+          drifts over a long run however it is written, so this work goes where
+          drift can't corrupt it
+AGREED  tool test: a job goes to the tool only if two GMs holding the same record
+        would get the same answer
+AGREED  drift in processing is answered by the tool; GM text describes the job
+        plainly; the guard nevers (§9 GUARDS) stay, scolding goes
+AGREED  a tool run that passes a point where the rules want a PC decision (a
+        span, a batch fight) is a GM mistake (GM §7.4): the player or the GM
+        overrules it there; a bad outcome alone is never a reason
+OPEN    drift in thinking (NPC voice, stop points, tone): the R50 self-check
+        covers facts only
+OPEN    more pause points in fights and spans → fewer overrules, but more calls
+        and more stops (the person rejects needless stops)
 ```
 
 ## 3a. The GM's job
@@ -563,6 +590,10 @@ TEST  Nov 12: 20-round Sheet Anchor test (West.L, treasure hunter). Opening,
 WORLD Nov 12: Sheet Anchor deleted by the author. The author's SCP Omega-99 v6
       background converted to NEO (worlds/BACKGROUND_SCP_OMEGA99_NEO_v0.md) and
       made the test world; the 55 tests now run on it
+REVIEW Nov 13: the person found the set off balance: the GM written as a
+      form-filler and writer, RULES as a form spec; the tool's size is fine
+      (processing). Legs, tool test and overrule recorded in §3. NEXT: go
+      through the GM file and RULES against §3
 ```
 
 ---
