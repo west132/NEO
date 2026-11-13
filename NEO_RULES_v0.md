@@ -219,7 +219,8 @@ ATTACKS   each opponent attacks as its body allows: a man-sized fighter once per
           remaining attack spends one; a failure with no attack left is a setback
 BATCH     the tool rolls exchange after exchange and pauses at a turning point:
           someone falls or is badly hurt · a leader falls · a stop condition is
-          reached · the objective is met or lost · the PC goes down
+          reached · the objective is met or lost · the PC drops to half HP or
+          below · the PC goes down
 AT PAUSE  settle morale and look at the world around the fight (noise heard, fire
           spreading, someone arriving); what the plan covers → continue; what it
           doesn't → the player decides (GM §5)

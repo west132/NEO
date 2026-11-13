@@ -16,9 +16,9 @@ Each folder holds `transcript.md` (with test notes and the run's own findings), 
 
 **Where the tool ran past a decision, or nearly did:**
 
-1. **S3: the PC dropped from 7 to 2 HP in one exchange, and the batch didn't pause for it.** A coincidental pause on an enemy saved it. The PC only stops a batch at 0 HP, or at a stop the player gave.
-2. **A1: a JSON-written location hid the PC's zone, so the span ran straight past Jacob's 21:00 move.** Nothing warned.
-3. **A1: mass fights paused on nearly every exchange** (someone is always "badly hurt"). That's the opposite problem: too many stops, most of them empty.
+1. **A1: a JSON-written location hid the PC's zone, so the span ran straight past Jacob's 21:00 move.** Nothing warned.
+2. **A1: mass fights paused on nearly every exchange** (someone is always "badly hurt"); most pauses needed nothing.
+3. **S3: the PC went from 7 to 2 HP in one exchange.** The tool did what the rule said: the plan holds until a real decision or fatal damage (0 HP). Since Nov 13 RULES §8 and the tool also stop when **the PC drops to half HP or below** (once, on crossing).
 
 **Where the GM (thinking) slipped:** every slip was a missed step of the turn under combat load, never a wrong judgment call.
 
@@ -55,15 +55,9 @@ The scene types didn't carry across. AC 1868 has no creatures, so scene 2 became
 
 **Rules (the game):**
 
-- "A fight is one round" against "a round closes on a new decision": they collide mid-fight.
-- "Reach full" means the objective in §4 and one hit in §5.
-- The strike on an unaware target (v6.3's AI_RULES line) is missing in NEO.
-- Non-HP weapons (tranquillisers, nets, a tackle) have no place in the combat form; the rules don't say to use an action form for a non-lethal objective.
-- Bystanders under attack have no slot in the combat form.
-- A hazard already in play (a lamp over jute) has no rule for acting on its own.
 - "Night" in a due is 21:00 to the tool but 00–06 in the daypart table.
-- Does field first aid on a downed creature count as treatment?
-- Whether an undercurrent that *is* a due's own cause also rolls.
+
+Not rule gaps: these are the GM's calls (the runs' own notes listed them wrongly as gaps): how a mid-fight decision ends the round (the plan holds until a real decision or fatal damage), reading "reach" on a hit, striking a target who doesn't see you, using an action roll instead of the combat form for nets, tranquillisers or a tackle, bystanders under attack, a hazard acting, field first aid as treatment, and whether an undercurrent that is a due's own cause also rolls.
 
 **GM (thinking):**
 

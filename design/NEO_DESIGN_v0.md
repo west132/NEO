@@ -594,6 +594,10 @@ REVIEW Nov 13: the person found the set off balance: the GM written as a
       form-filler and writer, RULES as a form spec; the tool's size is fine
       (processing). Legs, tool test and overrule recorded in §3. NEXT: go
       through the GM file and RULES against §3
+TEST  Nov 13: combat test, 3 scenes × 2 worlds (tests/runs/combat/README.md);
+      AC Syndicate converted to NEO. From it, the person's rule: in a fight the
+      plan holds until a real decision or fatal damage (0 HP, death); added: the
+      PC dropping to half HP or below also stops the batch (RULES §8 BATCH; tool)
 ```
 
 ---

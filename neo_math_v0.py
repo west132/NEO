@@ -2526,6 +2526,10 @@ def do_combat(form):
             th = threshold(f)
             if th is not None and f["state"] == "standing" and f["hp"] <= th and i == 0:
                 turn.append(f"{f['name']} at HP {f['hp']} — the plan's stop condition")
+            half = f["max"] // 2   # the PC at half HP or below always pauses, once, on crossing
+            if f["field"] == "player.condition.hp" and f["state"] == "standing" \
+                    and f["start_hp"] > half >= f["hp"]:
+                turn.append(f"{f['name']} at HP {f['hp']} of {f['max']} — half or below")
         if not [t for t in theirs if t["state"] == "standing"]:
             reason = "no opponent left standing"
         elif not [o for o in ours if o["state"] == "standing"]:
