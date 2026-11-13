@@ -34,6 +34,5 @@ Out of character: start a message with `ps`, or say it is out of game, to the GM
 | Folder | What it is |
 |---|---|
 | `design/` | Design record, reading note, rule map. History and reasons, for people; kept out of games. |
-| `tests/` | Checks for the tool. From this folder: `python -m unittest discover -s tests -t tests` |
 
 All play files share one version; keep them together.
