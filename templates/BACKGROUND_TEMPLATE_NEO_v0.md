@@ -240,7 +240,7 @@ setting:
   world:
   era:
   starting_region:
-  mode:                 # canon | historical | original | alternate (canon: attach the modules file)
+  mode:                 # canon | historical | original | alternate
   canon_scope:          # canon: history before the start is fixed; after it, canon's course is the actors' default plans
   allowed_deviations:   # what play may change
 ```
@@ -280,7 +280,7 @@ setting_anchors:
     morale:                 # how readily each common kind of combatant breaks (RULES §8)
       kind_of_combatant:
     usual:                  # optional: where this setting's "usual" differs from the real world's
-  mp_powers:                # only if the setting has MP-drawing powers (attach the modules file)
+  mp_powers:                # only if the setting has MP-drawing powers
     draws_mp: []
     recovery:               # fast | slow | rest_only
     notes:
@@ -318,7 +318,7 @@ content_bounds:
 
 ```yaml
 enabled_modules:
-  numeric_level_xp: true            # false: attach the modules file
+  numeric_level_xp: true
   flexible_item_entitlement: true
 ```
 

@@ -8,9 +8,6 @@ TOOL     neo_math makes every number: rolls, modifiers, caps, bands, damage, XP,
 INPUT    you fill a form; the tool reads it as a JSON file or stdin; values the
          save already holds (level, tier, HP, gear) the tool reads from the save
 OUTPUT   the tool prints the roll line; copy it word for word into the turn
-MODULES  powers (MP), canon mode and play without levels live in
-         modules/NEO_MODULES_v0.md; a background that uses one says so in its
-         setting, and the player attaches that file
 ```
 
 ---
@@ -159,6 +156,24 @@ RECOVERY  an hour's rest: a quarter of max HP (min 1) · a night's rest: full HP
 SEEN      the player sees the PC's own HP exactly; others' as they look
 ONCE      weapon → damage · armour → soak · gear tier → §6 · lasting condition →
           `lasting`
+```
+
+Powers (MP), when the background's `mp_powers.draws_mp` lists powers:
+
+```text
+MP        an actor with a power the setting draws from a pool; the tool derives
+          max MP from level and the best MP-drawing skill's tier; the save holds
+          current MP
+DAMAGE    by the power's tier: T1 1d8 · T2 2d6 · T3 3d6 · T4 4d6, as damage or HP
+          restored
+CASTING   costs MP by the power's tier (the tool), paid on casting whether it works
+          or not; a caster uses powers up to their own tier and when they have the
+          MP; the background's mp_powers names the MP powers, and other powers
+          follow their setting rule
+RECOVERY  the background's mp_powers.recovery: fast = full after about 10 minutes
+          out of danger · slow = a quarter per hour of rest, full after a night ·
+          rest_only = full after a night
+SEEN      the player sees the PC's own MP exactly; others' as they look
 ```
 
 ## 6. Equipment tiers
@@ -419,7 +434,7 @@ PRICES      the background's price list first; else what it costs in its economy
 
 ## 13. Level and XP
 
-On unless the background sets `numeric_level_xp: false` (then see the modules file).
+On unless the background sets `numeric_level_xp: false` (then WITHOUT LEVELS below).
 
 ```text
 LEVEL       overall capability, cap 35: L1 ordinary trained adult · L3
@@ -441,6 +456,17 @@ EVENT XP    for a real non-combat challenge resolved: a discovery, a rescue, a
             negotiation, an investigation, survival
 QUEST XP    at CLOSE, once per code (§10)
 PAID ONCE   each fight, event and code pays once; the tool marks it paid
+```
+
+```text
+WITHOUT LEVELS  when the background sets numeric_level_xp: false
+CAPABILITY  the actor's grade in the domain: deficient · basic · competent ·
+            advanced · exceptional (the form's capability_grade slot)
+OPPOSITION  the engaged opponent's power is the base Difficulty; its attacks stay
+            the danger
+VITALITY    HP comes from vitality instead of level: ordinary · seasoned · veteran ·
+            exceptional · heroic · legendary
+XP          none; skills still grow by §7
 ```
 
 ## 14. Item points
@@ -742,6 +768,23 @@ CONDITIONS  ending_conditions (an open world needs none): written before the
 ```
 
 ---
+
+### 15.11 Canon mode
+
+When the background sets `mode: canon`: a world set in an existing story (a game, a novel, history) that keeps its course unless play changes it.
+
+```text
+COURSE    canon is the default course: canon actors follow its plans (the
+          background's canon_course, else the source) while their causes hold
+SETTLED   their plans are settled from the record; attempts still resolve
+          normally (§3, §8)
+ANSWERS   +2 likelihood in an ask roll where canon records this outcome and play
+          hasn't changed its causes (§9.1)
+GAPS      filled from canon first
+FIT       new content fits around canon's people, places and events
+BEATS     a beat's actors pursue it with their own means; it can pass without the
+          PC, and the PC goes only where the player sends them
+```
 
 ## 16. The tool
 
