@@ -767,8 +767,6 @@ CONDITIONS  ending_conditions (an open world needs none): written before the
             unreachable → closed
 ```
 
----
-
 ### 15.11 Canon mode
 
 When the background sets `mode: canon`: a world set in an existing story (a game, a novel, history) that keeps its course unless play changes it.
@@ -785,6 +783,8 @@ FIT       new content fits around canon's people, places and events
 BEATS     a beat's actors pursue it with their own means; it can pass without the
           PC, and the PC goes only where the player sends them
 ```
+
+---
 
 ## 16. The tool
 

@@ -373,8 +373,7 @@ RESTORE   by stable id, newer over older: player block, time, location,
           environment ← the readable part; everything else ← the capsule, else the
           background unless retired; the later round stamp wins; state wins over
           summary text
-SETTING   the background travels with the
-          save; ask for whatever is missing
+SETTING   the background travels with the save; ask for whatever is missing
 GAPS      a minor detail missing → keep what is known, mark the rest unknown, the
           save is valid · something needed is missing or contradictory → the save
           waits for repair from real evidence

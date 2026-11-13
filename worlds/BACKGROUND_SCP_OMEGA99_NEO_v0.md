@@ -1,6 +1,6 @@
 # BACKGROUND — SCP: Class of '99 (Agent West) (NEO v0)
 
-A NEO v0 background (converted from v6.0). **Round-0 truth**; once play begins this file is history and the save changes instead. `mode: canon`: attach `modules/NEO_MODULES_v0.md` with the play set. **Player: set only the `[UNASSIGNED]` entries before starting.** The GM withholds `locked_case_truths`, undiscovered NPC knowledge and hidden faction information during play.
+A NEO v0 background (converted from v6.0). **Round-0 truth**; once play begins this file is history and the save changes instead. **Player: set only the `[UNASSIGNED]` entries before starting.** The GM withholds `locked_case_truths`, undiscovered NPC knowledge and hidden faction information during play.
 
 **Undefined parts:** anything this background leaves undefined is the AI GM's to develop in play, consistent with its setting anchors, SCP canon and established facts (GM §7.5) — never a gap to wait on, refuse over, or expect the engine to fill.
 
